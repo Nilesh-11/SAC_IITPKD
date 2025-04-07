@@ -1,0 +1,163 @@
+/* General Styling */
+.dashboard {
+    padding: 20px;
+    font-family: "Poppins", sans-serif;
+  }
+  
+  .dashboard-title {
+    font-size: 24px;
+    font-weight: 700;
+    color: #1a1a1a;
+  }
+  
+  /* Section Titles */
+  .section-title {
+    font-size: 18px;
+    font-weight: 600;
+    color: #222;
+  }
+  
+  .section {
+    margin-bottom: 20px;
+  }
+  
+  .section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  /* View All Button */
+  .view-all {
+    background-color: orange;
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.3s ease;
+  }
+  
+  .view-all:hover {
+    background-color: #d97706;
+  }
+  
+  /* Announcements */
+  .announcements {
+    border: 1px solid #ddd;
+    padding: 10px;
+    border-radius: 8px;
+  }
+  
+  .announcement-item {
+    display: flex;
+    align-items: center;
+    padding: 12px 10px;
+    border-bottom: 1px solid #eee;
+  }
+  
+  /* Remove border from last announcement item */
+  .announcement-item:last-child {
+    border-bottom: none;
+  }
+  
+  
+  .announcement-logo {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 12px;
+  }
+  
+  .announcement-content {
+    flex-grow: 1;
+    text-align: left;
+  }
+  
+  .announcement-title {
+    font-size: 14px;
+    font-weight: 500;
+    color: #333;
+  }
+  
+  .announcement-meta {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  .announcement-date {
+    font-size: 12px;
+    color: #777;
+  }
+  
+  .menu-icon {
+    cursor: pointer;
+    font-size: 18px;
+    color: #444;
+  }
+  
+  /* Status Label */
+  .status-label {
+    font-size: 16px;
+    font-weight: 600;
+    color: #222;
+    margin-top: 12px;
+    text-align: left;
+  }
+  
+  /* Status Section */
+  .status {
+    display: flex;
+    justify-content: space-between;
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background: #fafafa;
+    align-items: center;
+  }
+  
+  .status-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    width: 100%;
+  }
+  
+  .status-icon {
+    color: orange;
+    font-size: 28px !important;
+    margin-bottom: 5px;
+  }
+  
+  .status-text {
+    font-size: 14px;
+    font-weight: 500;
+    color: #333;
+  }
+  
+  /* Vertical Divider for Status */
+  .status-divider {
+    width: 1px;
+    height: 40px;
+    background-color: #ddd;
+    margin: 0 15px;
+  }
+  
+  /* My Clubs */
+  .my-clubs {
+    display: flex;
+    gap: 10px;
+  }
+  
+  .club-image {
+    width: 100px;
+    height: 100px;
+    background-color: orange;
+    border-radius: 8px;
+  }
+  

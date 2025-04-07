@@ -1,0 +1,158 @@
+.footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap; /* Ensures responsiveness */
+    background: linear-gradient(to top, #1a1a1a, #333333, #4a4a4a, #888888, #ffffff);
+    color: white;
+    padding: 20px 50px;
+    font-family: "Arial", sans-serif;
+  }
+  
+  /* Left Section */
+  .footer-left {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap; /* Wrap content on smaller screens */
+  }
+  
+  .footer-logo {
+    width: 80px; /* Adjust based on actual logo */
+    margin-right: 15px;
+  }
+  
+  /* Footer Text Styling */
+  .sac-title {
+    margin: 0;
+    font-size: 20px;
+    color: rgb(244, 200, 175);
+  }
+  
+  .footer-line {
+    width: 100%;
+    height: 2px;
+    background-color: white;
+    margin: 8px 0;
+  }
+  
+  .iitp-text {
+    font-size: 16px;
+    color: rgb(227, 141, 64);
+  }
+  
+  .footer-text p {
+    margin: 5px 0;
+    font-size: 14px;
+    color: #d1d1d1;
+  }
+  
+  .copyright {
+    font-size: 12px;
+    color: #bbb;
+  }
+  
+  /* Right Section */
+  .footer-right {
+    text-align: right;
+    flex-basis: 40%;
+  }
+  
+  .footer-right h3 {
+    margin: 0;
+    font-size: 18px;
+  }
+  
+  .footer-right p {
+    margin: 5px 0;
+    font-size: 14px;
+  }
+  
+  /* Social Icons */
+  .social-icons {
+    margin-top: 10px;
+  }
+  
+  .social-icons a {
+    color: white;
+    font-size: 20px;
+    margin: 0 8px;
+    transition: 0.3s;
+  }
+  
+  .social-icons a:hover {
+    color: #f2a365;
+  }
+  
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    .footer {
+      flex-direction: column; /* Stack elements vertically */
+      text-align: center;
+      padding: 20px;
+    }
+  
+    .footer-left {
+      justify-content: center;
+      text-align: center;
+    }
+  
+    .footer-logo {
+      margin-bottom: 10px;
+    }
+  
+    .footer-right {
+      text-align: center;
+      flex-basis: 100%;
+      margin-top: 20px;
+    }
+  
+    .social-icons {
+      display: flex;
+      justify-content: center;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .footer {
+      padding: 15px;
+    }
+  
+    .sac-title {
+      font-size: 18px;
+    }
+  
+    .iitp-text {
+      font-size: 14px;
+    }
+  
+    .footer-text p {
+      font-size: 12px;
+    }
+  
+    .footer-right h3 {
+      font-size: 16px;
+    }
+  
+    .footer-right p {
+      font-size: 12px;
+    }
+  
+    .social-icons a {
+      font-size: 24px;
+      margin: 0 10px;
+      transition: color 0.3s ease-in-out;
+    }
+  }
+  
+  .social-icons a:hover:nth-child(1) {
+    color: #1DA1F2; /* Twitter Blue */
+  }
+  
+  .social-icons a:hover:nth-child(2) {
+    color: #0077b5; /* LinkedIn Blue */
+  }
+  
+  .social-icons a:hover:nth-child(3) {
+    color: #FF0000; /* YouTube Red */
+  }
+  

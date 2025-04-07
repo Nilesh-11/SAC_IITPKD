@@ -1,0 +1,87 @@
+/* General container for gallery */
+.gallery-container {
+  width: 100%;
+  max-width: 1200px; /* Restrict gallery max width on large screens */
+  margin: 0 auto;  /* Center the gallery */
+  padding: 20px;
+}
+
+/* Swiper container styling */
+.swiper {
+  width: 100%;
+  padding-top: 50px;
+  padding-bottom: 50px;
+  display: flex;
+  justify-content: center;
+  position: relative;
+  overflow: hidden; /* Ensure the content stays within the rounded borders */
+  border-radius: 20px; /* Rounded corners for swiper container */
+}
+
+/* Swiper slide styles with adjusted dimensions */
+.swiper-slide {
+  background-position: center;
+  background-size: cover;
+  width: 800px; /* Set width for landscape images */
+  height: 400px; /* Adjust height based on landscape aspect ratio */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-sizing: border-box;
+  border-radius: 15px; /* Rounded corners for each slide */
+  overflow: hidden; /* Prevent images from spilling outside rounded corners */
+}
+
+/* Ensures images fill the swiper-slide */
+.swiper-slide img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* Ensures images fill the slide without distortion */
+  border-radius: 15px; /* Ensure image corners are rounded as well */
+}
+
+/* Responsive Breakpoints */
+@media (max-width: 1200px) {
+  /* On large tablets or small desktops */
+  .swiper-slide {
+    width: 70vw; /* Make slides smaller on larger tablets */
+    height: 350px;
+  }
+}
+
+@media (max-width: 992px) {
+  /* On medium tablets */
+  .swiper-slide {
+    width: 80vw; /* Make slides smaller on tablets */
+    height: 300px;
+  }
+}
+
+@media (max-width: 768px) {
+  /* On small tablets or mobile screens */
+  .gallery-container {
+    padding: 0px;
+    width: 97%
+  }
+  .swiper-slide {
+    width: 90vw; /* Make slides take more space on small devices */
+    height: 250px; /* Decrease height on smaller screens */
+  }
+  .swiper {
+    padding-top: 20px;
+    padding-bottom: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  /* On very small screens like phones */
+  .swiper-slide {
+    width: 100vw; /* Slides take full width */
+    height: 200px; /* Adjust the height accordingly */
+  }
+  .swiper {
+    padding-top: 10px;
+    padding-bottom: 10px;
+  }
+}
