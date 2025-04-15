@@ -1,0 +1,35 @@
+version: '3.8'
+
+services:
+  auth-service:
+    build: .
+    ports:
+      - "8001:8001"
+    depends_on:
+      db:
+        condition: service_healthy  # Wait for db to be healthy
+    environment:
+      USERS_DATABASE_URL: postgresql://postgres:acoolpassword@db:5432/users
+      AUTH_DATABASE_URL: postgresql://postgres:acoolpassword@db:5432/auth
+      MY_MAIL: nileshdummy00@gmail.com
+      MY_MAIL_PASS: qryxvugwvggtroqj
+
+  db:
+    image: postgres:14
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: acoolpassword
+      POSTGRES_DB: auth
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+volumes:
+  postgres_data:

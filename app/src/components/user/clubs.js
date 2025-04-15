@@ -10,14 +10,17 @@ const Clubs = ({ my_clubs, other_clubs, handleNavigation }) => {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
       >
-        <Typography variant="h5" fontWeight={700} textAlign="center" color="black">
+        <Typography variant="h5" fontWeight={700} textAlign="left" color="black" sx={{
+          fontFamily: "Poppins, sans-serif",
+          color: "rgba(255, 154, 65, 0.96)",
+        }}>
           CLUBS
         </Typography>
       </motion.div>
 
       {/* My Clubs Section */}
       <Box mt={3}>
-        <Typography variant="h6" fontWeight={600} textAlign="left">
+        <Typography sx={{ fontFamily: "Poppins, sans-serif" }} variant="h6" fontWeight={600} textAlign="left">
           My Clubs
         </Typography>
         <motion.div
@@ -104,7 +107,7 @@ const Clubs = ({ my_clubs, other_clubs, handleNavigation }) => {
 
       {/* Other Clubs Section */}
       <Box mt={4}>
-        <Typography variant="h6" fontWeight={600} textAlign="left">
+        <Typography sx={{ fontFamily: "Poppins, sans-serif" }} variant="h6" fontWeight={600} textAlign="left">
           Other Clubs
         </Typography>
         <motion.div

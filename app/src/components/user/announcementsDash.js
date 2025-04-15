@@ -18,14 +18,16 @@ const fadeIn = keyframes`
 const AnnouncementsDash = ({ announcements }) => {
   return (
     <Box sx={{ maxWidth: 800, mx: "auto", textAlign: "center", p: 2 }}>
-      <Typography
-        variant="h5"
-        fontWeight="bold"
-        gutterBottom
-        sx={{ mb: 4 }} // Increased space below heading
-      >
-        ANNOUNCEMENTS
-      </Typography>
+      <Box >
+        <Typography
+          variant="h5"
+          fontWeight="bold"
+          gutterBottom
+          sx={{ mb: 4, fontFamily: "Poppins, sans-serif", color: "rgba(255, 154, 65, 0.96)",}} // Increased space below heading
+        >
+          ANNOUNCEMENTS
+        </Typography>
+      </Box>
 
       <Box
         sx={{
@@ -65,10 +67,10 @@ const AnnouncementsDash = ({ announcements }) => {
               }}
             >
               <Box sx={{ textAlign: "left" }}>
-                <Typography variant="caption" fontWeight="bold">
+                <Typography variant="caption" fontWeight="bold" sx={{fontFamily: "Poppins, sans-serif"}}>
                   {announcement.club}
                 </Typography>
-                <Typography variant="subtitle1" fontWeight="bold">
+                <Typography variant="subtitle1" fontWeight="bold" sx={{fontFamily: "Poppins, sans-serif" }}>
                   {announcement.title}
                 </Typography>
               </Box>
@@ -96,7 +98,7 @@ const AnnouncementsDash = ({ announcements }) => {
             {/* Info (expands dynamically) */}
             <CardContent sx={{ flexGrow: 1, p: 1 }}>
               <Typography variant="body2" color="text.secondary">
-                {announcement.info}
+                {announcement.body}
               </Typography>
             </CardContent>
           </Card>

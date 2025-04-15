@@ -5,13 +5,10 @@ class AuthRequest(BaseModel):
 
 class EventsRequest(BaseModel):
     model_config = ConfigDict(extra="allow")
-    token: str
-    
+
 class ProjectsRequest(BaseModel):
     model_config = ConfigDict(extra="allow")
-    token: str
 
 class UsersRequest(BaseModel):
     model_config = ConfigDict(extra="allow")
-    token: str
     

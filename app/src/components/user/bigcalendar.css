@@ -1,0 +1,57 @@
+.calendar-wrapper {
+    width: 100%;
+    overflow-x: auto;
+  }
+  
+  .calendar {
+    display: flex;
+    width: 100%;
+  }
+  
+  .time-column {
+    flex: 0 0 60px;
+    border-right: 1px solid #ccc;
+    background-color: #f5f5f5;
+  }
+  
+  .time-slot {
+    height: 60px;
+    padding: 4px;
+    text-align: center;
+    border-bottom: 1px solid #eee;
+    color: #666;
+    font-size: 12px;
+  }
+  
+  .day-column {
+    flex: 1;
+    border-left: 1px solid #ddd;
+    position: relative;
+    min-width: 200px;
+  }
+  
+  .date-header {
+    text-align: center;
+    padding: 8px;
+    background-color: #fafafa;
+    border-bottom: 1px solid #ddd;
+    font-weight: 600;
+    font-size: 14px;
+  }
+  
+  .events-column {
+    position: relative;
+    height: calc(60px * 17); /* for 17 time slots */
+  }
+  
+  .event-block {
+    position: absolute;
+    left: 5%;
+    width: 90%;
+    padding: 4px 6px;
+    border-radius: 4px;
+    color: white;
+    box-sizing: border-box;
+    overflow: hidden;
+  }
+  

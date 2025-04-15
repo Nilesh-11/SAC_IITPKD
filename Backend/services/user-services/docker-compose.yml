@@ -1,0 +1,37 @@
+version: '3.8'
+
+services:
+  user-service:
+    build: .
+    ports:
+      - "8004:8004"
+    depends_on:
+      db:
+        condition: service_healthy  # Wait for db to be healthy
+    environment:
+      EVENTS_DATABASE_URL: postgresql://postgres:acoolpassword@db:5432/events
+      USERS_DATABASE_URL: postgresql://postgres:acoolpassword@db:5432/users
+      PROJECTS_DATABASE_URL: postgresql://postgres:acoolpassword@db:5432/projects
+      PUBLIC_DATABASE_URL: postgresql://postgres:acoolpassword@db:5432/public
+      MY_MAIL: nileshdummy00@gmail.com
+      MY_MAIL_PASS: qryxvugwvggtroqj
+
+  db:
+    image: postgres:14
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: acoolpassword
+      POSTGRES_DB: users
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+volumes:
+  postgres_data:

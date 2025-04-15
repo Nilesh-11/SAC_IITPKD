@@ -12,7 +12,7 @@ const Footer = () => {
           <h2 className="sac-title">Student Affairs Council</h2>
           <div className="footer-line"></div>
           <p className="iitp-text">Indian Institute of Technology Palakkad</p>
-          <p className="copyright">Copyright © 2023. All rights reserved.</p>
+          <p className="copyright">Copyright © 2025. All rights reserved.</p>
         </div>
       </div>
 

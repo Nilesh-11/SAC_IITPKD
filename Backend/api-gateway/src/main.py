@@ -17,11 +17,11 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-    
+
 @app.get("/")
 def health_check():
     return {"status": "API Gateway is running"}
 
-@app.get("/api/verify-token")
+@app.post("/api/verify-token")
 def verify_jwt(token: str = Depends(get_token_from_header)):
     return authenticate_jwt(token)

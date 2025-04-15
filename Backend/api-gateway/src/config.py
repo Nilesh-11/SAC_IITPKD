@@ -9,16 +9,12 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
-ENVIRONMENT = os.getenv("ENV", "development")
-if ENVIRONMENT == "development":
-    load_dotenv(".env.dev")
-else:
-    load_dotenv(".env")
+load_dotenv(".env")
 
-with open("D:\YACC\SAC_IITPKD\Backend\services\\auth-service\private.pem", "r") as f:
+with open("./secrets/private.pem", "r") as f:
     JWT_PRIVATE_KEY = f.read()
 
-with open("D:\YACC\SAC_IITPKD\Backend\services\\auth-service\public.pem", "r") as f:
+with open("./secrets/public.pem", "r") as f:
     JWT_PUBLIC_KEY = f.read()
 
 AUTH_SERVICE_URL = os.getenv("AUTH_SERVICE_URL", "http://localhost:8001")

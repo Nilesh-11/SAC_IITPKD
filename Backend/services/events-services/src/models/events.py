@@ -11,6 +11,7 @@ class Event(BaseEvents):
     registered_by = Column(String, nullable=False)
     title = Column(String, nullable=False)
     description = Column(Text)
+    council = Column(String, nullable=False, unique=True)
     event_timestamp = Column(DateTime, nullable=False)
     duration = Column(Interval, nullable=False)
     venue = Column(String, nullable=False)

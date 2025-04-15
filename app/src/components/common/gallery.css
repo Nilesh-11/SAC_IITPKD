@@ -6,6 +6,12 @@
   padding: 20px;
 }
 
+.swiper-button-next,
+.swiper-button-prev {
+  color: rgb(243, 130, 33) !important; /* Set to your custom orange shade */
+}
+
+
 /* Swiper container styling */
 .swiper {
   width: 100%;

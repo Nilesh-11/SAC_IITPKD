@@ -10,16 +10,12 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
-ENVIRONMENT = os.getenv("ENV", "development")
-if ENVIRONMENT == "development":
-    load_dotenv(".env.dev") 
-else:
-    load_dotenv(".env") 
+load_dotenv(".env")
 
-with open("private.pem", "r") as f:
+with open("./secrets/private.pem", "r") as f:
     JWT_PRIVATE_KEY = f.read()
 
-with open("public.pem", "r") as f:
+with open("./secrets/public.pem", "r") as f:
     JWT_PUBLIC_KEY = f.read()
 
 AUTH_DATABASE_URL = os.getenv("AUTH_DATABASE_URL", "sqlite:///dev.db")

@@ -17,6 +17,7 @@ export const AuthProvider = ({ children }) => {
 
   const loginUser = (token) => {
     const user = decodeToken(token);
+    console.log("Token decoded: ", user);
     localStorage.setItem("token", token);
     setAuth({ user, token, loading: false });
 
@@ -31,22 +32,17 @@ export const AuthProvider = ({ children }) => {
       setAuth({ user: null, token: null, loading: false });
       return;
     }
-
-    verifyToken(token)
-      .then((res) => {
-        const content = res?.content;
-        if (
-          content?.type === "error" &&
-          (content.details === "JWTExpired" || content.details === "JWTInvalid")
-        ) {
-          logout(); // token is expired or invalid, force logout
+    console.log("Token found")
+    verifyToken().then((result) => {
+        if (!result.valid) {
+          console.warn("Token invalid or expired:", result.reason);
+          logout(); // force logout
         } else {
           const user = decodeToken(token);
           setAuth({ user, token, loading: false });
         }
-      })
-      .catch(() => {
-        logout(); // network/server error, log out just to be safe
+      }).catch(() => {
+        logout(); // fallback for unexpected issues
       });
   }, []);
 

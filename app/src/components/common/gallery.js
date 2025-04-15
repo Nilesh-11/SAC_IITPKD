@@ -3,7 +3,8 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
 import 'swiper/css/effect-coverflow';
 import './gallery.css';
-import { EffectCoverflow } from 'swiper/modules';
+import { EffectCoverflow, Navigation } from 'swiper/modules';
+import 'swiper/css/navigation';
 
 const Gallery = ({ images, galleryId }) => {
   return (
@@ -13,6 +14,7 @@ const Gallery = ({ images, galleryId }) => {
         grabCursor={true}
         centeredSlides={true}
         slidesPerView={'auto'}
+        navigation={true}
         coverflowEffect={{
           rotate: window.innerWidth < 768 ? 0 : 50, // Less rotation for small screens
           stretch: window.innerWidth < 768 ? 50 : 100, // Responsive stretch
@@ -22,7 +24,7 @@ const Gallery = ({ images, galleryId }) => {
         }}
         speed={600}
         preventClicks={true}
-        modules={[EffectCoverflow]}
+        modules={[EffectCoverflow, Navigation]}
         className={`mySwiper-${galleryId}`}
         onSlideChange={({ activeIndex }) => {
           const slides = document.querySelectorAll(`.mySwiper-${galleryId} .swiper-slide img`);

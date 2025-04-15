@@ -32,7 +32,7 @@ def signupwithCredentials(data: StudentSignupRequest, db: Session = Depends(get_
                 db.delete(existing_otp)
                 db.commit()
             else:
-                return {'content':{"type": "invalid", "verdict": "Otpfound", 'status_code': 400, "detail": "Otp already sent, found try resending otp"}}
+                return {'content':{"type": "invalid", "verdict": "otpfound", 'status_code': 400, "detail": "Otp already sent, found try resending otp"}}
         
         mail_response = send_mail_otp(email)
         if mail_response['type'] != 'ok':

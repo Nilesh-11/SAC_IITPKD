@@ -19,10 +19,7 @@ const Api = async (path, { data }) => {
     });
     const responseData = await response.json();
     console.log(responseData);
-    if (
-      responseData?.content?.type === "error" &&
-      (responseData.content.details === "JWTExpired" || responseData.content.details === "JWTInvalid")
-    ) {
+    if ( responseData?.content?.type === "error" && (responseData.content.details === "JWTExpired" || responseData.content.details === "JWTInvalid")) {
       handleAPIError();
       return;
     }
@@ -38,15 +35,24 @@ const Api = async (path, { data }) => {
 };
 
 export const verifyToken = async () => {
-    try {
-        const res = await Api(`${BACKEND_URL}/api/verify-token`, {
-            body: {},
-        });
-        return res;
-    } catch (error) {
-        console.error("Token verification failed:", error);
-        throw error;
+  try {
+    const res = await Api("/api/verify-token", {
+      data: {},
+    });
+
+    const content = res?.content;
+
+    if (
+      content?.type === "error" &&
+      (content.details === "JWTExpired" || content.details === "JWTInvalid")
+    ) {
+      return { valid: false, reason: content.details };
     }
+    return { valid: true };
+  } catch (error) {
+    console.error("Token verification failed:", error);
+    return { valid: false, reason: "NetworkError" };
+  }
 };
 
 export default Api;
