@@ -64,3 +64,25 @@ class DeleteEventRequest(BaseModel):
     @classmethod
     def validate_mail(cls, value: str) -> str:
         return validate_mail(value)
+
+class AddClubRequest(BaseModel):
+    name: str
+    email: EmailStr
+    password_hash: str
+    faculty_advisor: EmailStr
+    head: Optional[List[str]] = None
+    coheads: Optional[List[str]] = None
+    leads: Optional[List[str]] = None
+    members: Optional[List[str]] = None
+    website: Optional[str] = None
+    council_id: int
+    
+    @field_validator("email")
+    @classmethod
+    def validate_mail(cls, value: str) -> str:
+        return validate_mail(value)
+    
+    @field_validator("faculty_advisor")
+    @classmethod
+    def validate_faculty_mail(cls, value: str) -> str:
+        return validate_mail(value)
