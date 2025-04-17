@@ -45,3 +45,8 @@ class UpdateAnnouncementRequest(BaseModel):
 class DeleteAnnouncementRequest(BaseModel):
     id: int
     request_by: EmailStr
+    
+    @field_validator("request_by")
+    @classmethod
+    def validate_mail(cls, value: str) -> str:
+        return validate_mail(value)
