@@ -38,7 +38,7 @@ class Club(BaseUser):
     email = Column(String, unique=True, index=True, nullable=False)
     password_hash = Column(String, nullable=False)
     faculty_advisor=Column(String, unique=True, index=True, nullable=False)
-    head = Column(ARRAY(String), nullable=True)
+    head = Column(String, nullable=True)
     coheads = Column(ARRAY(String), nullable=True)
     leads = Column(ARRAY(String), nullable=True)
     members = Column(ARRAY(String), nullable=True)

@@ -1,66 +1,47 @@
 from src.utils.verify import validate_mail
-from pydantic import BaseModel, field_validator, EmailStr
+from pydantic import BaseModel, field_validator, EmailStr, Field
 from typing import Optional, List
-from datetime import date, time, timedelta
+from datetime import date, time, timedelta, datetime
+from src.models.public import AnnouncementPriority
 
-class AddProjectRequest(BaseModel):
-    proj_type: str
-    member_roles: List[str]
-    proj_domain: str
-    title: str
+class DeleteCouncilRequest(BaseModel):
+    id: int
+    request_by: EmailStr
+
+class AddCouncilRequest(BaseModel):
+    email: EmailStr
+    password: str
+    name: str
     description: str
-    start_date: date
-    duration: timedelta
-    skills: Optional[List[str]]
-    status: str
-    max_members_count: int
-    current_members_count: int
+    faculty_advisor: str
+    secretary: str
+    deputy: Optional[List[str]]
     request_by: EmailStr
 
-class GetEventsRequest(BaseModel):
+class AddClubRequest(BaseModel):
+    name: str
+    email: EmailStr
+    password: str
+    faculty_advisor: str
+    head: str
+    coheads: Optional[List[str]]
     request_by: EmailStr
-    
-    @field_validator("request_by")
-    @classmethod
-    def validate_mail(cls, value: str) -> str:
-        return validate_mail(value)
 
-class GetEventRequest(BaseModel):
+class AddAnnouncementRequest(BaseModel):
+    title: str = Field(..., max_length=255)
+    body: str
+    expires_at: datetime
+    priority: Optional[AnnouncementPriority] = AnnouncementPriority.normal
     request_by: EmailStr
+
+class UpdateAnnouncementRequest(BaseModel):
     id: int
-    
-    @field_validator("request_by")
-    @classmethod
-    def validate_mail(cls, value: str) -> str:
-        return validate_mail(value)
-    
-class UpdateEventRequest(BaseModel):
+    title: str = Field(..., max_length=255)
+    body: str
+    expires_at: datetime
+    priority: Optional[AnnouncementPriority] = AnnouncementPriority.normal
     request_by: EmailStr
+
+class DeleteAnnouncementRequest(BaseModel):
     id: int
-    organizer: EmailStr
-    title: str
-    description: str
-    event_date: date
-    event_time: time
-    venue: str
-    duration: timedelta
-    
-    @field_validator("organizer")
-    @classmethod
-    def validate_mail(cls, value: str) -> str:
-        return validate_mail(value)
-    
-    @field_validator("request_by")
-    @classmethod
-    def validate_mail(cls, value: str) -> str:
-        return validate_mail(value)
-    
-    
-class DeleteEventRequest(BaseModel):
     request_by: EmailStr
-    id: int
-    
-    @field_validator("request_by")
-    @classmethod
-    def validate_mail(cls, value: str) -> str:
-        return validate_mail(value)
