@@ -7,7 +7,6 @@ const handleAPIError = () => {
 
 const Api = async (path, { data }) => {
   const url = `${BACKEND_URL}` + path;
-  console.log(url)
   try {
     const response = await fetch(url, {
       method: 'POST',

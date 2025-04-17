@@ -52,23 +52,22 @@ const AnnouncementsDash = ({ announcements }) => {
               transition: "transform 0.3s, box-shadow 0.3s",
               animation: `${fadeIn} 0.4s ease-out ${index * 0.1}s`, // Staggered fade-in effect
               "&:hover": {
-                transform: "scale(1.05)", // Smooth hover effect
+                transform: "scale(1.05)",
                 boxShadow: 4,
               },
             }}
           >
-            {/* Header: Club, Title, and Icon */}
             <Box
               sx={{
                 display: "flex",
                 justifyContent: "space-between",
                 alignItems: "center",
-                mb: 2, // More spacing below the header
+                mb: 2,
               }}
             >
               <Box sx={{ textAlign: "left" }}>
                 <Typography variant="caption" fontWeight="bold" sx={{fontFamily: "Poppins, sans-serif"}}>
-                  {announcement.club}
+                  {announcement.author}
                 </Typography>
                 <Typography variant="subtitle1" fontWeight="bold" sx={{fontFamily: "Poppins, sans-serif" }}>
                   {announcement.title}
@@ -81,7 +80,7 @@ const AnnouncementsDash = ({ announcements }) => {
             <Box sx={{ width: "80%", mx: "auto", borderRadius: 1, overflow: "hidden" }}>
               <CardMedia
                 component="img"
-                image={announcement.image}
+                image={`/roles/${announcement.author_role}_circular.png`}
                 alt={announcement.title}
                 sx={{
                   width: "100%", // Make it responsive

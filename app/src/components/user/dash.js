@@ -13,7 +13,7 @@ import {
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import LocalLibraryIcon from "@mui/icons-material/LocalLibrary";
 import SquareGallery from "./squareGallery";
-
+import timeAgo from "../../utils/parser";
 const Dashboard = ({
   announcements,
   status,
@@ -83,7 +83,7 @@ const Dashboard = ({
                 }}
               >
                 <img
-                  src={announcement.logo}
+                  src={`/roles/${announcement.author_role}_circular.png`}
                   alt="logo"
                   style={{
                     width: 40,
@@ -104,7 +104,7 @@ const Dashboard = ({
                   </Typography>
                 </Box>
                 <Typography fontSize={12} color="text.secondary" sx={{ ml: 1 }}>
-                  {announcement.date}
+                  {timeAgo(announcement.created_at)}
                 </Typography>
               </Box>
               {index !== announcements.length - 1 && <Divider />}

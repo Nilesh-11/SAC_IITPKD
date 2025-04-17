@@ -4,6 +4,7 @@ import PlayArrowRoundedIcon from '@mui/icons-material/PlayArrowRounded';
 import CircleRoundedIcon from '@mui/icons-material/CircleRounded';
 
 const AnnouncementSection = ({announcements}) => {
+  console.log(announcements);
   const [startIndex, setStartIndex] = useState(0);
 
   const itemsToShow = 3;
@@ -119,7 +120,7 @@ const AnnouncementSection = ({announcements}) => {
           ref={containerRef}
           >
           {displayedAnnouncements.map((announcement, index) => (
-            <React.Fragment key={index}>
+            <React.Fragment key={announcement.id}>
               <Box
                 sx={{
                   display: 'flex',
@@ -147,7 +148,7 @@ const AnnouncementSection = ({announcements}) => {
                     },
                   }}
                   >
-                  {announcement}
+                  {announcement.body}
                 </Typography>
               </Box>
               {index < displayedAnnouncements.length - 1 && (

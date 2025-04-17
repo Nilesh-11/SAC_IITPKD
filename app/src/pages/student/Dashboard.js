@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Header from "./Header";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
@@ -9,77 +9,117 @@ import ProjectList from "./../../components/user/projects";
 import AnnouncementsDash from "../../components/user/announcementsDash";
 import EventCalendar from "../../components/user/bigcalendar";
 
-import {events, liveEvents, projects, announcements, otherClubs, myClubs, myClubs2} from "./../variables";
-
+import {
+  liveEvents,
+  projects,
+  announcements,
+  otherClubs,
+  myClubs,
+  myClubs2,
+} from "./../variables";
+import getAnnouncementsList from "../../api/announcement";
+import getEventsList from "../../api/events";
 const StudentDashboard = () => {
-    const navigate = useNavigate();
-    const [currSection, setCurrentSection] = useState("dashboard");
+  const navigate = useNavigate();
+  const [events, setEvents] = useState([]);
+  const [announcements, setAnnouncements] = useState([]);
+  const [currSection, setCurrentSection] = useState("dashboard");
 
-    const handleMenuNavigation = (link) => {
-        console.log(link);
-        setCurrentSection(link);
-    }
+  useEffect(() => {
+    const fetchAnnouncements = async () => {
+      const data = await getAnnouncementsList();
+      setAnnouncements(data);
+    };
+    const fetchEvents = async () => {
+      const data = await getEventsList();
+      console.log(data);
+      setEvents(data);
+    };
 
-    const activity = [
-        { club: "YACC", user: "Alice", club_logo_src: "/logo192.png" },
-        { club: "Voxel", user: "Bob", club_logo_src: "/logo192.png" },
-    ];
-    
-    const menuItems = [
-        { name: "Dashboard", icon: "📊", link: "dashboard" },
-        { name: "Clubs", icon: "🏫", link: "clubs" },
-        { name: "Announcements", icon: "📣", link: "announcements" },
-        { name: "Calendar", icon: "🗓️", link: "calendar" },
-        { name: "Live-Events", icon: "🎤", link: "live-events" },
-        { name: "Opportunities", icon: "🔍", link: "opportunities" },
-        { name: "Budget", icon: "💰", link: "budget" },
-        { name: "More", icon: "⋯", link: "more" }
-    ];
+    fetchAnnouncements();
+    fetchEvents();
+  }, []);
 
-    const status = [
-        { title: "Clubs", count: 5 },
-        { title: "Events", count: 10 },
-        { title: "Ongoing Projects", count: 2 },
-        { title: "Projects Completed", count: "10" },
-        { title: "Add Functionalities", count: "+" }
-    ];
+  const handleMenuNavigation = (link) => {
+    console.log(link);
+    setCurrentSection(link);
+  };
 
-    
+  const activity = [
+    { club: "YACC", user: "Alice", club_logo_src: "/logo192.png" },
+    { club: "Voxel", user: "Bob", club_logo_src: "/logo192.png" },
+  ];
 
+  const menuItems = [
+    { name: "Dashboard", icon: "📊", link: "dashboard" },
+    { name: "Clubs", icon: "🏫", link: "clubs" },
+    { name: "Announcements", icon: "📣", link: "announcements" },
+    { name: "Calendar", icon: "🗓️", link: "calendar" },
+    { name: "Live-Events", icon: "🎤", link: "live-events" },
+    { name: "Opportunities", icon: "🔍", link: "opportunities" },
+    { name: "Budget", icon: "💰", link: "budget" },
+    { name: "More", icon: "⋯", link: "more" },
+  ];
 
-    const handleClubNavigation = (link) => {
-        console.log(link);
-    }
+  const status = [
+    { title: "Clubs", count: 5 },
+    { title: "Events", count: 10 },
+    { title: "Ongoing Projects", count: 2 },
+    { title: "Projects Completed", count: "10" },
+    { title: "Add Functionalities", count: "+" },
+  ];
 
-    return (
-        <div>
-            <Header handleMenuNavigation={handleMenuNavigation} liveEvents={liveEvents} recentActivity={activity} menuItems={menuItems} ></Header>
-            {currSection == "dashboard" && (
-                <Dashboard announcements={announcements} status={status} myClubs={myClubs} 
-                    handleAllAnnouncementClick={() => {setCurrentSection("announcements")}}
-                    handleAllClubLink={() => {setCurrentSection("clubs")}}
-                    > </Dashboard>
-                )}
+  const handleClubNavigation = (link) => {
+    console.log(link);
+  };
 
-            {currSection == "clubs" && (
-                <Clubs my_clubs={myClubs2} other_clubs={otherClubs} handleNavigation={handleClubNavigation} />
-            )}
+  return (
+    <div>
+      <Header
+        handleMenuNavigation={handleMenuNavigation}
+        liveEvents={liveEvents}
+        recentActivity={activity}
+        menuItems={menuItems}
+      ></Header>
+      {currSection == "dashboard" && (
+        <Dashboard
+          announcements={announcements}
+          status={status}
+          myClubs={myClubs}
+          handleAllAnnouncementClick={() => {
+            setCurrentSection("announcements");
+          }}
+          handleAllClubLink={() => {
+            setCurrentSection("clubs");
+          }}
+        >
+          {" "}
+        </Dashboard>
+      )}
 
-            {currSection == 'opportunities' && (
-                <ProjectList projects={projects}></ProjectList>
-            )}
+      {currSection == "clubs" && (
+        <Clubs
+          my_clubs={myClubs2}
+          other_clubs={otherClubs}
+          handleNavigation={handleClubNavigation}
+        />
+      )}
 
-            {currSection == 'announcements' && (
-                <AnnouncementsDash announcements={announcements}></AnnouncementsDash>
-            )}
+      {currSection == "opportunities" && (
+        <ProjectList projects={projects}></ProjectList>
+      )}
 
-            {currSection == 'calendar' && (
-                <LocalizationProvider dateAdapter={AdapterDayjs}>
-                    <EventCalendar events={events} />
-                </LocalizationProvider>
-            )}
-        </div>
-    );
-}
+      {currSection == "announcements" && (
+        <AnnouncementsDash announcements={announcements}></AnnouncementsDash>
+      )}
+
+      {currSection == "calendar" && (
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <EventCalendar events={events} />
+        </LocalizationProvider>
+      )}
+    </div>
+  );
+};
 
 export default StudentDashboard;

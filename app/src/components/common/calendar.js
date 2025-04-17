@@ -1,26 +1,44 @@
-import React, { useState, useEffect } from 'react';
-import dayjs from 'dayjs';
-import Badge from '@mui/material/Badge';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { PickersDay } from '@mui/x-date-pickers/PickersDay';
-import { DateCalendar } from '@mui/x-date-pickers/DateCalendar';
-import { DayCalendarSkeleton } from '@mui/x-date-pickers/DayCalendarSkeleton';
-import { Box, Typography } from '@mui/material';
+import React, { useState, useEffect, useRef } from "react";
+import dayjs from "dayjs";
+import Badge from "@mui/material/Badge";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { PickersDay } from "@mui/x-date-pickers/PickersDay";
+import { DateCalendar } from "@mui/x-date-pickers/DateCalendar";
+import { DayCalendarSkeleton } from "@mui/x-date-pickers/DayCalendarSkeleton";
+import { Box, Typography, Tooltip, Chip } from "@mui/material";
+
+// Color map for different councils
+const COUNCIL_COLORS = {
+  "Technical Council": "#f38221",
+  "Cultural Council": "#7e57c2",
+  "Sports Council": "#43a047",
+  "Academic Council": "#039be5",
+  default: "#546e7a",
+};
 
 const CalendarComponent = ({ events }) => {
-  const requestAbortController = React.useRef(null);
-  const [isLoading, setIsLoading] = React.useState(false);
-  const [highlightedDays, setHighlightedDays] = React.useState([]);
+  const requestAbortController = useRef(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [highlightedDaysMap, setHighlightedDaysMap] = useState({});
 
-  // Fetch events and highlight the dates for the current month
   const fetchHighlightedDays = (date) => {
     setIsLoading(true);
-    const daysToHighlight = events
-      .filter((event) => dayjs(event.date).month() === date.month() && dayjs(event.date).year() === date.year())
-      .map((event) => dayjs(event.date).date());
+    const map = {};
 
-    setHighlightedDays(daysToHighlight);
+    events.forEach((event) => {
+      const eventDate = dayjs(event.start_time);
+      if (
+        eventDate.month() === date.month() &&
+        eventDate.year() === date.year()
+      ) {
+        const day = eventDate.date();
+        if (!map[day]) map[day] = [];
+        map[day].push(event);
+      }
+    });
+
+    setHighlightedDaysMap(map);
     setIsLoading(false);
   };
 
@@ -37,114 +55,124 @@ const CalendarComponent = ({ events }) => {
   }, [events]);
 
   function CustomDay(props) {
-    const { highlightedDays = [], day, outsideCurrentMonth, ...other } = props;
-    const isSelected = !outsideCurrentMonth && highlightedDays.includes(day.date());
-
-    return (
-      <Badge
-        key={day.toString()}
-        overlap="circular"
-        badgeContent={isSelected ? '🌚' : undefined}
-      >
-        <PickersDay
-          {...other}
-          outsideCurrentMonth={outsideCurrentMonth}
-          day={day}
-          sx={{
-            ...(isSelected && {
-              backgroundColor: 'rgb(243, 130, 33)', // Highlight selected day with the specified color
-              color: 'white', // Change text color to white for better contrast
-              '&:hover': {
-                backgroundColor: 'rgb(243, 130, 33)', // Ensure hover state maintains the highlight
-              },
-            }),
-            // Override default focus and selected state to prevent blue background
-            '&.Mui-selected': {
-              backgroundColor: 'rgb(243, 130, 33) !important', // Override default selected state
-              color: 'white',
+    const { day, outsideCurrentMonth, ...other } = props;
+    const dayNum = day.date();
+    const dayEvents = highlightedDaysMap[dayNum] || [];
+    const isHighlighted = !outsideCurrentMonth && dayEvents.length > 0;
+  
+    // Get all involved councils for the day
+    const councils = [...new Set(dayEvents.map((e) => e.council))];
+    const primaryColor =
+      councils.length === 1
+        ? COUNCIL_COLORS[councils[0]] || COUNCIL_COLORS["default"]
+        : COUNCIL_COLORS["default"];
+  
+    const tooltipContent = dayEvents
+      .map((e) => `${dayjs(e.start_time).format("HH:mm")} - ${e.title}`)
+      .join("\n");
+  
+    const pickersDay = (
+      <PickersDay
+        {...other}
+        day={day}
+        outsideCurrentMonth={outsideCurrentMonth}
+        sx={{
+          ...(isHighlighted && {
+            backgroundColor: primaryColor,
+            color: "white",
+            "&:hover": {
+              backgroundColor: dayjs().isSame(day, 'day') ? primaryColor : "#333",
+              color: "white",
             },
-            '&.Mui-focusVisible': {
-              backgroundColor: 'rgb(243, 130, 33) !important', // Override default focus state
-              color: 'white',
-            },
-          }}
-        />
-      </Badge>
+          }),
+          "&.Mui-selected": {
+            backgroundColor: primaryColor + " !important",
+            color: "white",
+          },
+          "&.Mui-focusVisible": {
+            backgroundColor: primaryColor + " !important",
+            color: "white",
+          },
+        }}
+      />
+    );
+  
+    return isHighlighted ? (
+      <Tooltip title={<pre style={{ margin: 0 }}>{tooltipContent}</pre>} arrow>
+        {pickersDay}
+      </Tooltip>
+    ) : (
+      pickersDay
     );
   }
+  
 
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
-      <Box sx={{ 
-          width: '100%', 
-          maxWidth: 600, // Limit the max width on larger screens
-          margin: '0 auto', // Center align the box
+      <Box
+        sx={{
+          width: "100%",
+          maxWidth: 600,
+          margin: "0 auto",
           padding: 2,
-          '@media (max-width: 600px)': { // Ensure the container is full width on smaller screens
-              padding: 1,
-          }
-      }}>
-          {/* Header with Calendar text and thick line */}
-          <Box sx={{ 
-              display: 'flex', 
-              flexDirection: 'column', 
-              alignItems: 'flex-end', // Align the title to the right
-              marginBottom: 2,
-              '@media (max-width: 600px)': {
-                  alignItems: 'center',
+        }}
+      >
+        {/* Header */}
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "flex-end",
+            marginBottom: 2,
+            "@media (max-width: 600px)": {
+              alignItems: "center",
+            },
+          }}
+        >
+          <Typography
+            variant="h6"
+            sx={{
+              marginBottom: "5px",
+              fontSize: { xs: "16px", sm: "18px", md: "20px" },
+            }}
+          >
+            CALENDAR
+          </Typography>
+          <Box
+            sx={{
+              backgroundColor: "#f38221",
+              width: "30%",
+              height: "6px",
+              borderRadius: "10px",
+              "@media (max-width: 600px)": {
+                width: "50%",
               },
-          }}>
-              <Typography 
-                  variant="h6" 
-                  sx={{ 
-                      marginBottom: '5px',
-                      fontSize: { xs: '16px', sm: '18px', md: '20px' }, // Responsive typography
-                  }}
-              >
-                  CALENDAR
-              </Typography>
-              <Box sx={{ 
-                  backgroundColor: 'rgb(243, 130, 33)', 
-                  width: '30%', 
-                  height: '6px', 
-                  borderRadius: '10px',
-                  '@media (max-width: 600px)': {
-                      width: '50%', // Adjust width of line for small screens
-                  }
-              }}></Box>
-          </Box>
-          
-          <DateCalendar
-              defaultValue={dayjs()}
-              loading={isLoading}
-              onMonthChange={handleMonthChange}
-              renderLoading={() => <DayCalendarSkeleton />}
-              sx={{
-                  backgroundColor: 'rgb(250, 199, 170)', // Set background color of the calendar
-                  borderRadius: '8px', // Optional: Make the calendar have rounded corners
-                  padding: '10px',
-                  width: '90%', // Reduce the width of the calendar
-                  maxWidth: '400px', // Set a maximum width for the calendar
-                  height: '300px', // Set a fixed height for the calendar
-                  marginLeft: 'auto', // Align the calendar to the right
-                  '@media (max-width: 600px)': {
-                      padding: '5px', // Less padding on small screens
-                      width: '100%', // Full width on smaller screens
-                      height: '250px', // Adjust height for smaller screens
-                  },
-              }}
-              slots={{
-                  day: CustomDay,
-              }}
-              slotProps={{
-                  day: {
-                      highlightedDays,
-                  },
-              }}
+            }}
           />
+        </Box>
+
+        <DateCalendar
+          defaultValue={dayjs()}
+          loading={isLoading}
+          onMonthChange={handleMonthChange}
+          renderLoading={() => <DayCalendarSkeleton />}
+          sx={{
+            backgroundColor: "rgb(250, 199, 170)",
+            borderRadius: "8px",
+            padding: "10px",
+            width: "90%",
+            maxWidth: "400px",
+            height: "300px",
+            marginLeft: "auto",
+            "@media (max-width: 600px)": {
+              padding: "5px",
+              width: "100%",
+              height: "250px",
+            },
+          }}
+          slots={{ day: CustomDay }}
+        />
       </Box>
-
-
     </LocalizationProvider>
   );
 };
