@@ -17,6 +17,7 @@ const AppRoutes = () => (
 
     <Route element={<ProtectedRoute allowedRoles={['student']} />}>
       <Route path="/student/dashboard" element={<StudentDashboard />} />
+      <Route path="/student/settings" element={<StudentDashboard />} />
     </Route>
     <Route element={<ProtectedRoute allowedRoles={['admin']} />}>
       <Route path="/admin/dashboard" element={<AdminDashboard />} />

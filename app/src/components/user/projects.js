@@ -20,6 +20,7 @@ import { formatToIST } from "./../../utils/parser";
 const ProjectList = ({ projects }) => {
   const [filterType, setFilterType] = useState("All");
   const [filterRole, setFilterRole] = useState("All");
+  const [filterStatus, setFilterStatus] = useState("All"); // ✅ NEW
 
   const sortedProjects = [...projects].sort(
     (a, b) => new Date(b.dateCreated) - new Date(a.dateCreated)
@@ -29,7 +30,8 @@ const ProjectList = ({ projects }) => {
     const typeMatch = filterType === "All" || proj.proj_type === filterType;
     const roleMatch =
       filterRole === "All" || proj.coordinator_role === filterRole;
-    return typeMatch && roleMatch;
+    const statusMatch = filterStatus === "All" || proj.status === filterStatus; // ✅ NEW
+    return typeMatch && roleMatch && statusMatch;
   });
 
   const theme = useTheme();
@@ -37,7 +39,6 @@ const ProjectList = ({ projects }) => {
 
   return (
     <Box sx={{ padding: 3, px: { xs: 2, sm: 5, md: 10 }, py: 3 }}>
-      {/* Title */}
       <Typography
         variant="h4"
         fontWeight="bold"
@@ -55,7 +56,6 @@ const ProjectList = ({ projects }) => {
         PROJECTS
       </Typography>
 
-      {/* Filter Bar */}
       <Box
         component={motion.div}
         initial={{ opacity: 0, y: 20 }}
@@ -73,7 +73,6 @@ const ProjectList = ({ projects }) => {
           flexWrap: "wrap",
         }}
       >
-        {/* Project Type Filter */}
         <FormControl
           variant="outlined"
           size="small"
@@ -104,7 +103,6 @@ const ProjectList = ({ projects }) => {
           </Select>
         </FormControl>
 
-        {/* Coordinator Role Filter */}
         <FormControl
           variant="outlined"
           size="small"
@@ -137,7 +135,36 @@ const ProjectList = ({ projects }) => {
           </Select>
         </FormControl>
 
-        {/* New Project Button */}
+        <FormControl
+          variant="outlined"
+          size="small"
+          sx={{
+            backgroundColor: "white",
+            borderRadius: "10px",
+            minWidth: isSmallScreen ? "100%" : 150,
+            boxShadow: "0px 2px 5px rgba(0,0,0,0.1)",
+          }}
+        >
+          <Select
+            value={filterStatus}
+            onChange={(e) => setFilterStatus(e.target.value)}
+            displayEmpty
+            sx={{
+              borderRadius: "10px",
+              "& .MuiOutlinedInput-notchedOutline": { border: "none" },
+            }}
+          >
+            <MenuItem value="All">
+              <strong>All Statuses</strong>
+            </MenuItem>
+            {[...new Set(projects.map((p) => p.status))].map((status) => (
+              <MenuItem key={status} value={status}>
+                {status}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+
         <Button
           variant="contained"
           component={motion.div}
@@ -177,7 +204,6 @@ const ProjectList = ({ projects }) => {
               }}
             >
               <CardContent>
-                {/* Header */}
                 <Box
                   sx={{
                     display: "flex",
@@ -213,7 +239,6 @@ const ProjectList = ({ projects }) => {
                   </Typography>
                 </Box>
 
-                {/* Title and Description */}
                 <Typography variant="h6" fontWeight="bold" mt={2}>
                   {project.title}
                 </Typography>
@@ -221,7 +246,6 @@ const ProjectList = ({ projects }) => {
                   {project.description}
                 </Typography>
 
-                {/* Skills and Button */}
                 <Box
                   sx={{
                     display: "flex",

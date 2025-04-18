@@ -6,104 +6,294 @@ import {
   Button,
   Stack,
   Divider,
+  Grid,
 } from "@mui/material";
+import timeAgo from "./../../utils/parser";
+import ProjectList from "./projects";
+import ClubProjects from "./clubProjects";
 
-const ClubInfo = ({ club, details, image, club_heads, club_leads, mail, contact_number, discussions }) => {
+const ClubInfo = ({ club }) => {
   return (
-    <Box sx={{ p: 3, backgroundColor: "#f8f8f8", fontFamily: "Arial, sans-serif" }}>
+    <Box
+      sx={{
+        p: { xs: 2, sm: 4 },
+        backgroundColor: "#fafafa",
+      }}
+    >
       {/* Club Title */}
-      <Typography variant="h4" fontWeight="bold" mb={2}>
-        {club}
+      <Typography
+        variant="h4"
+        fontWeight="bold"
+        mb={3}
+        sx={{
+          fontFamily: "Poppins, sans-serif",
+          fontSize: { xs: "1.6rem", sm: "1.8rem", md: "2rem" },
+        }}
+      >
+        {club.title}
       </Typography>
 
-      {/* Club Header Section */}
-      <Stack direction="row" spacing={4} alignItems="flex-start">
-        {/* Club Image */}
-        <Box
-          component="img"
-          src={image}
-          alt={`${club} logo`}
-          sx={{ width: 240, height: 240, borderRadius: 2 }}
-        />
+      {/* Club Info Section - Centered */}
+      <Box sx={{ px: { xs: 1, sm: 2, md: 4, lg: 6 } }}>
+        {/* Logo + Info Cards */}
+        <Grid
+          container
+          spacing={4}
+          sx={{
+            flexDirection: { xs: "column", md: "row" },
+            alignItems: "stretch",
+            justifyContent: "space-between",
+          }}
+        >
+          {/* Logo on Left */}
+          <Grid
+            item
+            xs={12}
+            md={6}
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "flex-start",
+            }}
+          >
+            <Box
+              component="img"
+              src={`/clubs/${club.name}/logo.png`}
+              alt={`${club.name} logo`}
+              sx={{
+                width: "100%",
+                maxWidth: 260,
+                height: "auto",
+                borderRadius: 2,
+              }}
+            />
+          </Grid>
 
-        {/* Club Description */}
-        <Box flex={1}>
-          <Typography variant="body1" sx={{ fontSize: 15, lineHeight: 1.5, textAlign: "justify", color: "#333" }}>
-            {details}
-          </Typography>
-        </Box>
+          {/* Head/Mail Info Cards on Right */}
+          <Grid
+            item
+            xs={12}
+            md={6}
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              gap: 2,
+            }}
+          >
+            {/* Club Head/CoHeads Card */}
+            <Card
+              sx={{
+                backgroundColor: "rgb(245,164,94)",
+                color: "black",
+                p: 2,
+                borderRadius: 2,
+                boxShadow: 2,
+              }}
+            >
+              <Typography variant="h6" gutterBottom>
+                ● Club Head
+              </Typography>
+              <Typography variant="body2" sx={{ mb: 1 }}>
+                {club.head}
+              </Typography>
+              <Divider sx={{ backgroundColor: "black", my: 1 }} />
+              <Typography variant="h6" gutterBottom>
+                ● Club CoHead(s)
+              </Typography>
+              <Typography variant="body2">{club.coheads.join(", ")}</Typography>
+            </Card>
 
-        {/* Club Info Cards */}
-        <Stack spacing={2}>
-          {/* Club Heads & Leads - Orange Box */}
-          <Card sx={{ backgroundColor: "rgb(245,164,94)", color: "black", p: 2, borderRadius: 2, width: 250 }}>
-            <Typography variant="h6">
-              ● <strong>Club Head(s)</strong>
-            </Typography>
-            <Typography variant="body1" sx={{ fontSize: 15, lineHeight: 1.5, textAlign: "justify" }}>
-              {club_heads.join(", ")}
-            </Typography>
-            <Divider sx={{ my: 1, backgroundColor: "black" }} />
-            <Typography variant="h6">
-              ● <strong>Club Lead(s)</strong>
-            </Typography>
-            <Typography variant="body1" sx={{ fontSize: 15, lineHeight: 1.5, textAlign: "justify" }}>
-              {club_leads.join(", ")}
-            </Typography>
-          </Card>
+            {/* Email Card */}
+            <Card
+              sx={{
+                backgroundColor: "#5d5d5d",
+                color: "white",
+                p: 2,
+                borderRadius: 2,
+                boxShadow: 2,
+              }}
+            >
+              <Typography variant="h6" gutterBottom>
+                ● Club Mail ID
+              </Typography>
+              <Typography variant="body2">{club.email}</Typography>
+            </Card>
+          </Grid>
+        </Grid>
 
-          {/* Contact Info - Grey Box */}
-          <Card sx={{ backgroundColor: "#5d5d5d", color: "white", p: 2, borderRadius: 2, width: 250 }}>
-            <Typography variant="h6">
-              ● <strong>Club Mail ID</strong>
+        {/* Full Width Description Below */}
+        <Grid item xs={12} mt={4}>
+          <Box
+            sx={{
+              backgroundColor: "#fff",
+              p: 2,
+              borderRadius: 2,
+              boxShadow: 1,
+            }}
+          >
+            <Typography
+              variant="body1"
+              sx={{
+                fontSize: "1rem",
+                lineHeight: 1.6,
+                textAlign: "justify",
+                color: "#444",
+              }}
+            >
+              {club.description}
             </Typography>
-            <Typography variant="body1" sx={{ fontSize: 15, lineHeight: 1.5, textAlign: "justify" }}>
-              {mail}
-            </Typography>
-            <Divider sx={{ my: 1, backgroundColor: "white" }} />
-            <Typography variant="h6">
-              ● <strong>Head Contact Number</strong>
-            </Typography>
-            <Typography variant="body1" sx={{ fontSize: 15, lineHeight: 1.5, textAlign: "justify" }}>
-              {contact_number}
-            </Typography>
-          </Card>
-        </Stack>
-      </Stack>
-
-      {/* Forum Discussions Header */}
-      <Stack direction="row" justifyContent="space-between" alignItems="center" mt={3}>
-        <Typography variant="h5">Forum Discussions</Typography>
-        <Button sx={{ backgroundColor: "rgb(243,130,33)", color: "white", borderRadius: 2, "&:hover": { backgroundColor: "rgb(220,100,30)" } }}>
-          View All
-        </Button>
-      </Stack>
-
-      {/* Forum Discussions List */}
-      <Box mt={2}>
-        {discussions.map((discussion, index) => (
-          <Card key={index} sx={{ display: "flex", alignItems: "center", p: 2, mb: 2, borderRadius: 2 }}>
-            <Box component="img" src={discussion.logo} alt="Discussion logo" sx={{ width: 40, height: 40, mr: 2 }} />
-            <Box flex={1}>
-              <Typography variant="h6">{discussion.title}</Typography>
-              <Typography variant="body2">by {discussion.student}</Typography>
-            </Box>
-            <Typography variant="body2" sx={{ color: "gray", fontSize: 12 }}>
-              {discussion.date}
-            </Typography>
-          </Card>
-        ))}
+          </Box>
+        </Grid>
+      </Box>
+      <Box sx={{ mt: 2, px: { xs: 2, sm: 5, md: 2 } }}>
+        <Typography
+          variant="h5"
+          sx={{
+            fontFamily: "Poppins, sans-serif",
+            fontSize: { xs: "1.4rem", sm: "1.6rem" },
+          }}
+        >
+          Projects
+        </Typography>
+        <ClubProjects projects={club.projects}></ClubProjects>
       </Box>
 
-      {/* Action Buttons */}
-      <Stack direction="row" justifyContent="center" spacing={2} mt={3}>
-        <Button sx={{ backgroundColor: "gray", color: "white", borderRadius: 2, px: 3, "&:hover": { backgroundColor: "#505050" } }}>
-          Back
-        </Button>
-        <Button sx={{ backgroundColor: "orange", color: "white", borderRadius: 2, px: 3, "&:hover": { backgroundColor: "darkorange" } }}>
-          Request to Join
-        </Button>
-      </Stack>
+      <Box sx={{ mt: 2, px: { xs: 2, sm: 5, md: 2 } }}>
+        <Stack
+          direction="row"
+          justifyContent="space-between"
+          alignItems="center"
+          mt={5}
+          mb={2}
+        >
+          <Typography
+            variant="h5"
+            sx={{
+              fontFamily: "Poppins, sans-serif",
+              fontSize: { xs: "1.4rem", sm: "1.6rem" },
+            }}
+          >
+            Members
+          </Typography>
+        </Stack>
+
+        <Box
+          sx={{
+            maxHeight: 400,
+            overflowY: "auto",
+            pr: 1,
+            mt: 2,
+          }}
+        >
+          <Stack spacing={2}>
+            {club.members.map((member, index) => (
+              <Card
+                key={index}
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                  p: 2,
+                  borderRadius: 2,
+                  boxShadow: 1,
+                }}
+              >
+                <Box sx={{ display: "flex", alignItems: "center", flex: 1 }}>
+                  <Box
+                    component="img"
+                    src={`/roles/student_circular.png`}
+                    alt="member"
+                    sx={{ width: 48, height: 48, mr: 2 }}
+                  />
+                  <Box>
+                    <Typography variant="subtitle1" fontWeight="bold">
+                      {member.name}
+                    </Typography>
+                    <Typography variant="body2" color="text.secondary">
+                      {member.email}
+                    </Typography>
+                  </Box>
+                </Box>
+                <Typography
+                  variant="caption"
+                  sx={{
+                    color: "gray",
+                    fontSize: 11,
+                    minWidth: "70px",
+                    textAlign: "right",
+                  }}
+                >
+                  {timeAgo(member.joined_date)}
+                </Typography>
+              </Card>
+            ))}
+          </Stack>
+        </Box>
+      </Box>
+      {/* Members Section */}
+
+      <Box
+        sx={{
+          position: "sticky",
+          bottom: 0,
+          backgroundColor: "#fafafa",
+          zIndex: 10,
+          py: 2,
+          mt: 5,
+          borderTop: "1px solid #ddd",
+        }}
+      >
+        <Stack
+          direction="row"
+          justifyContent="center"
+          spacing={2}
+          sx={{ flexWrap: "wrap" }}
+        >
+          <Button
+            variant="outlined"
+            sx={{
+              borderColor: "gray",
+              color: "gray",
+              borderRadius: 2,
+              px: 3,
+              textTransform: "none",
+              "&:hover": { backgroundColor: "#f0f0f0" },
+            }}
+          >
+            Back
+          </Button>
+          <Button
+            variant="contained"
+            sx={{
+              backgroundColor: "rgb(243,130,33)",
+              color: "white",
+              borderRadius: 2,
+              px: 3,
+              textTransform: "none",
+              "&:hover": {
+                backgroundColor: "rgb(220,100,30)",
+              },
+            }}
+          >
+            Join as Member
+          </Button>
+          <Button
+            variant="contained"
+            sx={{
+              backgroundColor: "rgb(243,130,33)",
+              color: "white",
+              borderRadius: 2,
+              px: 3,
+              textTransform: "none",
+              "&:hover": {
+                backgroundColor: "rgb(220,100,30)",
+              },
+            }}
+          >
+            Core Team
+          </Button>
+        </Stack>
+      </Box>
     </Box>
   );
 };

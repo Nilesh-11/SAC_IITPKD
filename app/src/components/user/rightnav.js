@@ -91,7 +91,7 @@ const RightNavbar = ({ username, userLogo, liveEvents, activity, onClose }) => {
             gap={2}
           >
             <Avatar
-              src={event.club_logo_src}
+              src={`/roles/student_circular.png`}
               sx={{
                 width: 40,
                 height: 40,
@@ -105,7 +105,7 @@ const RightNavbar = ({ username, userLogo, liveEvents, activity, onClose }) => {
                 color="text.secondary"
                 sx={{ fontSize: { xs: "0.75rem", sm: "0.85rem" } }}
               >
-                {event.club}
+                {event.council}
               </Typography>
               <Typography
                 variant="h6"
@@ -139,7 +139,7 @@ const RightNavbar = ({ username, userLogo, liveEvents, activity, onClose }) => {
             mt={1}
             sx={{ fontSize: { xs: "0.75rem", sm: "0.85rem" } }}
           >
-            {event.info}
+            {event.description}
           </Typography>
         </Paper>
       ))}
@@ -177,7 +177,7 @@ const RightNavbar = ({ username, userLogo, liveEvents, activity, onClose }) => {
             }}
           />
           <Avatar
-            src={act.club_logo_src}
+            src={`/roles/student_circular.png`}
             sx={{
               width: 30,
               height: 30,
