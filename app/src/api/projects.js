@@ -5,8 +5,8 @@ const handleAPIError = () => {
   window.location.href = "/login"; // Use navigate only inside React component
 };
 
-const getAnnouncementsList = async () => {
-  const url = `${BACKEND_URL}` + "/api/public/announcements/list";
+const getProjectsList = async () => {
+  const url = `${BACKEND_URL}` + "/api/projects/list";
   try {
     const response = await fetch(url, {
       method: "POST",
@@ -26,7 +26,7 @@ const getAnnouncementsList = async () => {
       return;
     }
     if (response.ok) {
-      return responseData.content.announcements;
+      return responseData.content.projects;
     } else {
       throw new Error(`HTTP error! Status: ${response.status}`);
     }
@@ -36,4 +36,4 @@ const getAnnouncementsList = async () => {
   }
 };
 
-export default getAnnouncementsList;
+export default getProjectsList;

@@ -26,7 +26,6 @@ const getEventsList = async () => {
       return;
     }
     if (response.ok) {
-      console.log(responseData);
       return responseData.content.events;
     } else {
       throw new Error(`HTTP error! Status: ${response.status}`);

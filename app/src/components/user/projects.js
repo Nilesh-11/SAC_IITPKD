@@ -15,18 +15,22 @@ import {
 } from "@mui/material";
 import { Add } from "@mui/icons-material";
 import { motion } from "framer-motion";
+import { formatToIST } from "./../../utils/parser";
 
 const ProjectList = ({ projects }) => {
   const [filterType, setFilterType] = useState("All");
+  const [filterRole, setFilterRole] = useState("All");
 
   const sortedProjects = [...projects].sort(
     (a, b) => new Date(b.dateCreated) - new Date(a.dateCreated)
   );
 
-  const filteredProjects =
-    filterType === "All"
-      ? sortedProjects
-      : sortedProjects.filter((proj) => proj.type === filterType);
+  const filteredProjects = sortedProjects.filter((proj) => {
+    const typeMatch = filterType === "All" || proj.proj_type === filterType;
+    const roleMatch =
+      filterRole === "All" || proj.coordinator_role === filterRole;
+    return typeMatch && roleMatch;
+  });
 
   const theme = useTheme();
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
@@ -66,8 +70,10 @@ const ProjectList = ({ projects }) => {
           padding: 2,
           borderRadius: "20px",
           gap: 2,
+          flexWrap: "wrap",
         }}
       >
+        {/* Project Type Filter */}
         <FormControl
           variant="outlined"
           size="small"
@@ -82,15 +88,56 @@ const ProjectList = ({ projects }) => {
             value={filterType}
             onChange={(e) => setFilterType(e.target.value)}
             displayEmpty
-            sx={{ borderRadius: "10px", "& .MuiOutlinedInput-notchedOutline": { border: "none" } }}
+            sx={{
+              borderRadius: "10px",
+              "& .MuiOutlinedInput-notchedOutline": { border: "none" },
+            }}
           >
-            <MenuItem value="All"><strong>All Projects</strong></MenuItem>
-            {[...new Set(projects.map((p) => p.type))].map((type) => (
-              <MenuItem key={type} value={type}>{type}</MenuItem>
+            <MenuItem value="All">
+              <strong>All Projects</strong>
+            </MenuItem>
+            {[...new Set(projects.map((p) => p.proj_type))].map((type) => (
+              <MenuItem key={type} value={type}>
+                {type}
+              </MenuItem>
             ))}
           </Select>
         </FormControl>
 
+        {/* Coordinator Role Filter */}
+        <FormControl
+          variant="outlined"
+          size="small"
+          sx={{
+            backgroundColor: "white",
+            borderRadius: "10px",
+            minWidth: isSmallScreen ? "100%" : 150,
+            boxShadow: "0px 2px 5px rgba(0,0,0,0.1)",
+          }}
+        >
+          <Select
+            value={filterRole}
+            onChange={(e) => setFilterRole(e.target.value)}
+            displayEmpty
+            sx={{
+              borderRadius: "10px",
+              "& .MuiOutlinedInput-notchedOutline": { border: "none" },
+            }}
+          >
+            <MenuItem value="All">
+              <strong>All Roles</strong>
+            </MenuItem>
+            {[...new Set(projects.map((p) => p.coordinator_role))].map(
+              (role) => (
+                <MenuItem key={role} value={role}>
+                  {role}
+                </MenuItem>
+              )
+            )}
+          </Select>
+        </FormControl>
+
+        {/* New Project Button */}
         <Button
           variant="contained"
           component={motion.div}
@@ -131,13 +178,24 @@ const ProjectList = ({ projects }) => {
             >
               <CardContent>
                 {/* Header */}
-                <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                <Box
+                  sx={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                  }}
+                >
                   <Box sx={{ display: "flex", alignItems: "center" }}>
-                    <Avatar src={project.logo} sx={{ width: 40, height: 40, mr: 1 }} />
+                    <Avatar
+                      src={`/roles/${project.coordinator_role}_circular.png`}
+                      sx={{ width: 40, height: 40, mr: 1 }}
+                    />
                     <Box>
-                      <Typography variant="body2" fontWeight="bold">{project.clubname}</Typography>
+                      <Typography variant="body2" fontWeight="bold">
+                        {project.coordinator}
+                      </Typography>
                       <Typography variant="caption" color="text.secondary">
-                        {new Date(project.dateCreated).toLocaleString()}
+                        {formatToIST(project.start_date)}
                       </Typography>
                     </Box>
                   </Box>
@@ -147,7 +205,8 @@ const ProjectList = ({ projects }) => {
                       fontSize: "12px",
                       color: "white",
                       borderRadius: "5px",
-                      backgroundColor: project.status === "Ongoing" ? "green" : "gray",
+                      backgroundColor:
+                        project.status === "Ongoing" ? "green" : "gray",
                     }}
                   >
                     {project.status}
@@ -163,7 +222,16 @@ const ProjectList = ({ projects }) => {
                 </Typography>
 
                 {/* Skills and Button */}
-                <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mt: 3, flexWrap: "wrap", gap: 1 }}>
+                <Box
+                  sx={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                    mt: 3,
+                    flexWrap: "wrap",
+                    gap: 1,
+                  }}
+                >
                   <Box sx={{ display: "flex", gap: 1, flexWrap: "wrap" }}>
                     {project.skills.map((skill, i) => (
                       <Typography
@@ -174,7 +242,10 @@ const ProjectList = ({ projects }) => {
                           fontSize: "12px",
                           borderRadius: "5px",
                           fontWeight: "bold",
-                          "&:hover": { transform: "scale(1.1)", backgroundColor: "#fff2e0" },
+                          "&:hover": {
+                            transform: "scale(1.1)",
+                            backgroundColor: "#fff2e0",
+                          },
                         }}
                       >
                         {skill}
@@ -184,7 +255,8 @@ const ProjectList = ({ projects }) => {
 
                   <Box sx={{ textAlign: "center" }}>
                     <Typography variant="body2">
-                      Members: {project.currentMembers}/{project.maxmembers}
+                      Members: {project.current_members_count}/
+                      {project.max_members_count}
                     </Typography>
                     <Button
                       variant="contained"
@@ -193,12 +265,17 @@ const ProjectList = ({ projects }) => {
                       whileTap={{ scale: 0.95 }}
                       sx={{
                         mt: 1,
-                        backgroundColor: project.status === "Ongoing" ? "white" : "gray",
-                        color: project.status === "Ongoing" ? "rgb(245,164,94)" : "white",
+                        backgroundColor:
+                          project.status === "Ongoing" ? "white" : "gray",
+                        color:
+                          project.status === "Ongoing"
+                            ? "rgb(245,164,94)"
+                            : "white",
                         fontWeight: "bold",
                         textTransform: "none",
                         "&:hover": {
-                          backgroundColor: project.status === "Ongoing" ? "#fff2e0" : "gray",
+                          backgroundColor:
+                            project.status === "Ongoing" ? "#fff2e0" : "gray",
                         },
                       }}
                     >

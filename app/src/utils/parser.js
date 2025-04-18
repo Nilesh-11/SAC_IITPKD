@@ -25,4 +25,16 @@ const timeAgo = (utcDateString) => {
   return istDate.toLocaleDateString("en-IN"); // fallback to date in Indian format
 };
 
+export const formatToIST = (utcDate) => {
+  return new Date(utcDate).toLocaleString("en-IN", {
+    timeZone: "Asia/Kolkata",
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+};
+
+
 export default timeAgo;

@@ -11,18 +11,19 @@ import EventCalendar from "../../components/user/bigcalendar";
 
 import {
   liveEvents,
-  projects,
-  announcements,
   otherClubs,
   myClubs,
   myClubs2,
 } from "./../variables";
 import getAnnouncementsList from "../../api/announcement";
 import getEventsList from "../../api/events";
+import getProjectsList from "../../api/projects";
+
 const StudentDashboard = () => {
   const navigate = useNavigate();
   const [events, setEvents] = useState([]);
   const [announcements, setAnnouncements] = useState([]);
+  const [projects, setProjects] = useState([]);
   const [currSection, setCurrentSection] = useState("dashboard");
 
   useEffect(() => {
@@ -30,18 +31,23 @@ const StudentDashboard = () => {
       const data = await getAnnouncementsList();
       setAnnouncements(data);
     };
+
     const fetchEvents = async () => {
       const data = await getEventsList();
-      console.log(data);
       setEvents(data);
+    };
+
+    const fetchProjects = async () => {
+      const data = await getProjectsList();
+      setProjects(data);
     };
 
     fetchAnnouncements();
     fetchEvents();
+    fetchProjects();
   }, []);
 
   const handleMenuNavigation = (link) => {
-    console.log(link);
     setCurrentSection(link);
   };
 

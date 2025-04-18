@@ -17,7 +17,6 @@ const Api = async (path, { data }) => {
       body: JSON.stringify(data),
     });
     const responseData = await response.json();
-    console.log(responseData);
     if ( responseData?.content?.type === "error" && (responseData.content.details === "JWTExpired" || responseData.content.details === "JWTInvalid")) {
       handleAPIError();
       return;
