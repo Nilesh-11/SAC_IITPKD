@@ -1,6 +1,7 @@
 from src.database.connection import BasePublic
 from sqlalchemy import Column, Integer, String,Enum, DateTime
 from sqlalchemy.ext.hybrid import hybrid_property
+from src.models.users import UserRole
 import datetime
 import enum
 
@@ -21,6 +22,7 @@ class Announcements(BasePublic):
     expires_at = Column(DateTime, nullable=False)
     priority = Column(Enum(AnnouncementPriority), default=AnnouncementPriority.normal)
     author = Column(String(50), nullable=False)
+    author_role = Column(Enum(UserRole), default=UserRole.admin)
     
     @hybrid_property
     def is_expired(self):

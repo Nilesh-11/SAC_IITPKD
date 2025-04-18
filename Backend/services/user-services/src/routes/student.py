@@ -1,12 +1,38 @@
 
 from src.utils.auth import hash_password
-from src.models.users import Student
+from src.models.users import Student, Club, ClubMembership, ClubRole
+from src.schemas.request import JoinClubRequest
 from src.database.connection import get_users_db
-from fastapi import APIRouter, HTTPException, Depends
+from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
-import datetime
 
 router = APIRouter()
+
+@router.post("/club/join")
+def join_club(data: JoinClubRequest, db: Session = Depends(get_users_db)):
+    club_id=data.club_id
+    request_by=data.request_by
+    try:
+        existing_student = db.query(Student).filter(Student.email == request_by).first()
+        if not existing_student:
+            return {'content':{'type': "error", 'details': "Student not found"}}
+        existing_club = db.query(Club).filter(Club.id == club_id).first()
+        if not existing_club:
+            return {'content':{'type': "error", 'details': "Club not found"}}
+        new_club_membership = ClubMembership(
+            student_id=existing_student.id,
+            club_id=club_id,
+        )
+        default_role = db.query(ClubRole).filter(ClubRole.club_id == club_id, ClubRole.title == "member").first()
+        if default_role:
+            new_club_membership.role_id = default_role.id
+        db.add(new_club_membership)
+        db.commit()
+        db.refresh(new_club_membership)
+        return {'content':{'type': "ok", 'details': "Club membership added", 'id':new_club_membership.id}}
+    except Exception as e:
+        print("Error in log in:", e)
+        return {'content':{"type": "error", "detail": "An error occurred with login", 'status_code': 500}}
 
 # @router.post("/save-password")
 # def forgot_password(data: SavePasswordRequest, db_user: Session = Depends(get_users_db)):

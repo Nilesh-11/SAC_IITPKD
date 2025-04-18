@@ -25,7 +25,8 @@ def add_announcment(request: AddAnnouncementRequest, db: Session = Depends(get_p
             updated_at=datetime.datetime.utcnow(),
             expires_at=datetime.datetime.utcnow() + datetime.timedelta(days=30),
             priority=priority,
-            author=request_by
+            author=request_by,
+            author_role="admin"
         )
         db.add(new_announcement)
         db.commit()
@@ -76,17 +77,42 @@ def add_announcment(request: DeleteAnnouncementRequest, db: Session = Depends(ge
         print("ERROR in add announcement:", e)
         return {'content':{'type': "error", 'details':"An error occurred"}}
 
+@router.post("/announcement/add")
+def add_announcment(request: AddAnnouncementRequest, db: Session = Depends(get_public_db)):
+    title=request.title
+    body=request.body
+    priority=request.priority
+    request_by = request.request_by
+    try:
+        new_announcement = Announcements(
+            title=title,
+            body=body,
+            created_at=datetime.datetime.utcnow(),
+            updated_at=datetime.datetime.utcnow(),
+            expires_at=datetime.datetime.utcnow() + datetime.timedelta(days=30),
+            priority=priority,
+            author=request_by,
+            author_role="admin"
+        )
+        db.add(new_announcement)
+        db.commit()
+        return {'content': {'type':"ok", 'details': "Announcement added"}}
+    except Exception as e:
+        print("ERROR in add announcement:", e)
+        return {'content':{'type': "error", 'details':"An error occurred"}}
+
 @router.post("/councils/add")
 def add_council(request: AddCouncilRequest, db: Session = Depends(get_users_db)):
     email=request.email
     password=request.password
+    password_hash = hash_password(password)
     name=request.name
+    title=request.title
     description=request.description
     faculty_advisor=request.faculty_advisor
     secretary=request.secretary
     deputy=request.deputy
     request_by = request.request_by
-    password_hash = hash_password(password)
     try:
         existing_admin = db.query(Admin).filter(Admin.email == request_by).first()
         if not existing_admin:
@@ -94,23 +120,27 @@ def add_council(request: AddCouncilRequest, db: Session = Depends(get_users_db))
         existing_secretary = db.query(Student).filter(Student.email == secretary).first()
         if not existing_secretary:
             return {'content': {'type':"error", 'details': "Secretary not found"}}
+        deputy_students = []
         for user in deputy:
             existing_deputy = db.query(Student).filter(Student.email == user).first()
             if not existing_deputy:
                 return {'content': {'type':"error", 'details': "Deputy Secretary not found"}}
+            deputy_students.append(existing_deputy)
         new_council = Council(
             email=email,
             password_hash=password_hash,
             name=name,
+            title=title,
             description=description,
             faculty_advisor=faculty_advisor,
-            secretary=secretary,
-            deputy=deputy
+            secretary_id=existing_secretary.id,
+            secretary=existing_secretary,
+            deputy_ids=deputy_students
         )
         db.add(new_council)
         db.commit()
         db.refresh(new_council)
-        return {'content': {'type':"ok", 'details': "Council updated",'id': new_council.id}}
+        return {'content': {'type':"ok", 'details': "Council added",'id': new_council.id}}
     except Exception as e:
         print("ERROR in add council:", e)
         return {'content':{'type': "error", 'details':"An error occurred"}}

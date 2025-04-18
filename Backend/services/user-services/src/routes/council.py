@@ -1,8 +1,8 @@
 from src.utils.auth import hash_password
-from src.schemas.request import DeleteAnnouncementRequest, AddAnnouncementRequest, UpdateAnnouncementRequest, AddClubRequest
+from src.schemas.request import UpdateClubRequest, DeleteAnnouncementRequest, AddAnnouncementRequest, UpdateAnnouncementRequest, AddClubRequest
 from src.utils.verify import verify_user
 from src.models.projects import Project
-from src.models.users import Council, Student, Club, Admin
+from src.models.users import Council, Student, Club, Admin, ClubRole
 from src.models.public import Announcements
 from src.database.connection import get_users_db, get_public_db
 from fastapi.responses import JSONResponse
@@ -26,7 +26,8 @@ def add_announcment(request: AddAnnouncementRequest, db: Session = Depends(get_p
             updated_at=datetime.datetime.utcnow(),
             expires_at=datetime.datetime.utcnow() + datetime.timedelta(days=30),
             priority=priority,
-            author=request_by
+            author=request_by,
+            author_role="council"
         )
         db.add(new_announcement)
         db.commit()
@@ -80,7 +81,9 @@ def add_announcment(request: DeleteAnnouncementRequest, db: Session = Depends(ge
 @router.post("/clubs/add")
 def add_club(request: AddClubRequest, db: Session = Depends(get_users_db)):
     name=request.name
+    title=request.title
     email=request.email
+    description=request.description
     password=request.password
     password_hash=hash_password(password)
     faculty_advisor=request.faculty_advisor
@@ -100,6 +103,8 @@ def add_club(request: AddClubRequest, db: Session = Depends(get_users_db)):
                 return {'content': {'type':"error", 'details': "CO-Head not found"}}
         new_club = Club(
             name=name,
+            title=title,
+            description=description,
             email=email,
             password_hash=password_hash,
             faculty_advisor=faculty_advisor,
@@ -110,6 +115,62 @@ def add_club(request: AddClubRequest, db: Session = Depends(get_users_db)):
         db.add(new_club)
         db.commit()
         db.refresh(new_club)
+        new_club_role = ClubRole(
+            club_id = new_club.id,
+            title= "member",
+            description = "member of club"
+        )
+        db.add(new_club_role)
+        db.commit()
+        return {'content': {'type':"ok", 'details': "Club created",'id': new_club.id}}
+    except Exception as e:
+        print("ERROR in add announcement:", e)
+        return {'content':{'type': "error", 'details':"An error occurred"}}
+
+@router.post("/clubs/update")
+def add_club(request: UpdateClubRequest, db: Session = Depends(get_users_db)):
+    name=request.name
+    title=request.title
+    email=request.email
+    description=request.description
+    password=request.password
+    password_hash=hash_password(password)
+    faculty_advisor=request.faculty_advisor
+    head=request.head
+    coheads=request.coheads
+    request_by=request.request_by
+    try:
+        existing_council = db.query(Council).filter(Council.email == request_by).first()
+        if not existing_council:
+            return {'content': {'type':"error", 'details': "Council not found"}}
+        existing_head = db.query(Student).filter(Student.email == head).first()
+        if not existing_head:
+            return {'content': {'type':"error", 'details': "Head not found"}}
+        for cohead in coheads:
+            existing_cohead = db.query(Student).filter(Student.email == cohead).first()
+            if not existing_cohead:
+                return {'content': {'type':"error", 'details': "CO-Head not found"}}
+        new_club = Club(
+            name=name,
+            title=title,
+            description=description,
+            email=email,
+            password_hash=password_hash,
+            faculty_advisor=faculty_advisor,
+            head=head,
+            coheads=coheads,
+            council_id=existing_council.id
+        )
+        db.add(new_club)
+        db.commit()
+        db.refresh(new_club)
+        new_club_role = ClubRole(
+            club_id = new_club.id,
+            title= "member",
+            description = "member of club"
+        )
+        db.add(new_club_role)
+        db.commit()
         return {'content': {'type':"ok", 'details': "Club created",'id': new_club.id}}
     except Exception as e:
         print("ERROR in add announcement:", e)
