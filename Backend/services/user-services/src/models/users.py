@@ -92,7 +92,6 @@ class Council(BaseUser):
 
     clubs = relationship('Club', back_populates='council', cascade="all, delete-orphan")
 
-
 class Club(BaseUser):
     __tablename__ = "clubs"
 
@@ -157,6 +156,7 @@ class ClubRole(BaseUser):
     club_id = Column(Integer, ForeignKey("clubs.id", ondelete="CASCADE"), nullable=False)
     title = Column(String, nullable=False)
     description = Column(Text, nullable=True)
+    privilege=Column(Integer, nullable=False)
     created_at = Column(DateTime, default=datetime.utcnow)
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 

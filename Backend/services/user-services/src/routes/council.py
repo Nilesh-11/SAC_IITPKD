@@ -116,9 +116,10 @@ def add_club(request: AddClubRequest, db: Session = Depends(get_users_db)):
         db.commit()
         db.refresh(new_club)
         new_club_role = ClubRole(
-            club_id = new_club.id,
-            title= "member",
-            description = "member of club"
+            club_id=new_club.id,
+            title="member",
+            description="member of club",
+            privilege=1
         )
         db.add(new_club_role)
         db.commit()

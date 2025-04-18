@@ -19,6 +19,10 @@ def join_club(data: JoinClubRequest, db: Session = Depends(get_users_db)):
         existing_club = db.query(Club).filter(Club.id == club_id).first()
         if not existing_club:
             return {'content':{'type': "error", 'details': "Club not found"}}
+        existing_membership = db.query(ClubMembership)\
+                                .filter(ClubMembership.student_id == existing_student.id, ClubMembership.club_id == existing_club.id)
+        if existing_membership:
+            return {'content':{'type': "error", 'details': f"Already a member as {existing_membership.role}"}}
         new_club_membership = ClubMembership(
             student_id=existing_student.id,
             club_id=club_id,

@@ -7,7 +7,9 @@ from src.models.public import AnnouncementPriority
 
 class AddRolesRequest(BaseModel):
     title: str
+    privilege: int
     description: str
+    privilege:int
     request_by: EmailStr
     
     @field_validator("request_by")
@@ -24,11 +26,16 @@ class MembersListRequest(BaseModel):
         return validate_mail(value)
 
 class UpdateMembershipRequest(BaseModel):
-    id: int
+    email: EmailStr
     role: str
     request_by: EmailStr
 
     @field_validator("request_by")
+    @classmethod
+    def validate_mail(cls, value: str) -> str:
+        return validate_mail(value)
+    
+    @field_validator("email")
     @classmethod
     def validate_mail(cls, value: str) -> str:
         return validate_mail(value)
