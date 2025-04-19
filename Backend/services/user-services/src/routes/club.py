@@ -1,4 +1,4 @@
-from src.schemas.request import AddRolesRequest, MembersListRequest, UpdateMembershipRequest, DeleteAnnouncementRequest, AddAnnouncementRequest, UpdateAnnouncementRequest
+from src.schemas.request import UpdateRolesRequest, AddRolesRequest, MembersListRequest, UpdateMembershipRequest, DeleteAnnouncementRequest, AddAnnouncementRequest, UpdateAnnouncementRequest
 from src.utils.verify import verify_user
 from src.models.projects import Project
 from src.models.users import Student, Club, ClubMembership, ClubRole
@@ -77,7 +77,7 @@ def add_announcment(request: DeleteAnnouncementRequest, db: Session = Depends(ge
         print("ERROR in delete announcement:", e)
         return {'content':{'type': "error", 'details':"An error occurred"}}
 
-@router.post("/roles/add")
+@router.post("/role/add")
 def add_roles(data: AddRolesRequest, db: Session = Depends(get_users_db)):
     title=data.title
     description=data.description
@@ -104,8 +104,9 @@ def add_roles(data: AddRolesRequest, db: Session = Depends(get_users_db)):
         print("ERROR in adding roles:", e)
         return {'content':{'type': "error", 'details':"An error occurred"}}
 
-@router.post("/roles/update")
-def update_roles(data: AddRolesRequest, db: Session = Depends(get_users_db)):
+@router.post("/role/update")
+def update_roles(data: UpdateRolesRequest, db: Session = Depends(get_users_db)):
+    role_id = data.role_id
     title=data.title
     privilege=data.privilege
     description=data.description
@@ -114,9 +115,10 @@ def update_roles(data: AddRolesRequest, db: Session = Depends(get_users_db)):
         existing_club = db.query(Club).filter(Club.email == request_by).first()
         if not existing_club:
             return {'content':{'type': "error", 'details': "Club not found"}}
-        existing_role = db.query(ClubRole).filter(ClubRole.club_id == existing_club.id, ClubRole.title == title).first()
-        if existing_role:
+        existing_role = db.query(ClubRole).filter(ClubRole.id == role_id, ClubRole.club_id == existing_club.id).first()
+        if not existing_role:
             return {'content':{'type': "error", 'details': "Role not found"}}
+        existing_role.title = title
         existing_role.description = description
         existing_role.privilege=privilege
         db.commit()
@@ -126,7 +128,7 @@ def update_roles(data: AddRolesRequest, db: Session = Depends(get_users_db)):
         return {'content':{'type': "error", 'details':"An error occurred"}}
 
 @router.post("/membership/update")
-def join_club(data: UpdateMembershipRequest, db: Session = Depends(get_users_db)):
+def membership_update(data: UpdateMembershipRequest, db: Session = Depends(get_users_db)):
     student_email=data.email
     role=data.role
     request_by=data.request_by
@@ -135,19 +137,63 @@ def join_club(data: UpdateMembershipRequest, db: Session = Depends(get_users_db)
         if not existing_club:
             return {'content':{'type': "error", 'details': "Club not found"}}
         existing_student = db.query(Student).filter(Student.email == student_email).first()
-        existing_role = db.query(ClubRole).filter(ClubRole.club_id == existing_club.id, ClubRole.title == role).first()
-        if not existing_role:
-            return {'content':{'type': "error", 'details': "Role not found"}}
-        existing_membership = db.query(ClubMembership)\
-                                .filter(ClubMembership.student_id == existing_student.id, ClubMembership.club_id == existing_club.id)\
+        if not existing_student:
+            return {'content':{'type': "error", 'details': "Student not found"}}
+        current_membership = db.query(ClubMembership)\
+                                .join(ClubRole)\
+                                .filter(ClubMembership.club_id == existing_club.id,
+                                        ClubMembership.student_id == existing_student.id,
+                                        ~ClubRole.title.startswith('ex-'))\
                                 .first()
-        if not existing_membership:
+        if not current_membership:
             return {'content':{'type': "error", 'details': "Student membership not found"}}
-        existing_membership.role=role
+        current_role = db.query(ClubRole).filter(ClubRole.id == current_membership.role_id).first()
+        if not current_role:
+            return {'content':{'type': "error", 'details': "Previous role not found"}}
+        if current_role.privilege > 90:
+            return {'content':{'type': "error", 'details': "Clubs do not have privilege for this operation contact council instead"}}
+        if current_role.title == role:
+            return {'content':{'type': "error", 'details': "Same role already"}}
+        
+        def ensure_ex_role(previous_role: ClubRole) -> ClubRole:
+            clean_title = previous_role.title.replace("ex-", "")
+            ex_role_title = f"ex-{clean_title}"
+            ex_role = db.query(ClubRole).filter(
+                ClubRole.club_id == existing_club.id,
+                ClubRole.title == ex_role_title,
+            ).first()
+            if not ex_role:
+                ex_role = ClubRole(
+                    club_id=existing_club.id,
+                    title=ex_role_title,
+                    description=f"Ex-{previous_role.description}",
+                    privilege=previous_role.privilege - 1
+                )
+                db.add(ex_role)
+                db.commit()
+                db.refresh(ex_role)
+            return ex_role
+        if not current_role.title.startswith("ex-"):
+            current_role = ensure_ex_role(current_role)
+            current_membership.role_id = current_role.id
+            db.commit()
+        new_existing_role = db.query(ClubRole).filter(ClubRole.title == role, ClubRole.club_id == existing_club.id).first()
+        if new_existing_role.privilege > 90:
+            return {'content':{'type': "error", 'details': "Clubs do not have privilege for this operation contact council instead"}}
+        
+        if not new_existing_role:
+            return {'content':{'type': "error", 'details': "Role not found"}}
+        new_membership = ClubMembership(
+            student_id = existing_student.id,
+            club_id = existing_club.id,
+            role_id = new_existing_role.id
+        )
+        db.add(new_membership)
         db.commit()
         return {'content':{'type': "ok", 'details': "Club membership updated"}}
     except Exception as e:
         print("Error in membership update in:", e)
+        db.rollback()
         return {'content':{"type": "error", "detail": "An error occurred with login", 'status_code': 500}}
 
 @router.post("/membership/list")

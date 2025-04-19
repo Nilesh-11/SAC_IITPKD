@@ -17,6 +17,23 @@ club_coheads_association = Table(
     Column('student_id', Integer, ForeignKey('students.id', ondelete="CASCADE"), primary_key=True)
 )
 
+council_deputy_association = Table(
+    'council_deputy_association',
+    BaseUser.metadata,
+    Column('council_id', Integer, ForeignKey('councils.id', ondelete="CASCADE"), primary_key=True),
+    Column('student_id', Integer, ForeignKey('students.id', ondelete="CASCADE"), primary_key=True)
+)
+
+class Admin(BaseUser):
+    __tablename__ = "admins"
+    
+    id = Column(Integer, primary_key=True, index=True)
+    name = Column(String)
+    registered_date = Column(DateTime, default=datetime.utcnow())
+    email = Column(String, unique=True, index=True, nullable=False)
+    password_hash = Column(String, nullable=False)
+    phone_number = Column(String, nullable=True)
+
 class Student(BaseUser):
     __tablename__ = "students"
 
@@ -53,16 +70,8 @@ class Student(BaseUser):
     deputy_of_council = relationship(
         "Council",
         secondary="council_deputy_association",
-        back_populates="deputy",
-        foreign_keys="CouncilDeputyAssociation.student_id"
+        back_populates="deputy_ids"
     )
-
-council_deputy_association = Table(
-    'council_deputy_association',
-    BaseUser.metadata,
-    Column('council_id', Integer, ForeignKey('councils.id', ondelete="CASCADE"), primary_key=True),
-    Column('student_id', Integer, ForeignKey('students.id', ondelete="CASCADE"), primary_key=True)
-)
 
 class Council(BaseUser):
     __tablename__ = "councils"
@@ -80,17 +89,17 @@ class Council(BaseUser):
     deputy_ids = relationship(
         'Student',
         secondary="council_deputy_association",
-        back_populates="deputy_of_council",
-        uselist=True
+        back_populates="deputy_of_council"
     )
     
     secretary = relationship("Student", back_populates="secretary_of_council", foreign_keys=[secretary_id])
     
     website = Column(String(100), nullable=True)
-    created_at = Column(DateTime, default=datetime.utcnow)
-    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+    created_at = Column(DateTime, default=datetime.utcnow())
+    updated_at = Column(DateTime, default=datetime.utcnow(), onupdate=datetime.utcnow())
 
     clubs = relationship('Club', back_populates='council', cascade="all, delete-orphan")
+
 
 class Club(BaseUser):
     __tablename__ = "clubs"
@@ -116,6 +125,13 @@ class Club(BaseUser):
         cascade="all, delete-orphan",
         passive_deletes=True
     )
+    
+    custom_roles = relationship(
+        "ClubRole",
+        back_populates="club",
+        cascade="all, delete-orphan",
+        passive_deletes=True
+    )
 
     head = relationship("Student", foreign_keys=[head_id])
     coheads = relationship(
@@ -124,25 +140,15 @@ class Club(BaseUser):
         back_populates="cohead_clubs"
     )
 
-class Admin(BaseUser):
-    __tablename__ = "admins"
-    
-    id = Column(Integer, primary_key=True, index=True)
-    name = Column(String)
-    registered_date = Column(DateTime, default=datetime.utcnow())
-    email = Column(String, unique=True, index=True, nullable=False)
-    password_hash = Column(String, nullable=False)
-    phone_number = Column(String, nullable=True)
-
 class ClubMembership(BaseUser):
     __tablename__ = "club_memberships"
-    __table_args__ = (UniqueConstraint("student_id", "club_id", name="_student_club_uc"),)
 
     id = Column(Integer, primary_key=True, index=True)
     student_id = Column(Integer, ForeignKey("students.id", ondelete="RESTRICT"), nullable=False)
     club_id = Column(Integer, ForeignKey("clubs.id", ondelete="CASCADE"), nullable=False)
     role_id = Column(Integer, ForeignKey("club_roles.id", ondelete="SET NULL"), nullable=True)
-    joined_date = Column(DateTime, default=datetime.utcnow)
+    joined_date = Column(DateTime, default=datetime.utcnow())
+    updated_date = Column(DateTime, default=datetime.utcnow(), onupdate=datetime.utcnow)
 
     student = relationship("Student", back_populates="club_memberships")
     club = relationship("Club", back_populates="memberships")
@@ -155,10 +161,10 @@ class ClubRole(BaseUser):
     id = Column(Integer, primary_key=True, index=True)
     club_id = Column(Integer, ForeignKey("clubs.id", ondelete="CASCADE"), nullable=False)
     title = Column(String, nullable=False)
-    description = Column(Text, nullable=True)
     privilege=Column(Integer, nullable=False)
-    created_at = Column(DateTime, default=datetime.utcnow)
-    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+    description = Column(Text, nullable=True)
+    created_at = Column(DateTime, default=datetime.utcnow())
+    updated_at = Column(DateTime, default=datetime.utcnow(), onupdate=datetime.utcnow())
 
-    club = relationship("Club", backref="custom_roles")
+    club = relationship("Club", back_populates="custom_roles")
     memberships = relationship("ClubMembership", back_populates="role")
