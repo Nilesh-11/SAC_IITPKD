@@ -21,6 +21,18 @@ const ProjectList = ({ projects }) => {
   const [filterType, setFilterType] = useState("All");
   const [filterRole, setFilterRole] = useState("All");
   const [filterStatus, setFilterStatus] = useState("All"); // ✅ NEW
+  const theme = useTheme();
+  const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
+
+  if (!projects || projects.length === 0) {
+    return (
+      <Box sx={{ padding: 3, textAlign: "center" }}>
+        <Typography variant="h5" color="text.secondary">
+          No projects available right now.
+        </Typography>
+      </Box>
+    );
+  }
 
   const sortedProjects = [...projects].sort(
     (a, b) => new Date(b.dateCreated) - new Date(a.dateCreated)
@@ -34,8 +46,7 @@ const ProjectList = ({ projects }) => {
     return typeMatch && roleMatch && statusMatch;
   });
 
-  const theme = useTheme();
-  const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
+  
 
   return (
     <Box sx={{ padding: 3, px: { xs: 2, sm: 5, md: 10 }, py: 3 }}>

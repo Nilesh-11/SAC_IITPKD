@@ -1,4 +1,5 @@
-import React from "react";
+import { React, useState, useEffect  } from "react";
+import { useSearchParams } from "react-router-dom";
 import {
   Box,
   Typography,
@@ -7,12 +8,78 @@ import {
   Stack,
   Divider,
   Grid,
+  Snackbar,
+  Alert,
 } from "@mui/material";
 import timeAgo from "./../../utils/parser";
-import ProjectList from "./projects";
 import ClubProjects from "./clubProjects";
+import {JoinClub, getClubInfo} from "../../api/club";
 
-const ClubInfo = ({ club }) => {
+const ClubInfo = () => {
+  const [searchParams] = useSearchParams();
+  const club_id = searchParams.get("club_id");
+  const [alert, setAlert] = useState({ open: false, type: "success", message: "" });
+  const [clubData, setClubData] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [userRole, setUserRole] = useState("");
+
+  useEffect(() => {
+    const fetchClubData = async () => {
+      try {
+        const data = await getClubInfo({ club_id });
+        console.log(data);
+        if (data.type === "ok") {
+          setClubData(data.club);
+          setUserRole(data.club.role);
+        } else {
+          setError(data.details);
+        }
+      } catch (err) {
+        setError("Failed to fetch club data");
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    if (club_id) fetchClubData();
+  }, [club_id]);
+
+  const handleJoinClub = async () => {
+    try {
+      const res = await JoinClub({ club_id });
+      if (res?.type === "ok") {
+        // Refresh club data after successful join
+        const updatedData = await getClubInfo({ club_id });
+        setClubData(updatedData.club);
+        setUserRole(updatedData.club.role);
+        setAlert({
+          open: true,
+          type: "success",
+          message: res.details || "Successfully joined the club.",
+        });
+      } else {
+        setAlert({
+          open: true,
+          type: "error",
+          message: res?.details || "Something went wrong.",
+        });
+      }
+    } catch (error) {
+      setAlert({
+        open: true,
+        type: "error",
+        message: "An unexpected error occurred while joining the club.",
+      });
+    }
+  };
+  
+  const handleCloseAlert = () => {
+    setAlert({ ...alert, open: false });
+  };
+  if (error) return <div>Error: {error}</div>;
+  if (!clubData) return <div>Club not found</div>;
+
   return (
     <Box
       sx={{
@@ -20,7 +87,6 @@ const ClubInfo = ({ club }) => {
         backgroundColor: "#fafafa",
       }}
     >
-      {/* Club Title */}
       <Typography
         variant="h4"
         fontWeight="bold"
@@ -30,12 +96,10 @@ const ClubInfo = ({ club }) => {
           fontSize: { xs: "1.6rem", sm: "1.8rem", md: "2rem" },
         }}
       >
-        {club.title}
+        {clubData.title}
       </Typography>
 
-      {/* Club Info Section - Centered */}
       <Box sx={{ px: { xs: 1, sm: 2, md: 4, lg: 6 } }}>
-        {/* Logo + Info Cards */}
         <Grid
           container
           spacing={4}
@@ -58,8 +122,8 @@ const ClubInfo = ({ club }) => {
           >
             <Box
               component="img"
-              src={`/clubs/${club.name}/logo.png`}
-              alt={`${club.name} logo`}
+              src={`/clubs/${clubData.name}/logo.png`}
+              alt={`${clubData.name} logo`}
               sx={{
                 width: "100%",
                 maxWidth: 260,
@@ -94,13 +158,13 @@ const ClubInfo = ({ club }) => {
                 ● Club Head
               </Typography>
               <Typography variant="body2" sx={{ mb: 1 }}>
-                {club.head}
+                {clubData.head}
               </Typography>
               <Divider sx={{ backgroundColor: "black", my: 1 }} />
               <Typography variant="h6" gutterBottom>
                 ● Club CoHead(s)
               </Typography>
-              <Typography variant="body2">{club.coheads.join(", ")}</Typography>
+              <Typography variant="body2">{clubData.coheads.join(", ")}</Typography>
             </Card>
 
             {/* Email Card */}
@@ -116,7 +180,7 @@ const ClubInfo = ({ club }) => {
               <Typography variant="h6" gutterBottom>
                 ● Club Mail ID
               </Typography>
-              <Typography variant="body2">{club.email}</Typography>
+              <Typography variant="body2">{clubData.email}</Typography>
             </Card>
           </Grid>
         </Grid>
@@ -140,7 +204,7 @@ const ClubInfo = ({ club }) => {
                 color: "#444",
               }}
             >
-              {club.description}
+              {clubData.description}
             </Typography>
           </Box>
         </Grid>
@@ -155,7 +219,7 @@ const ClubInfo = ({ club }) => {
         >
           Projects
         </Typography>
-        <ClubProjects projects={club.projects}></ClubProjects>
+        <ClubProjects projects={clubData.projects}></ClubProjects>
       </Box>
 
       <Box sx={{ mt: 2, px: { xs: 2, sm: 5, md: 2 } }}>
@@ -186,7 +250,7 @@ const ClubInfo = ({ club }) => {
           }}
         >
           <Stack spacing={2}>
-            {club.members.map((member, index) => (
+            {clubData.members.map((member, index) => (
               <Card
                 key={index}
                 sx={{
@@ -263,20 +327,22 @@ const ClubInfo = ({ club }) => {
             Back
           </Button>
           <Button
-            variant="contained"
-            sx={{
-              backgroundColor: "rgb(243,130,33)",
-              color: "white",
-              borderRadius: 2,
-              px: 3,
-              textTransform: "none",
-              "&:hover": {
-                backgroundColor: "rgb(220,100,30)",
-              },
-            }}
-          >
-            Join as Member
-          </Button>
+        variant="contained"
+        onClick={handleJoinClub}
+        disabled={!!userRole}
+        sx={{
+          backgroundColor: userRole ? "#aaa" : "rgb(243,130,33)",
+          color: "white",
+          borderRadius: 2,
+          px: 3,
+          textTransform: "none",
+          "&:hover": {
+            backgroundColor: userRole ? "#aaa" : "rgb(220,100,30)",
+          },
+        }}
+      >
+        {userRole ? `${userRole}` : "Join as Member"}
+      </Button>
           <Button
             variant="contained"
             sx={{
@@ -294,6 +360,16 @@ const ClubInfo = ({ club }) => {
           </Button>
         </Stack>
       </Box>
+      <Snackbar
+        open={alert.open}
+        autoHideDuration={3000}
+        onClose={handleCloseAlert}
+        anchorOrigin={{ vertical: "top", horizontal: "right" }}
+      >
+        <Alert onClose={handleCloseAlert} severity={alert.type} sx={{ width: "100%" }}>
+          {alert.message}
+        </Alert>
+      </Snackbar>
     </Box>
   );
 };
