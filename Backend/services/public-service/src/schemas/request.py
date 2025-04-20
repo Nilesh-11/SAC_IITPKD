@@ -1,6 +1,6 @@
 from pydantic import BaseModel
 
-class AnnoncementListRequest(BaseModel):
+class AnnouncementListRequest(BaseModel):
     pass
 
 class EventsListRequest(BaseModel):

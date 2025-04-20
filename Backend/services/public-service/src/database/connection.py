@@ -3,16 +3,16 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 from src.config.config import EVENTS_DATABASE_URL, USERS_DATABASE_URL, PROJECTS_DATABASE_URL, PUBLIC_DATABASE_URL
 
-engine_public = create_engine(PUBLIC_DATABASE_URL, pool_size=10, max_overflow=5, pool_timeout=30, pool_recycle=1800, echo=True)
+engine_public = create_engine(PUBLIC_DATABASE_URL, pool_size=10, max_overflow=5, pool_timeout=30, pool_recycle=1800, echo=False)
 SessionPublic = sessionmaker(autocommit=False, autoflush=False, bind=engine_public)
 
-engine_project = create_engine(PROJECTS_DATABASE_URL, pool_size=5, max_overflow=2, pool_timeout=20, pool_recycle=1800, echo=True)
+engine_project = create_engine(PROJECTS_DATABASE_URL, pool_size=5, max_overflow=2, pool_timeout=20, pool_recycle=1800, echo=False)
 SessionProjects = sessionmaker(autocommit=False, autoflush=False, bind=engine_project)
 
-engine_event = create_engine(EVENTS_DATABASE_URL, pool_size=5, max_overflow=2, pool_timeout=20, pool_recycle=1800, echo=True)
+engine_event = create_engine(EVENTS_DATABASE_URL, pool_size=5, max_overflow=2, pool_timeout=20, pool_recycle=1800, echo=False)
 SessionEvents = sessionmaker(autocommit=False, autoflush=False, bind=engine_event)
 
-engine_user = create_engine(USERS_DATABASE_URL, pool_size=5, max_overflow=2, pool_timeout=20, pool_recycle=1800, echo=True)
+engine_user = create_engine(USERS_DATABASE_URL, pool_size=5, max_overflow=2, pool_timeout=20, pool_recycle=1800, echo=False)
 SessionUsers = sessionmaker(autocommit=False, autoflush=False, bind=engine_user)
 
 BaseEvents = declarative_base()
