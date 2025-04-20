@@ -24,7 +24,8 @@ class Otp(BaseAuth):
     lock_until = Column(DateTime, nullable=True)
     ip_addr = Column(String, nullable=True)
     user_agent = Column(String, nullable=True)
-    name = Column(String, nullable=True)
+    name = Column(String, nullable=False)
+    full_name = Column(String, unique=True, nullable=False)
     email = Column(String, unique=True, index=True, nullable=False)
     password_hash = Column(String, nullable=False)
 

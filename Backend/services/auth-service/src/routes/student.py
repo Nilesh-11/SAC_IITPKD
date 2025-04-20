@@ -19,6 +19,7 @@ def signupwithCredentials(data: StudentSignupRequest, db: Session = Depends(get_
         raise HTTPException(status_code=400, detail="Email already registered")
     
     name = data.name
+    full_name = data.full_name
     password = data.password
     email = data.email
     ip_addr = data.ip_addr
@@ -50,6 +51,7 @@ def signupwithCredentials(data: StudentSignupRequest, db: Session = Depends(get_
             attempts=0,
             email=email,
             name=name,
+            full_name=full_name,
             password_hash=hashed_password,
             ip_addr=ip_addr,
             user_agent=user_agent
@@ -65,6 +67,7 @@ def signupwithCredentials(data: StudentSignupRequest, db: Session = Depends(get_
 def verify_otp(data: VerifyotpRequest, db: Session = Depends(get_auth_db), db_user: Session = Depends(get_users_db)):
     otp_code = data.otp_code
     email = data.email
+    print(data)
     try:
         existing_otp = db.query(Otp).filter(Otp.email == email, Otp.is_used == False).first()
         if not existing_otp:
@@ -86,6 +89,7 @@ def verify_otp(data: VerifyotpRequest, db: Session = Depends(get_auth_db), db_us
             return {'content':{'type': "ok", 'details': "Otp verified"}}
         new_user = Student(
             name=existing_otp.name,
+            full_name=existing_otp.full_name,
             password_hash=existing_otp.password_hash,
             registered_date=datetime.datetime.utcnow(),
             email=email
@@ -144,45 +148,6 @@ def user_login(data: LoginRequest, db_user: Session = Depends(get_users_db)):
         existing_user = db_user.query(Student).filter(Student.email == email, Student.password_hash == password_hash).first()
         if not existing_user:
             return {'content':{'type': "error", 'details': "Student not found"}}
-        token = create_jwt(email=existing_user.email, id=str(existing_user.id), role="student", aud="internal")
-        return {'content':{'type': "ok", 'token': token}}
-    except Exception as e:
-        print("Error in log in:", e)
-        return {'content':{"type": "error", "detail": "An error occurred with login", 'status_code': 500}}
-
-@router.post("/forgot-password")
-def forgot_password(data: ForgotPasswordRequest, db: Session = Depends(get_auth_db), db_user: Session = Depends(get_users_db)):
-    email = data.email
-    ip_addr = data.ip_addr
-    user_agent = data.user_agent
-    try:
-        existing_user = db_user.query(Student).filter(Student.email == email).first()
-        if not existing_user:
-            return {'content':{'type': "error", 'details': "Student not found, sign up first"}}
-        response = send_mail_otp(email)
-        if response['type'] != "ok":
-            return {'content':{'type': "error", 'details': "mail not sent, try again"}}
-        
-        otp_code = response['otp']
-        exp_time = datetime.datetime.utcnow() + otp_expiration_time
-        name = existing_user.name
-        hashed_password = existing_user.password_hash
-
-        new_otp = Otp(
-            otp_code=otp_code,
-            otp_type="email",
-            is_used=False,
-            created_at=datetime.datetime.utcnow(),
-            exp_time=exp_time,
-            attempts=0,
-            email=email,
-            name=name,
-            password_hash=hashed_password,
-            ip_addr=ip_addr,
-            user_agent=user_agent
-        )
-        db.add(new_otp)
-        db.commit()
         token = create_jwt(email=existing_user.email, id=str(existing_user.id), role="student", aud="internal")
         return {'content':{'type': "ok", 'token': token}}
     except Exception as e:

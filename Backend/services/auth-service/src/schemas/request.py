@@ -31,6 +31,7 @@ class VerifyotpRequest(BaseModel):
 class StudentSignupRequest(BaseModel):
     name: str = Field(..., min_length=3, max_length=30, pattern="^[a-zA-Z]+$")
     password: str = Field(..., min_length=8, max_length=50)
+    full_name: str = Field(..., pattern=r"^[a-zA-Z]+(?: [a-zA-Z]+)*$")
     email: EmailStr
     ip_addr: Optional[str] = None
     user_agent: Optional[str] = None
