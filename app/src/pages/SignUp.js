@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Api from "./../api/auth";
@@ -20,7 +21,6 @@ const Signup = () => {
   const handleSignupChange = (e) =>
     setSignupForm({ ...SignupForm, [e.target.name]: e.target.value });
 
-  // ✅ Fixed this to update the correct state (OtpForm)
   const handleOtpChange = (e) =>
     setOtpForm({ ...OtpForm, [e.target.name]: e.target.value });
 
@@ -61,7 +61,7 @@ const Signup = () => {
       const content = res.content;
       if (content.type === "ok") {
         alert("User registered successfully");
-        navigate("/login"); // ✅ Redirect after success
+        navigate("/login");
       } else {
         alert(content.detail);
       }
@@ -72,21 +72,103 @@ const Signup = () => {
   };
 
   return (
-    <div>
-      {!isotp ? (
-        <form onSubmit={handleSignupSubmit}>
-          <input name="user" placeholder="User" onChange={handleSignupChange} />
-          <input name="name" placeholder="Name" onChange={handleSignupChange} />
-          <input name="email" placeholder="Email" onChange={handleSignupChange} />
-          <input name="password" type="password" placeholder="Password" onChange={handleSignupChange} />
-          <button type="submit">Sign Up</button>
+    <div className="d-flex justify-content-center align-items-center min-vh-100 bg-light">
+      <div className="w-100" style={{ maxWidth: "400px" }}>
+        <form
+          className="card shadow-sm p-4"
+          onSubmit={isotp ? handleOtpSubmit : handleSignupSubmit}
+        >
+          <h1 className="h4 text-center mb-4">
+            {isotp ? "Verify OTP" : "Sign Up"}
+          </h1>
+
+          {!isotp ? (
+            <>
+              <div className="mb-3">
+                <label htmlFor="user" className="form-label">User</label>
+                <input
+                  id="user"
+                  name="user"
+                  type="text"
+                  placeholder="User type"
+                  onChange={handleSignupChange}
+                  className="form-control"
+                  required
+                />
+              </div>
+
+              <div className="mb-3">
+                <label htmlFor="name" className="form-label">Name</label>
+                <input
+                  id="name"
+                  name="name"
+                  type="text"
+                  placeholder="Full name"
+                  onChange={handleSignupChange}
+                  className="form-control"
+                  required
+                />
+              </div>
+
+              <div className="mb-3">
+                <label htmlFor="email" className="form-label">Email</label>
+                <input
+                  id="email"
+                  name="email"
+                  type="email"
+                  placeholder="Email"
+                  onChange={handleSignupChange}
+                  className="form-control"
+                  required
+                />
+              </div>
+
+              <div className="mb-3">
+                <label htmlFor="password" className="form-label">Password</label>
+                <input
+                  id="password"
+                  name="password"
+                  type="password"
+                  placeholder="Password"
+                  onChange={handleSignupChange}
+                  className="form-control"
+                  required
+                />
+              </div>
+            </>
+          ) : (
+            <div className="mb-3">
+              <label htmlFor="otp_code" className="form-label">OTP Code</label>
+              <input
+                id="otp_code"
+                name="otp_code"
+                type="text"
+                placeholder="Enter OTP"
+                onChange={handleOtpChange}
+                className="form-control"
+                required
+              />
+            </div>
+          )}
+
+          <div>
+            <button type="submit" className="btn btn-primary w-100">
+              {isotp ? "Verify" : "Sign Up"}
+            </button>
+          </div>
+
+          {!isotp && (
+            <div className="mt-3 text-center">
+              <p className="small text-muted">
+                Already have an account?{" "}
+                <a href="/login" className="text-decoration-none">
+                  Log in
+                </a>
+              </p>
+            </div>
+          )}
         </form>
-      ) : (
-        <form onSubmit={handleOtpSubmit}>
-          <input name="otp_code" placeholder="OTP Code" onChange={handleOtpChange} />
-          <button type="submit">Verify</button>
-        </form>
-      )}
+      </div>
     </div>
   );
 };

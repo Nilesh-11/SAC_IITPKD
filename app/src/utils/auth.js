@@ -19,3 +19,14 @@ export const decodeToken = (token) => {
     return null;
   }
 };
+
+export const validatePassword = (password) => {
+  const validations = {
+    length: password.length >= 8 && password.length <= 50,
+    digit: /[0-9]/.test(password),
+    lowercase: /[a-z]/.test(password),
+    uppercase: /[A-Z]/.test(password),
+    special: /[^A-Za-z0-9]/.test(password),
+  };
+  return validations;
+};

@@ -78,61 +78,7 @@ const StudentDashboard = () => {
   const handleClubNavigation = (link) => {
     console.log(link);
   };
-
-  const clubData = {
-    id: 2,
-    name: "yacc",
-    is_member: false,
-    role: "",
-    title: "Yet Another Coding Club",
-    description:"A dynamic and inclusive community of passionate coders and algorithmic thinkers. Our mission is to foster a deep and abiding love for coding, share knowledge, and provide a platform for students to enhance their coding skills and take on real-world challenges. YACC has five independent and parallel tracks that you can excel in: Competitive Programming, Ethical Hacking, Full stack development, Game development and System Design. YACC strives to build strong coding and problem-solving culture in the institute and to make programming a cherishable experience for students with different skill sets",
-    head: "Name 1",
-    coheads: ["Name 1", "Name 2", "Name 3"],
-    email: "club@iitpkd.ac.in",
-    members: [
-      {name: "some", email: "mail@mail.com", joined_date: "2025-04-15 17:28:57.626089"},
-      {name: "some", email: "mail@mail.com", joined_date: "2025-04-15 17:28:57.626089"},
-      {name: "some", email: "mail@mail.com", joined_date: "2025-04-15 17:28:57.626089"},
-      {name: "some", email: "mail@mail.com", joined_date: "2025-04-15 17:28:57.626089"},
-      {name: "some", email: "mail@mail.com", joined_date: "2025-04-15 17:28:57.626089"},
-      {name: "some", email: "mail@mail.com", joined_date: "2025-04-15 17:28:57.626089"},
-      {name: "some", email: "mail@mail.com", joined_date: "2025-04-15 17:28:57.626089"},
-      {name: "some", email: "mail@mail.com", joined_date: "2025-04-15 17:28:57.626089"},
-      {name: "some", email: "mail@mail.com", joined_date: "2025-04-15 17:28:57.626089"},
-      {name: "some", email: "mail@mail.com", joined_date: "2025-04-15 17:28:57.626089"},
-      {name: "some", email: "mail@mail.com", joined_date: "2025-04-15 17:28:57.626089"},
-      {name: "some", email: "mail@mail.com", joined_date: "2025-04-15 17:28:57.626089"},
-      {name: "some2", email: "mail@mail.com", joined_date: "2025-04-15 17:28:57.626089"}
-    ],
-    projects: projects
-  };
-
-  const ProjectInfo = {
-    name: "yacc",
-    title: "Yet Another Coding Club",
-    description:"A dynamic and inclusive community of passionate coders and algorithmic thinkers. Our mission is to foster a deep and abiding love for coding, share knowledge, and provide a platform for students to enhance their coding skills and take on real-world challenges. YACC has five independent and parallel tracks that you can excel in: Competitive Programming, Ethical Hacking, Full stack development, Game development and System Design. YACC strives to build strong coding and problem-solving culture in the institute and to make programming a cherishable experience for students with different skill sets",
-    head: "Name 1",
-    coheads: ["Name 1", "Name 2", "Name 3"],
-    email: "club@iitpkd.ac.in",
-    contact_number: "1234567890",
-    members: [
-      {name: "some", email: "mail@mail.com", joined_date: "2025-04-15 17:28:57.626089"},
-      {name: "some", email: "mail@mail.com", joined_date: "2025-04-15 17:28:57.626089"},
-      {name: "some", email: "mail@mail.com", joined_date: "2025-04-15 17:28:57.626089"},
-      {name: "some", email: "mail@mail.com", joined_date: "2025-04-15 17:28:57.626089"},
-      {name: "some", email: "mail@mail.com", joined_date: "2025-04-15 17:28:57.626089"},
-      {name: "some", email: "mail@mail.com", joined_date: "2025-04-15 17:28:57.626089"},
-      {name: "some", email: "mail@mail.com", joined_date: "2025-04-15 17:28:57.626089"},
-      {name: "some", email: "mail@mail.com", joined_date: "2025-04-15 17:28:57.626089"},
-      {name: "some", email: "mail@mail.com", joined_date: "2025-04-15 17:28:57.626089"},
-      {name: "some", email: "mail@mail.com", joined_date: "2025-04-15 17:28:57.626089"},
-      {name: "some", email: "mail@mail.com", joined_date: "2025-04-15 17:28:57.626089"},
-      {name: "some", email: "mail@mail.com", joined_date: "2025-04-15 17:28:57.626089"},
-      {name: "some2", email: "mail@mail.com", joined_date: "2025-04-15 17:28:57.626089"}
-    ],
-    projects: projects
-  };
-
+  
   return (
     <div>
       <Header

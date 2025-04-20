@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Container, Grid, Button, Box, Typography } from "@mui/material";
+import { Container, Grid, Box, Typography } from "@mui/material";
 import Header from "./../components/common/header";
 import CalendarComponent from "./../components/common/calendar";
 import Footer from "./../components/common/footer";
@@ -28,11 +28,6 @@ const Home = () => {
     fetchEvents();
   }, []);
 
-  // const events = [
-  //   { date: "2025-04-03", name: "Event 1" },
-  //   { date: "2025-04-10", name: "Event 2" },
-  //   { date: "2025-04-15", name: "Event 3" },
-  // ];
   const about_images = [
     "/about/photo1.jpg",
     "/about/photo2.jpg",
@@ -50,6 +45,15 @@ const Home = () => {
     "/councils/photo3.jpg",
   ];
   return (
+    <Box
+      sx={{
+        minHeight: "100vh",
+        backgroundImage: "url('/bg1.jpg')",
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        backgroundRepeat: "no-repeat",
+      }}
+    >
     <div id="home">
       <Header />
       <Container maxWidth="lg" alignItems="flex-end">
@@ -149,6 +153,7 @@ const Home = () => {
       </Container>
       <Footer />
     </div>
+    </Box>
   );
 };
 

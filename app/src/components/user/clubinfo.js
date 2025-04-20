@@ -77,6 +77,8 @@ const ClubInfo = () => {
   const handleCloseAlert = () => {
     setAlert({ ...alert, open: false });
   };
+  
+  if (isLoading) return <div>loading...</div>;
   if (error) return <div>Error: {error}</div>;
   if (!clubData) return <div>Club not found</div>;
 

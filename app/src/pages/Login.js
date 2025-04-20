@@ -1,19 +1,45 @@
 import { useState } from "react";
 import { useAuth } from "../contexts/AuthContext";
-import { loginRequest } from "../api/auth";
 import { useNavigate } from "react-router-dom";
-import Api from "../api/auth";
+import Api, { ForgotPasswordApi } from "../api/auth";
+import {
+  Container,
+  Box,
+  Typography,
+  TextField,
+  Button,
+  Alert,
+  MenuItem,
+  Select,
+  InputLabel,
+  FormControl,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+} from "@mui/material";
 
 const LoginDashboard = () => {
   const { loginUser } = useAuth();
   const navigate = useNavigate();
 
-  const [form, setForm] = useState({ email: "", password: "" });
+  const [form, setForm] = useState({
+    email: "",
+    password: "",
+    userType: "student",
+  });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [forgotPasswordOpen, setForgotPasswordOpen] = useState(false);
+  const [forgotPasswordEmail, setForgotPasswordEmail] = useState("");
 
   const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    setForm((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleForgotPasswordChange = (e) => {
+    setForgotPasswordEmail(e.target.value);
   };
 
   const handleSubmit = async (e) => {
@@ -22,13 +48,18 @@ const LoginDashboard = () => {
     setError("");
 
     try {
-      const data = {email: form.email, password: form.password}
-      const res = await Api(`/api/auth/student/login`, { data });
+      const { email, password, userType } = form;
+      const res = await Api(`/api/auth/${userType}/login`, {
+        data: { email, password },
+      });
       const content = res?.content;
-    
+
       if (content?.type === "ok" && content?.token) {
-        loginUser(content.token); // set context + redirect
-        console.log("Token stored in localStorage:", localStorage.getItem("token"));
+        loginUser(content.token);
+        console.log(
+          "Token stored in localStorage:",
+          localStorage.getItem("token")
+        );
       } else {
         setError("Invalid credentials or server error.");
       }
@@ -39,49 +70,157 @@ const LoginDashboard = () => {
     }
   };
 
+  const handleForgotPasswordSubmit = async () => {
+    setLoading(true);
+    setError("");
+    try {
+      const res = await ForgotPasswordApi({ email: forgotPasswordEmail });
+      if (res?.type === "ok") {
+        alert("Please check your email for reset instructions.");
+        setForgotPasswordOpen(false);
+      } else {
+        setError(res?.details || "Error sending reset link. Please try again.");
+      }
+    } catch (err) {
+      setError("Something went wrong. Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
-    <div className="flex justify-center items-center h-screen bg-gray-100">
-      <form
+    <Container
+      maxWidth="sm"
+      sx={{
+        minHeight: "100vh",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        bgcolor: "#f5f5f5",
+      }}
+    >
+      <Box
+        component="form"
         onSubmit={handleSubmit}
-        className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 max-w-md w-full"
+        sx={{
+          p: 4,
+          bgcolor: "white",
+          boxShadow: 3,
+          borderRadius: 2,
+          width: "100%",
+        }}
       >
-        <h2 className="text-2xl mb-4 text-center font-semibold">Sign In</h2>
+        <Typography variant="h5" align="center" gutterBottom>
+          Login
+        </Typography>
 
-        {error && <p className="text-red-500 text-sm mb-4 text-center">{error}</p>}
+        {error && (
+          <Alert severity="error" sx={{ mb: 2 }}>
+            {error}
+          </Alert>
+        )}
 
-        <div className="mb-4">
-          <label className="block text-gray-700 text-sm mb-2">Email</label>
-          <input
-            type="email"
-            name="email"
-            value={form.email}
+        <TextField
+          fullWidth
+          label="Email"
+          name="email"
+          type="email"
+          value={form.email}
+          onChange={handleChange}
+          margin="normal"
+          required
+        />
+
+        <TextField
+          fullWidth
+          label="Password"
+          name="password"
+          type="password"
+          value={form.password}
+          onChange={handleChange}
+          margin="normal"
+          required
+        />
+
+        <FormControl fullWidth margin="normal">
+          <InputLabel>User Type</InputLabel>
+          <Select
+            name="userType"
+            value={form.userType}
+            label="User Type"
             onChange={handleChange}
-            required
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700"
-          />
-        </div>
+          >
+            <MenuItem value="student">Student</MenuItem>
+            <MenuItem value="council">Council</MenuItem>
+            <MenuItem value="club">Club</MenuItem>
+            <MenuItem value="admin">Admin</MenuItem>
+          </Select>
+        </FormControl>
 
-        <div className="mb-6">
-          <label className="block text-gray-700 text-sm mb-2">Password</label>
-          <input
-            type="password"
-            name="password"
-            value={form.password}
-            onChange={handleChange}
-            required
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700"
-          />
-        </div>
-
-        <button
+        <Button
           type="submit"
+          fullWidth
+          variant="contained"
+          color="primary"
+          sx={{ mt: 2 }}
           disabled={loading}
-          className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 w-full rounded focus:outline-none focus:shadow-outline"
         >
-          {loading ? "Signing in..." : "Sign In"}
-        </button>
-      </form>
-    </div>
+          {loading ? "Signing in..." : "Sign in"}
+        </Button>
+
+        <Box mt={3} textAlign="center">
+          <Typography variant="body2" color="textSecondary">
+            Don&apos;t have an account?{" "}
+            <a href="#" style={{ textDecoration: "none", color: "#1976d2" }}>
+              Sign up
+            </a>
+          </Typography>
+
+          <Typography
+            variant="body2"
+            color="primary"
+            sx={{ cursor: "pointer", mt: 2 }}
+            onClick={() => setForgotPasswordOpen(true)}
+          >
+            Forgot password?
+          </Typography>
+        </Box>
+      </Box>
+
+      {/* Forgot Password Dialog */}
+      <Dialog
+        open={forgotPasswordOpen}
+        onClose={() => setForgotPasswordOpen(false)}
+      >
+        <DialogTitle>Reset Password</DialogTitle>
+        <DialogContent>
+          <TextField
+            fullWidth
+            label="Enter your email"
+            value={forgotPasswordEmail}
+            onChange={handleForgotPasswordChange}
+            margin="normal"
+            required
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button
+            onClick={() => setForgotPasswordOpen(false)}
+            color="secondary"
+            disabled={loading}
+          >
+            Cancel
+          </Button>
+          <Button
+            onClick={handleForgotPasswordSubmit}
+            color="primary"
+            disabled={loading}
+          >
+            {loading ? "Submitting..." : "Submit"}
+          </Button>
+        </DialogActions>
+      </Dialog>
+    </Container>
   );
 };
 
