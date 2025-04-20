@@ -29,6 +29,7 @@ const AppRoutes = () => (
     <Route path="/hostel" element={<Hostel />} />
     <Route path="/research" element={<Research />} />
     <Route path="/sports" element={<Sports />} />
+    <Route path="/signup" element={<Signup />} />
     <Route path="/developers" element={<Developers />} />
 
     <Route element={<ProtectedRoute allowedRoles={['student']} />}>

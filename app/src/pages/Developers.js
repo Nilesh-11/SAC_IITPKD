@@ -39,7 +39,10 @@ const developers = [
 
 const Developers = () => {
   return (
-    <Box>
+    <Box sx={{ minHeight: "100vh", backgroundImage: "url('/bg1.jpg')",
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          backgroundRepeat: "no-repeat"}}>
         <Header></Header>
     <Container maxWidth="lg" sx={{ mt: 6, mb: 6 }}>
       <Typography

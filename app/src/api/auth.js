@@ -88,7 +88,6 @@ export const ForgotPasswordApi = async ({email}) => {
 
 export const ResetPasswordApi = async ({new_password, token}) => {
   const url = `${BACKEND_URL}` + "/api/auth/reset-password";
-  console.log(token, new_password);
   try {
     const response = await fetch(url, {
       method: "POST",

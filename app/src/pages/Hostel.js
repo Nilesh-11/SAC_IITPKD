@@ -55,7 +55,10 @@ const Hostel = () => {
   ];
 
   return (
-    <Box sx={{ minHeight: "100vh", display: "flex", flexDirection: "column" }}>
+    <Box sx={{ minHeight: "100vh", display: "flex", flexDirection: "column", backgroundImage: "url('/bg1.jpg')",
+      backgroundSize: "cover",
+      backgroundPosition: "center",
+      backgroundRepeat: "no-repeat", }}>
       <Header />
 
       <Container
@@ -110,7 +113,7 @@ const Hostel = () => {
                           <Box sx={{ "& > *:not(:last-child)": { mb: 1 } }}>
                             <Box display="flex" alignItems="center" gap={1}>
                               <Person fontSize={isMobile ? "small" : "medium"} />
-                              <strong>Secretary:</strong> {council.secretary.full_name} ({council.secretary.name})
+                              <strong>Secretary:</strong> {council.secretary.full_name}
                             </Box>
                             <Box display="flex" alignItems="center" gap={1} flexWrap="wrap">
                               <Email fontSize={isMobile ? "small" : "medium"} />
@@ -125,7 +128,7 @@ const Hostel = () => {
                                 </Typography>
                                 {council.deputies.map((deputy, index) => (
                                   <Box key={index} sx={{ pl: 2, mb: 1 }}>
-                                    <div><strong>{deputy.full_name}</strong> ({deputy.name})</div>
+                                    <div><strong>{deputy.full_name}</strong></div>
                                     <div style={{ wordBreak: "break-all" }}>{deputy.email}</div>
                                   </Box>
                                 ))}

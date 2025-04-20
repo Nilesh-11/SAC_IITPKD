@@ -3,7 +3,6 @@ import { useAuth } from "../contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
 import Api, { ForgotPasswordApi } from "../api/auth";
 import {
-  Container,
   Box,
   Typography,
   TextField,
@@ -18,6 +17,8 @@ import {
   DialogContent,
   DialogTitle,
 } from "@mui/material";
+import LoginIcon from "@mui/icons-material/Login";
+import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
 
 const LoginDashboard = () => {
   const { loginUser } = useAuth();
@@ -33,6 +34,37 @@ const LoginDashboard = () => {
   const [forgotPasswordOpen, setForgotPasswordOpen] = useState(false);
   const [forgotPasswordEmail, setForgotPasswordEmail] = useState("");
 
+  const orange = "rgb(243,130,33)";
+  const darkOrange = "rgb(220,110,25)";
+
+  const textFieldSx = {
+    "& .MuiOutlinedInput-root": {
+      borderRadius: "12px",
+      backgroundColor: "#fafafa",
+      "& fieldset": {
+        borderColor: "#d1d1d1",
+      },
+      "&:hover fieldset": {
+        borderColor: "#b0b0b0",
+      },
+      "&.Mui-focused fieldset": {
+        borderColor: orange,
+        boxShadow: `0 0 0 2px rgba(243,130,33,0.2)`,
+      },
+      "& input": {
+        fontFamily: "Roboto, sans-serif",
+        padding: "10px",
+      },
+    },
+    "& label": {
+      color: "#666",
+      fontFamily: "Roboto, sans-serif",
+    },
+    "& label.Mui-focused": {
+      color: orange,
+    },
+  };
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setForm((prev) => ({ ...prev, [name]: value }));
@@ -46,20 +78,16 @@ const LoginDashboard = () => {
     e.preventDefault();
     setLoading(true);
     setError("");
-
+  
     try {
       const { email, password, userType } = form;
       const res = await Api(`/api/auth/${userType}/login`, {
         data: { email, password },
       });
       const content = res?.content;
-
+  
       if (content?.type === "ok" && content?.token) {
         loginUser(content.token);
-        console.log(
-          "Token stored in localStorage:",
-          localStorage.getItem("token")
-        );
       } else {
         setError("Invalid credentials or server error.");
       }
@@ -69,17 +97,39 @@ const LoginDashboard = () => {
       setLoading(false);
     }
   };
-
-  const handleForgotPasswordSubmit = async () => {
+  
+  const handleGuestLogin = async () => {
     setLoading(true);
     setError("");
+  
+    try {
+      const userType = "guest";
+      const res = await Api(`/api/auth/${userType}/login`, {
+        data: { email: "", password: "" },
+      });
+      const content = res?.content;
+  
+      if (content?.type === "ok" && content?.token) {
+        loginUser(content.token);
+      } else {
+        setError("Guest login failed. Try again later.");
+      }
+    } catch (err) {
+      setError("Something went wrong during guest login.");
+    } finally {
+      setLoading(false);
+    }
+  };
+  
+  const handleForgotPasswordSubmit = async () => {
+    setLoading(true);
     try {
       const res = await ForgotPasswordApi({ email: forgotPasswordEmail });
       if (res?.type === "ok") {
-        alert("Please check your email for reset instructions.");
+        alert("Check your email for reset instructions.");
         setForgotPasswordOpen(false);
       } else {
-        setError(res?.details || "Error sending reset link. Please try again.");
+        setError(res?.details || "Error sending reset link.");
       }
     } catch (err) {
       setError("Something went wrong. Please try again.");
@@ -88,49 +138,65 @@ const LoginDashboard = () => {
     }
   };
 
+
   return (
-    <Container
-      maxWidth="sm"
-      sx={{
-        minHeight: "100vh",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        bgcolor: "#f5f5f5",
-      }}
-    >
+    <Box
+  sx={{
+    minHeight: "100vh",
+    backgroundImage: `linear-gradient(rgba(255,255,255,0.15), rgba(255,255,255,0.25)), url('/bg2.jpg')`,
+    backgroundSize: "cover",
+    backgroundPosition: "center",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    p: 2,
+  }}
+>
+
       <Box
+        sx={{
+          backgroundColor: "white",
+          borderRadius: 3,
+          p: 3,
+          width: { xs: "100%", sm: 340 },
+          boxShadow: 4,
+          textAlign: "center",
+          fontFamily: "Roboto, sans-serif",
+        }}
         component="form"
         onSubmit={handleSubmit}
-        sx={{
-          p: 4,
-          bgcolor: "white",
-          boxShadow: 3,
-          borderRadius: 2,
-          width: "100%",
-        }}
       >
-        <Typography variant="h5" align="center" gutterBottom>
-          Login
-        </Typography>
+        <img
+          src="/sac_circular.jpg"
+          alt="SAC Logo"
+          style={{ width: 80, marginBottom: 12 }}
+        />
 
-        {error && (
-          <Alert severity="error" sx={{ mb: 2 }}>
-            {error}
-          </Alert>
-        )}
+        <Typography
+          variant="h6"
+          sx={{
+            fontWeight: 600,
+            mb: 0.5,
+            fontFamily: "Poppins, sans-serif",
+            fontSize: "1.25rem",
+          }}
+        >
+          Welcome to SAC Portal
+        </Typography>
+        <Typography variant="body2" sx={{ mb: 2, color: "gray" }}>
+          Sign in to your account
+        </Typography>
 
         <TextField
           fullWidth
           label="Email"
           name="email"
-          type="email"
           value={form.email}
           onChange={handleChange}
-          margin="normal"
+          margin="dense"
           required
+          sx={textFieldSx}
         />
-
         <TextField
           fullWidth
           label="Password"
@@ -138,11 +204,12 @@ const LoginDashboard = () => {
           type="password"
           value={form.password}
           onChange={handleChange}
-          margin="normal"
+          margin="dense"
           required
+          sx={textFieldSx}
         />
 
-        <FormControl fullWidth margin="normal">
+        <FormControl fullWidth margin="dense" sx={textFieldSx}>
           <InputLabel>User Type</InputLabel>
           <Select
             name="userType"
@@ -157,42 +224,87 @@ const LoginDashboard = () => {
           </Select>
         </FormControl>
 
+        {error && (
+          <Alert severity="error" sx={{ mt: 1.5, mb: 1 }}>
+            {error}
+          </Alert>
+        )}
+
         <Button
           type="submit"
           fullWidth
           variant="contained"
-          color="primary"
-          sx={{ mt: 2 }}
+          startIcon={<LoginIcon />}
+          sx={{
+            mt: 2,
+            py: 1.2,
+            backgroundColor: orange,
+            borderRadius: "10px",
+            fontWeight: 500,
+            fontFamily: "Roboto, sans-serif",
+            textTransform: "none",
+            '&:hover': {
+              backgroundColor: darkOrange,
+              boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
+            },
+          }}
           disabled={loading}
         >
-          {loading ? "Signing in..." : "Sign in"}
+          {loading ? "Signing in..." : "Sign In"}
         </Button>
 
-        <Box mt={3} textAlign="center">
-          <Typography variant="body2" color="textSecondary">
-            Don&apos;t have an account?{" "}
-            <a href="#" style={{ textDecoration: "none", color: "#1976d2" }}>
-              Sign up
-            </a>
-          </Typography>
+        <Button
+          fullWidth
+          variant="outlined"
+          startIcon={<PersonOutlineIcon />}
+          sx={{
+            mt: 1.5,
+            py: 1.2,
+            borderRadius: "10px",
+            borderColor: orange,
+            color: orange,
+            fontWeight: 500,
+            textTransform: "none",
+            fontFamily: "Roboto, sans-serif",
+            '&:hover': {
+              borderColor: darkOrange,
+              backgroundColor: "rgba(243,130,33,0.08)",
+            },
+          }}
+          onClick={handleGuestLogin}
+          disabled={loading}
+        >
+          {loading ? "Logging in..." : "Continue as Guest"}
+        </Button>
 
-          <Typography
-            variant="body2"
-            color="primary"
-            sx={{ cursor: "pointer", mt: 2 }}
-            onClick={() => setForgotPasswordOpen(true)}
-          >
-            Forgot password?
-          </Typography>
-        </Box>
+        <Typography variant="body2" sx={{ mt: 2 }}>
+          Don&apos;t have an account?{" "}
+          <a href="/signup" style={{ textDecoration: "none", color: orange }}>
+            Sign up
+          </a>
+        </Typography>
+
+        <Typography
+          variant="body2"
+          sx={{
+            cursor: "pointer",
+            mt: 1,
+            color: orange,
+            '&:hover': { textDecoration: "underline" },
+          }}
+          onClick={() => setForgotPasswordOpen(true)}
+        >
+          Forgot password?
+        </Typography>
       </Box>
 
-      {/* Forgot Password Dialog */}
       <Dialog
         open={forgotPasswordOpen}
         onClose={() => setForgotPasswordOpen(false)}
       >
-        <DialogTitle>Reset Password</DialogTitle>
+        <DialogTitle sx={{ fontFamily: "Roboto, sans-serif" }}>
+          Reset Password
+        </DialogTitle>
         <DialogContent>
           <TextField
             fullWidth
@@ -201,26 +313,33 @@ const LoginDashboard = () => {
             onChange={handleForgotPasswordChange}
             margin="normal"
             required
+            sx={textFieldSx}
           />
         </DialogContent>
         <DialogActions>
           <Button
             onClick={() => setForgotPasswordOpen(false)}
-            color="secondary"
             disabled={loading}
+            sx={{ color: orange }}
           >
             Cancel
           </Button>
           <Button
             onClick={handleForgotPasswordSubmit}
-            color="primary"
             disabled={loading}
+            sx={{
+              backgroundColor: orange,
+              color: "white",
+              '&:hover': {
+                backgroundColor: darkOrange,
+              },
+            }}
           >
             {loading ? "Submitting..." : "Submit"}
           </Button>
         </DialogActions>
       </Dialog>
-    </Container>
+    </Box>
   );
 };
 

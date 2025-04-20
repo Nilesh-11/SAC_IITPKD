@@ -17,13 +17,15 @@ export const AuthProvider = ({ children }) => {
 
   const loginUser = (token) => {
     const user = decodeToken(token);
-    console.log("Token decoded: ", user);
     localStorage.setItem("token", token);
     setAuth({ user, token, loading: false });
 
     if (user.role === "student") navigate("/student/dashboard");
     else if (user.role === "admin") navigate("/admin/dashboard");
     else if (user.role === "club") navigate("/club/dashboard");
+    else if (user.role === "council") navigate("/council/dashboard");
+    else if (user.role === "guest") navigate("/guest/dashboard");
+    else navigate("/");
   };
 
   useEffect(() => {
@@ -32,7 +34,6 @@ export const AuthProvider = ({ children }) => {
       setAuth({ user: null, token: null, loading: false });
       return;
     }
-    console.log("Token found")
     verifyToken().then((result) => {
         if (!result.valid) {
           console.warn("Token invalid or expired:", result.reason);

@@ -55,7 +55,10 @@ const Academic = () => {
   ];
 
   return (
-    <Box sx={{ minHeight: "100vh", display: "flex", flexDirection: "column" }}>
+    <Box sx={{ minHeight: "100vh", display: "flex", flexDirection: "column", backgroundImage: "url('/bg1.jpg')",
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          backgroundRepeat: "no-repeat", }}>
       <Header />
 
       <Container
@@ -163,8 +166,7 @@ const Academic = () => {
                                 <Person fontSize={isMobile ? "small" : "medium"} />
                                 <strong>Secretary:</strong>
                                 <span>
-                                  {council.secretary.full_name} (
-                                  {council.secretary.name})
+                                  {council.secretary.full_name}
                                 </span>
                               </Box>
 
@@ -211,8 +213,7 @@ const Academic = () => {
                                       }}
                                     >
                                       <div>
-                                        <strong>{deputy.full_name}</strong> (
-                                        {deputy.name})
+                                        <strong>{deputy.full_name}</strong>
                                       </div>
                                       <div style={{ wordBreak: "break-all" }}>
                                         {deputy.email}
