@@ -1,5 +1,6 @@
 from sqlalchemy.orm import Session
-from src.models.user import Student
+from src.models.users import Student, Club, Admin, Council
+from sqlalchemy.sql import exists
 
 def validate_password(value: str) -> str:
     if not any(char.isdigit() for char in value):
@@ -18,11 +19,11 @@ def validate_mail(email: str) -> bool:
     return email
 
 def verify_user(email: str, db: Session) -> bool:
-    existing_user = db.query(User).filter(User.email == email).first()
-    if existing_user:
-        return True
-    else:
-        existing_user = db.query(Club).filter(Club.email == email).first()
-        if existing_user:
-            return True
-    return False
+    try:
+        user_exists = db.query(exists().where(Student.email == email)).scalar()
+        club_exists = db.query(exists().where(Club.email == email)).scalar()
+        admin_exists = db.query(exists().where(Admin.email == email)).scalar()
+        council_exists = db.query(exists().where(Council.email == email)).scalar()
+        return user_exists or club_exists or admin_exists or council_exists
+    except Exception as e:
+        return False

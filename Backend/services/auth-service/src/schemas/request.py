@@ -2,11 +2,11 @@ from pydantic import BaseModel, Field, field_validator, EmailStr
 from src.utils.sanitation import validate_password, validate_mail
 from typing import Optional
 
-class googleSignupRequest(BaseModel):
-    username: str
-    password: str = Field(..., min_length=8, max_length=50)
+class ResetPasswordRequest(BaseModel):
+    token: str
+    new_password: str = Field(..., min_length=8, max_length=50)
     
-    @field_validator("password")
+    @field_validator("new_password")
     @classmethod
     def validate_password(cls, value: str) -> str:
         return validate_password(value)
@@ -85,6 +85,3 @@ class SavePasswordRequest(BaseModel):
     @classmethod
     def validate_mail(cls, value: str) -> str:
         return validate_mail(value)
-
-class TestRequest(BaseModel):
-    token: str

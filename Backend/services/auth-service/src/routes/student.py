@@ -1,7 +1,7 @@
 from src.utils.auth import hash_password
 from src.utils.jwt import create_jwt, verify_jwt
 from src.config.config import otp_expiration_time, otp_resend_time
-from src.models.user import Student
+from src.models.users import Student
 from src.models.auth import Otp
 from src.schemas.request import StudentSignupRequest, VerifyotpRequest, ResendOtpRequest, LoginRequest, ForgotPasswordRequest, SavePasswordRequest
 from src.database.connection import get_users_db, get_auth_db
@@ -185,29 +185,6 @@ def forgot_password(data: ForgotPasswordRequest, db: Session = Depends(get_auth_
         db.commit()
         token = create_jwt(email=existing_user.email, id=str(existing_user.id), role="student", aud="internal")
         return {'content':{'type': "ok", 'token': token}}
-    except Exception as e:
-        print("Error in log in:", e)
-        return {'content':{"type": "error", "detail": "An error occurred with login", 'status_code': 500}}
-
-@router.post("/save-password")
-def forgot_password(data: SavePasswordRequest, db_user: Session = Depends(get_users_db)):
-    email = data.email
-    token = data.token
-    password = data.password
-    hashed_password = hash_password(password)
-    ip_addr = data.ip_addr
-    user_agent = data.user_agent
-
-    try:
-        existing_user = db_user.query(Student).filter(Student.email == email).first()
-        if not existing_user:
-            return {'content':{'type': "error", 'details': "Student not found, sign up first"}}
-        data = verify_jwt(token)
-        if not data:
-            return {'content':{'type': "error", 'details': "Unauthorized user"}}
-        existing_user.password_hash = hashed_password
-        db_user.commit()
-        return {'content':{'type': "ok", 'details': "password saved successfully"}}
     except Exception as e:
         print("Error in log in:", e)
         return {'content':{"type": "error", "detail": "An error occurred with login", 'status_code': 500}}
