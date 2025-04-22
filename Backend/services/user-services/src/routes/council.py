@@ -1,5 +1,5 @@
 from src.utils.auth import hash_password
-from src.schemas.request import DeleteClubRequest, UpdateClubRequest, DeleteAnnouncementRequest, AddAnnouncementRequest, UpdateAnnouncementRequest, AddClubRequest
+from src.schemas.request import ClubListRequest, DeleteClubRequest, UpdateClubRequest, DeleteAnnouncementRequest, AddAnnouncementRequest, UpdateAnnouncementRequest, AddClubRequest
 from src.utils.verify import verify_user
 from src.models.projects import Project
 from src.models.users import Council, Student, Club, Admin, ClubRole, ClubMembership
@@ -11,72 +11,6 @@ from sqlalchemy.orm import Session
 import datetime
 
 router = APIRouter()
-
-@router.post("/announcement/add")
-def add_announcment(request: AddAnnouncementRequest, db: Session = Depends(get_public_db)):
-    title=request.title
-    body=request.body
-    priority=request.priority
-    request_by = request.request_by
-    try:
-        new_announcement = Announcements(
-            title=title,
-            body=body,
-            created_at=datetime.datetime.utcnow(),
-            updated_at=datetime.datetime.utcnow(),
-            expires_at=datetime.datetime.utcnow() + datetime.timedelta(days=30),
-            priority=priority,
-            author=request_by,
-            author_role="council"
-        )
-        db.add(new_announcement)
-        db.commit()
-        return {'content': {'type':"ok", 'details': "Announcement added"}}
-    except Exception as e:
-        print("ERROR in add announcement:", e)
-        return {'content':{'type': "error", 'details':"An error occurred"}}
-
-@router.post("/announcement/update")
-def add_announcment(request: UpdateAnnouncementRequest, db: Session = Depends(get_public_db)):
-    id=request.id
-    title=request.title
-    body=request.body
-    priority=request.priority
-    request_by = request.request_by
-    try:
-        existing_announcement = db.query(Announcements).filter(Announcements.id == id).first()
-        if not existing_announcement:
-            return {'content': {'type':"error", 'details': "Announcement not found"}}
-        if existing_announcement.author != request_by:
-            return {'content': {'type':"error", 'details': "Unauthorized"}}
-        existing_announcement.title=title
-        existing_announcement.body=body
-        existing_announcement.updated_at=datetime.datetime.utcnow()
-        existing_announcement.expires_at=datetime.datetime.utcnow() + datetime.timedelta(days=30)
-        existing_announcement.priority=priority
-        db.commit()
-        db.refresh(existing_announcement)
-        return {'content': {'type':"ok", 'details': "Announcement updated",'id': existing_announcement.id}}
-    except Exception as e:
-        print("ERROR in add announcement:", e)
-        return {'content':{'type': "error", 'details':"An error occurred"}}
-
-@router.post("/announcement/delete")
-def add_announcment(request: DeleteAnnouncementRequest, db: Session = Depends(get_public_db)):
-    id=request.id
-    request_by = request.request_by
-    try:
-        existing_announcement = db.query(Announcements).filter(Announcements.id == id).first()
-        if not existing_announcement:
-            return {'content': {'type':"error", 'details': "Announcement not found"}}
-        if existing_announcement.author != request_by:
-            return {'content': {'type':"error", 'details': "Unauthorized"}}
-        db.delete(existing_announcement)
-        db.commit()
-        return {'content': {'type':"ok", 'details': "Announcement updated",'id': existing_announcement.id}}
-    except Exception as e:
-        print("ERROR in add announcement:", e)
-        return {'content':{'type': "error", 'details':"An error occurred"}}
 
 @router.post("/club/add")
 def add_club(request: AddClubRequest, db: Session = Depends(get_users_db)):
@@ -327,3 +261,55 @@ def delete_club(data: DeleteClubRequest, db: Session = Depends(get_users_db)):
         print("ERROR in updating club:", e)
         db.rollback()
         return {'content': {'type': "error", 'details': "An error occurred"}}
+
+@router.post("/club/list")
+def clubs_list(request: ClubListRequest, db: Session = Depends(get_users_db)):
+    try:
+        existing_council = db.query(Council).filter(Council.email == request.request_by).first()
+        if not existing_council:
+            return {'content': {'type': 'error', 'details': 'Council not found'}}
+
+        clubs = db.query(Club).filter(Club.council_id == existing_council.id).all()
+
+        formatted_clubs = []
+        for club in clubs:
+            head_info = None
+            if club.head:
+                head_info = {
+                    'id': club.head.id,
+                    'name': club.head.name,
+                    'email': club.head.email
+                }
+            coheads_info = []
+            for cohead in club.coheads:
+                coheads_info.append({
+                    'id': cohead.id,
+                    'name': cohead.name,
+                    'email': cohead.email
+                })
+
+            # Format club data
+            club_data = {
+                'id': club.id,
+                'name': club.name,
+                'title': club.title,
+                'email': club.email,
+                'description': club.description,
+                'faculty_advisor': club.faculty_advisor,
+                'head': head_info,
+                'coheads': coheads_info,
+                'council_id': club.council_id
+            }
+            formatted_clubs.append(club_data)
+
+        return {
+            'content': {
+                'type': 'ok',
+                'details': f'Found {len(formatted_clubs)} clubs',
+                'clubs': formatted_clubs
+            }
+        }
+
+    except Exception as e:
+        print("ERROR in clubs list:", e)
+        return {'content': {'type': 'error', 'details': 'Failed to retrieve clubs list'}}

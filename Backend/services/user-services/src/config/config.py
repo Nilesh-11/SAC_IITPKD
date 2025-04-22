@@ -1,7 +1,6 @@
 import os
 from dotenv import load_dotenv
 import logging
-import datetime
 
 logging.basicConfig(
     filename="logs/user-service.log",

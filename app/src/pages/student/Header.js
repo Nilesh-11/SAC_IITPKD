@@ -14,7 +14,7 @@ import MenuIcon from "@mui/icons-material/Menu";
 import LeftNav from "../../components/user/leftnav";
 import RightNavbar from "../../components/user/rightnav";
 
-const Header = ({ menuItems, handleMenuNavigation, recentActivity, liveEvents, username }) => {
+const Header = ({ menuItems, handleMenuNavigation, recentActivity, liveEvents, username, userrole }) => {
   const [isRightDrawerOpen, setIsRightDrawerOpen] = useState(false);
   const [isLeftDrawerOpen, setIsLeftDrawerOpen] = useState(false);
 
@@ -102,7 +102,8 @@ const Header = ({ menuItems, handleMenuNavigation, recentActivity, liveEvents, u
         >
 
         <RightNavbar
-          username="John Doe"
+          username={username}
+          userrole={userrole}
           userLogo="logo192.png"
           liveEvents={liveEvents}
           activity={recentActivity}

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import Api from "../api/auth";
+import {Api} from "../api/auth";
 import {
   Box,
   Typography,

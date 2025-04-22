@@ -11,9 +11,8 @@ class AddProjectRequest(BaseModel):
     title: str
     description: str
     start_date: date
-    duration: timedelta
-    skills: Optional[List[str]]
-    status: str
+    end_date: date
+    skills: List[str]
     max_members_count: int
     request_by: EmailStr
     
@@ -27,6 +26,14 @@ class ShortlistRequest(BaseModel):
     project_id: int
     is_approved: bool
     role: str
+    request_by: EmailStr
+    
+    @field_validator("request_by")
+    @classmethod
+    def validate_mail(cls, value: str) -> str:
+        return validate_mail(value)
+
+class MyProjectsRequest(BaseModel):
     request_by: EmailStr
     
     @field_validator("request_by")
@@ -52,17 +59,16 @@ class GetProjectRequest(BaseModel):
         return validate_mail(value)
 
 class UpdateProjectRequest(BaseModel):
+    id: int
     proj_type: str
     member_roles: List[str]
     proj_domain: str
     title: str
     description: str
     start_date: date
-    duration: timedelta
+    end_date: date
     skills: Optional[List[str]]
-    status: str
     max_members_count: int
-    current_members_count: int
     request_by: EmailStr
     
     @field_validator("organizer")
@@ -76,8 +82,8 @@ class UpdateProjectRequest(BaseModel):
         return validate_mail(value)
 
 class DeleteProjectRequest(BaseModel):
-    request_by: EmailStr
     id: int
+    request_by: EmailStr
     
     @field_validator("request_by")
     @classmethod
@@ -86,9 +92,9 @@ class DeleteProjectRequest(BaseModel):
 
 class ApplyProjectRequest(BaseModel):
     project_id: int
-    request_by: EmailStr
     roles: List[str]
     skills: List[str]
+    request_by: EmailStr
     
     @field_validator("request_by")
     @classmethod
@@ -117,8 +123,8 @@ class WithdrawApplicationRequest(BaseModel):
 
 class RemoveApplicationRequest(BaseModel):
     project_id: int
-    request_by: EmailStr
     member: EmailStr
+    request_by: EmailStr
     
     @field_validator("request_by")
     @classmethod
@@ -138,7 +144,7 @@ class AddMeetingRequest(BaseModel):
     scheduled_at: datetime
     venue: Optional[str]
     meeting_link: Optional[str]
-    roles: Optional[List[str]]
+    roles: List[str]
     request_by: EmailStr
     
     @field_validator("request_by")
@@ -165,7 +171,25 @@ class UpdateMeetingRequest(BaseModel):
     scheduled_at: datetime
     venue: Optional[str]
     meeting_link: Optional[str]
-    roles: Optional[List[str]]
+    roles: List[str]
+    request_by: EmailStr
+    
+    @field_validator("request_by")
+    @classmethod
+    def validate_mail(cls, value: str) -> str:
+        return validate_mail(value)
+
+class ProjectInfoRequest(BaseModel):
+    project_id: int
+    request_by: EmailStr
+    
+    @field_validator("request_by")
+    @classmethod
+    def validate_mail(cls, value: str) -> str:
+        return validate_mail(value)
+
+
+class OwnProjectsRequest(BaseModel):
     request_by: EmailStr
     
     @field_validator("request_by")

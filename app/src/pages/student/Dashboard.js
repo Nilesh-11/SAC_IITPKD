@@ -4,79 +4,82 @@ import Header from "./Header";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import Dashboard from "../../components/user/dash";
-import Clubs from "../../components/user/clubs";
-import ProjectList from "./../../components/user/projects";
+import ProjectList from "../../components/user/projects";
 import AnnouncementsDash from "../../components/user/announcementsDash";
 import EventCalendar from "../../components/user/bigcalendar";
-import ClubInfo from "./../../components/user/clubinfo";
-import {
-  otherClubs,
-  myClubs,
-  myClubs2,
-} from "./../variables";
-import getAnnouncementsList from "../../api/announcement";
-import getEventsList from "../../api/events";
-import getProjectsList from "../../api/projects";
-import { Description } from "@mui/icons-material";
+import {getAnnouncementsList} from "../../api/announcement";
+import {getEventsList} from "../../api/events";
+import {ClubsListApi, StatusApi} from "../../api/public";
+import { CircularProgress } from "@mui/material";
+import AddProjectForm from "../../components/user/AddProjectForm";
+import ManageProject from "../../components/user/ManageProject";
+import UpdateProjectForm from "../../components/user/UpdateProjectForm";
+import CouncilClubs from "../../components/user/CouncilClubs";
+import { getUsername } from "../../api/auth";
 
 const StudentDashboard = () => {
   const navigate = useNavigate();
   const [events, setEvents] = useState([]);
   const [announcements, setAnnouncements] = useState([]);
-  const [projects, setProjects] = useState([]);
   const [currSection, setCurrentSection] = useState("dashboard");
+  const [status, setStatus] = useState("");
+  const [allClubs, setAllClubs] = useState([]);
+  const [username, setUsername] = useState("");
+  const [userrole, setRole] = useState("");
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchAnnouncements = async () => {
-      const data = await getAnnouncementsList();
-      setAnnouncements(data);
+    const fetchAllData = async () => {
+      try {
+        const [annData, eventData, clubData, userData, statData] = await Promise.all([
+          getAnnouncementsList(),
+          getEventsList(),
+          ClubsListApi(),
+          getUsername(),
+          StatusApi(),
+        ]);
+        setAllClubs(clubData.clubs.map(item => `/clubs/${item.name}/opaque_logo_square.png`));
+        setAnnouncements(annData);
+        setUsername(userData.name);
+        setRole(userData.user_type);
+        setEvents(eventData);
+        setStatus(statData);
+      } catch (err) {
+        console.error("Error loading dashboard data", err);
+      } finally {
+        setLoading(false);
+      }
     };
-
-    const fetchEvents = async () => {
-      const data = await getEventsList();
-      setEvents(data);
-    };
-
-    const fetchProjects = async () => {
-      const data = await getProjectsList();
-      setProjects(data);
-    };
-
-    fetchAnnouncements();
-    fetchEvents();
-    fetchProjects();
+    
+    fetchAllData();
   }, []);
-
+  
   const handleMenuNavigation = (link) => {
     setCurrentSection(link);
   };
 
-  const activity = [
-    { club: "YACC", user: "Alice", club_logo_src: "/logo192.png" },
-    { club: "Voxel", user: "Bob", club_logo_src: "/logo192.png" },
-  ];
-
   const menuItems = [
     { name: "Dashboard", icon: "📊", link: "dashboard" },
-    { name: "Clubs", icon: "🏫", link: "clubs" },
-    { name: "Announcements", icon: "📣", link: "announcements" },
+    { name: "Clubs", icon: "🏛️", link: "clubs" },
+    { name: "Announcements", icon: "📢", link: "announcements" },
     { name: "Calendar", icon: "🗓️", link: "calendar" },
-    { name: "Live-Events", icon: "🎤", link: "live-events" },
-    { name: "Opportunities", icon: "🔍", link: "opportunities" },
-    { name: "Budget", icon: "💰", link: "budget" },
-    { name: "More", icon: "⋯", link: "more" },
+    { name: "Projects", icon: "📂", link: "projects" },
+    { name: "Add Project", icon: "➕", link: "addproject" },
+    { name: "Update Project", icon: "🔄", link: "updateproject" },
+    { name: "Manage Project", icon: "🛠️", link: "manageproject" },
   ];
 
-  const status = [
-    { title: "Clubs", count: 5 },
-    { title: "Events", count: 10 },
-    { title: "Ongoing Projects", count: 2 },
-    { title: "Projects Completed", count: "10" },
-    { title: "Add Functionalities", count: "+" },
-  ];
+  if (loading) {
+    return (
+      <div style={{ textAlign: "center", marginTop: "100px" }}>
+        <h2>Loading Dashboard...</h2>
+        <CircularProgress />
+      </div>
+    );
+  }
 
   const handleClubNavigation = (link) => {
-    console.log(link);
+    navigate(link);
   };
   
   return (
@@ -84,14 +87,15 @@ const StudentDashboard = () => {
       <Header
         handleMenuNavigation={handleMenuNavigation}
         liveEvents={events}
-        recentActivity={activity}
         menuItems={menuItems}
+        username={username}
+        userrole={userrole}
       ></Header>
       {currSection == "dashboard" && (
         <Dashboard
           announcements={announcements}
           status={status}
-          myClubs={myClubs}
+          myClubs={allClubs}
           handleAllAnnouncementClick={() => {
             setCurrentSection("announcements");
           }}
@@ -104,20 +108,25 @@ const StudentDashboard = () => {
       )}
 
       {currSection == "clubs" && (
-        <Clubs
-          my_clubs={myClubs2}
-          other_clubs={otherClubs}
-          handleNavigation={handleClubNavigation}
-        />
+        <CouncilClubs handleNavigation={handleClubNavigation}></CouncilClubs>
       )}
 
-      {currSection == "more" && (
-        <ClubInfo />
+      {currSection == "addproject" && (
+        <AddProjectForm></AddProjectForm>
       )}
 
+      {currSection == "manageproject" && (
+        <ManageProject></ManageProject>
+      )}
 
-      {currSection == "opportunities" && (
-        <ProjectList projects={projects}></ProjectList>
+      {currSection == "updateproject" && (
+        <UpdateProjectForm></UpdateProjectForm>
+      )}
+      
+      {currSection == "projects" && (
+        <ProjectList handleAddProject={() => {
+          setCurrentSection("addproject");
+        }}></ProjectList>
       )}
 
       {currSection == "announcements" && (

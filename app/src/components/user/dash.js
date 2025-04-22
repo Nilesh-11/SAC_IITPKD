@@ -6,11 +6,9 @@ import {
   Card,
   Grid,
   Divider,
-  IconButton,
   useMediaQuery,
   useTheme,
 } from "@mui/material";
-import MoreVertIcon from "@mui/icons-material/MoreVert";
 import LocalLibraryIcon from "@mui/icons-material/LocalLibrary";
 import SquareGallery from "./squareGallery";
 import timeAgo from "../../utils/parser";

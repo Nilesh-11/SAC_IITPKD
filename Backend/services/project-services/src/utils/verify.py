@@ -1,4 +1,4 @@
-from src.models.users import Student, Club
+from src.models.users import Student, Club,Council, Admin
 from sqlalchemy.orm import Session
 from sqlalchemy.sql import exists
 from src.config.config import logger
@@ -21,10 +21,19 @@ def validate_mail(email: str) -> bool:
 
 def verify_user(email: str, db: Session) -> bool:
     try:
-        user_exists = db.query(exists().where(Student.email == email)).scalar()
+        student_exists = db.query(exists().where(Student.email == email)).scalar()
+        if student_exists:
+            return "student"
         club_exists = db.query(exists().where(Club.email == email)).scalar()
-
-        return user_exists or club_exists
+        if club_exists:
+            return "club"
+        council_exists = db.query(exists().where(Council.email == email)).scalar()
+        if council_exists:
+            return "council"
+        admin_exists = db.query(exists().where(Admin.email == email)).scalar()
+        if admin_exists:
+            return "admin"
+        return None
     except Exception as e:
         logger.error(f"Database error while verifying user: {e}")
         return False

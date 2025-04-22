@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useAuth } from "../contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
-import Api, { ForgotPasswordApi } from "../api/auth";
+import { ForgotPasswordApi, Api } from "../api/auth";
 import {
   Box,
   Typography,
@@ -120,7 +120,6 @@ const LoginDashboard = () => {
       setLoading(false);
     }
   };
-  
   const handleForgotPasswordSubmit = async () => {
     setLoading(true);
     try {

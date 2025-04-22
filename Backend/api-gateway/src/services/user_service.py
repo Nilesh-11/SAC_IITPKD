@@ -13,9 +13,9 @@ async def forward_user_request(path:str, data):
         if "application/json" in response.headers.get("Content-Type", ""):
             return response.json()
         else:
-            print("Invalid response format from auth service")
+            print("Invalid response format from user service")
             return {'content': {'type': "error", "details": "An error occurred", "status_code": response.status_code}}
     except Exception as e:
-        print("Failed to connect to auth service: ", e)
+        print("Failed to connect to user service: ", e)
         return {'content': {'type':"error", 'details': f"An error occured", 'status_code': 503}}
 

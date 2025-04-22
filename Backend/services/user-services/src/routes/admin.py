@@ -1,107 +1,14 @@
 from src.utils.auth import hash_password
-from src.schemas.request import DeleteAnnouncementRequest, DeleteCouncilRequest, AddAnnouncementRequest, UpdateAnnouncementRequest, AddCouncilRequest
-from src.utils.verify import verify_user
-from src.models.public import Announcements
+from src.schemas.request import CouncilListRequest, UpdateCouncilRequest, DeleteCouncilRequest, AddCouncilRequest
 from src.models.users import Admin, Council, Student
-from src.database.connection import get_public_db, get_users_db
-from fastapi.responses import JSONResponse
+from src.database.connection import get_users_db
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
-import datetime
+from sqlalchemy.orm import joinedload
 
 router = APIRouter()
 
-@router.post("/announcement/add")
-def add_announcment(request: AddAnnouncementRequest, db: Session = Depends(get_public_db)):
-    title=request.title
-    body=request.body
-    priority=request.priority
-    request_by = request.request_by
-    try:
-        new_announcement = Announcements(
-            title=title,
-            body=body,
-            created_at=datetime.datetime.utcnow(),
-            updated_at=datetime.datetime.utcnow(),
-            expires_at=datetime.datetime.utcnow() + datetime.timedelta(days=30),
-            priority=priority,
-            author=request_by,
-            author_role="admin"
-        )
-        db.add(new_announcement)
-        db.commit()
-        return {'content': {'type':"ok", 'details': "Announcement added"}}
-    except Exception as e:
-        print("ERROR in add announcement:", e)
-        return {'content':{'type': "error", 'details':"An error occurred"}}
-
-@router.post("/announcement/update")
-def add_announcment(request: UpdateAnnouncementRequest, db: Session = Depends(get_public_db)):
-    id=request.id
-    title=request.title
-    body=request.body
-    priority=request.priority
-    request_by = request.request_by
-    try:
-        existing_announcement = db.query(Announcements).filter(Announcements.id == id).first()
-        if not existing_announcement:
-            return {'content': {'type':"error", 'details': "Announcement not found"}}
-        if existing_announcement.author != request_by:
-            return {'content': {'type':"error", 'details': "Unauthorized"}}
-        existing_announcement.title=title
-        existing_announcement.body=body
-        existing_announcement.updated_at=datetime.datetime.utcnow()
-        existing_announcement.expires_at=datetime.datetime.utcnow() + datetime.timedelta(days=30)
-        existing_announcement.priority=priority
-        db.commit()
-        db.refresh(existing_announcement)
-        return {'content': {'type':"ok", 'details': "Announcement updated",'id': existing_announcement.id}}
-    except Exception as e:
-        print("ERROR in add announcement:", e)
-        return {'content':{'type': "error", 'details':"An error occurred"}}
-
-@router.post("/announcement/delete")
-def add_announcment(request: DeleteAnnouncementRequest, db: Session = Depends(get_public_db)):
-    id=request.id
-    request_by = request.request_by
-    try:
-        existing_announcement = db.query(Announcements).filter(Announcements.id == id).first()
-        if not existing_announcement:
-            return {'content': {'type':"error", 'details': "Announcement not found"}}
-        if existing_announcement.author != request_by:
-            return {'content': {'type':"error", 'details': "Unauthorized"}}
-        db.delete(existing_announcement)
-        db.commit()
-        return {'content': {'type':"ok", 'details': "Announcement updated",'id': existing_announcement.id}}
-    except Exception as e:
-        print("ERROR in add announcement:", e)
-        return {'content':{'type': "error", 'details':"An error occurred"}}
-
-@router.post("/announcement/add")
-def add_announcment(request: AddAnnouncementRequest, db: Session = Depends(get_public_db)):
-    title=request.title
-    body=request.body
-    priority=request.priority
-    request_by = request.request_by
-    try:
-        new_announcement = Announcements(
-            title=title,
-            body=body,
-            created_at=datetime.datetime.utcnow(),
-            updated_at=datetime.datetime.utcnow(),
-            expires_at=datetime.datetime.utcnow() + datetime.timedelta(days=30),
-            priority=priority,
-            author=request_by,
-            author_role="admin"
-        )
-        db.add(new_announcement)
-        db.commit()
-        return {'content': {'type':"ok", 'details': "Announcement added"}}
-    except Exception as e:
-        print("ERROR in add announcement:", e)
-        return {'content':{'type': "error", 'details':"An error occurred"}}
-
-@router.post("/councils/add")
+@router.post("/council/add")
 def add_council(request: AddCouncilRequest, db: Session = Depends(get_users_db)):
     email=request.email
     password=request.password
@@ -145,7 +52,87 @@ def add_council(request: AddCouncilRequest, db: Session = Depends(get_users_db))
         print("ERROR in add council:", e)
         return {'content':{'type': "error", 'details':"An error occurred"}}
 
-@router.post("/councils/delete")
+@router.post("/council/update")
+def update_council(request: UpdateCouncilRequest, db: Session = Depends(get_users_db)):
+    try:
+        admin = db.query(Admin).filter(Admin.email == request.request_by).first()
+        if not admin:
+            return {'content': {'type': 'error', 'details': 'Admin authorization required'}}
+        council = db.query(Council).filter(Council.id == request.council_id).first()
+        if not council:
+            return {'content': {'type': 'error', 'details': 'Council not found'}}
+        secretary = db.query(Student).filter(Student.email == request.secretary).first()
+        if not secretary:
+            return {'content': {'type': 'error', 'details': 'Secretary student not found'}}
+        new_deputies = []
+        for email in request.deputy:
+            deputy = db.query(Student).filter(Student.email == email).first()
+            if not deputy:
+                return {'content': {'type': 'error', 'details': f'Deputy {email} not found'}}
+            new_deputies.append(deputy)
+        council.email=request.email
+        council.password_hash=hash_password(request.password)
+        council.name=request.name
+        council.title=request.title
+        council.description=request.description
+        council.faculty_advisor=request.faculty_advisor
+        council.secretary_id=secretary.id
+        council.deputy_ids=new_deputies
+        db.commit()
+        return {
+            'content': {
+                'type': 'ok',
+                'details': 'Council updated successfully',
+                'council_id': council.id
+            }
+        }
+
+    except Exception as e:
+        db.rollback()
+        print(f"ERROR updating council: {e}")
+        return {'content': {'type': 'error', 'details': 'Failed to update council'}}
+
+@router.post("/council/list")
+def councils_list(request: CouncilListRequest, db: Session = Depends(get_users_db)):
+    try:
+        admin = db.query(Admin).filter(Admin.email == request.request_by).first()
+        if not admin:
+            return {'content': {'type': 'error', 'details': 'Admin authorization required'}}
+
+        councils = db.query(Council).options(
+            joinedload(Council.secretary),
+            joinedload(Council.deputy_ids)
+        ).all()
+
+        councils_data = []
+        for council in councils:
+            council_data = {
+                'id': council.id,
+                'email': council.email,
+                'name': council.name,
+                'title': council.title,
+                'description': council.description,
+                'faculty_advisor': council.faculty_advisor,
+                'secretary': council.secretary.email if council.secretary else None,
+                'deputies': [d.email for d in council.deputy_ids],
+                'website': council.website,
+                'created_at': council.created_at.isoformat(),
+                'updated_at': council.updated_at.isoformat()
+            }
+            councils_data.append(council_data)
+
+        return {
+            'content': {
+                'type': 'ok',
+                'details': f"Found {len(councils)} councils",
+                'councils': councils_data
+            }
+        }
+    except Exception as e:
+        print(f"ERROR retrieving councils: {e}")
+        return {'content': {'type': 'error', 'details': 'Failed to retrieve councils'}}
+
+@router.post("/council/delete")
 def delete_council(request: DeleteCouncilRequest, db: Session = Depends(get_users_db)):
     id=request.id
     request_by=request.request_by

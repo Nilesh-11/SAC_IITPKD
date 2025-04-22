@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Box,
   Typography,
@@ -12,17 +12,59 @@ import {
   Grid,
   useMediaQuery,
   useTheme,
+  CircularProgress,
 } from "@mui/material";
 import { Add } from "@mui/icons-material";
 import { motion } from "framer-motion";
 import { formatToIST } from "./../../utils/parser";
+import { getProjectsList } from "../../api/projects";
 
-const ProjectList = ({ projects }) => {
+const ProjectList = ( {handleAddProject} ) => {
+  const [projects, setProjects] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [filterType, setFilterType] = useState("All");
   const [filterRole, setFilterRole] = useState("All");
   const [filterStatus, setFilterStatus] = useState("All"); // ✅ NEW
   const theme = useTheme();
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
+
+  useEffect(() => {
+    const fetchProjects = async () => {
+      try {
+        const res = await getProjectsList();
+        setProjects(res);
+      } catch (err) {
+        console.error("Failed to fetch projects:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProjects();
+  }, []);
+
+  const sortedProjects = [...projects].sort(
+    (a, b) => new Date(b.dateCreated) - new Date(a.dateCreated)
+  );
+
+  const filteredProjects = sortedProjects.filter((proj) => {
+    const typeMatch = filterType === "All" || proj.proj_type === filterType;
+    const roleMatch =
+      filterRole === "All" || proj.coordinator_role === filterRole;
+    const statusMatch = filterStatus === "All" || proj.status === filterStatus;
+    return typeMatch && roleMatch && statusMatch;
+  });
+
+  if (loading) {
+    return (
+      <Box sx={{ padding: 3, textAlign: "center" }}>
+        <CircularProgress sx={{ color: "rgb(245,164,94)" }} />
+        <Typography mt={2} color="text.secondary">
+          Loading projects...
+        </Typography>
+      </Box>
+    );
+  }
 
   if (!projects || projects.length === 0) {
     return (
@@ -33,20 +75,6 @@ const ProjectList = ({ projects }) => {
       </Box>
     );
   }
-
-  const sortedProjects = [...projects].sort(
-    (a, b) => new Date(b.dateCreated) - new Date(a.dateCreated)
-  );
-
-  const filteredProjects = sortedProjects.filter((proj) => {
-    const typeMatch = filterType === "All" || proj.proj_type === filterType;
-    const roleMatch =
-      filterRole === "All" || proj.coordinator_role === filterRole;
-    const statusMatch = filterStatus === "All" || proj.status === filterStatus; // ✅ NEW
-    return typeMatch && roleMatch && statusMatch;
-  });
-
-  
 
   return (
     <Box sx={{ padding: 3, px: { xs: 2, sm: 5, md: 10 }, py: 3 }}>
@@ -181,6 +209,7 @@ const ProjectList = ({ projects }) => {
           component={motion.div}
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
+          onClick={handleAddProject}
           sx={{
             backgroundColor: "white",
             color: "rgb(245,164,94)",
@@ -196,7 +225,7 @@ const ProjectList = ({ projects }) => {
       </Box>
 
       {/* Project Grid */}
-      <Grid container spacing={3} mt={3}>
+      <Grid container spacing={3} mt={3} sx={{flexDirection: "column"}}>
         {filteredProjects.map((project, index) => (
           <Grid item xs={12} sm={6} md={4} key={index}>
             <Card

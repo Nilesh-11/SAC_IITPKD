@@ -11,8 +11,10 @@ import {
   useTheme,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
+import EventIcon from '@mui/icons-material/Event';
 
-const RightNavbar = ({ username, userLogo, liveEvents, activity, onClose }) => {
+const RightNavbar = ({ username, userLogo, liveEvents, userrole }) => {
+  console.log(liveEvents);
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
@@ -44,7 +46,7 @@ const RightNavbar = ({ username, userLogo, liveEvents, activity, onClose }) => {
           {username}
         </Typography>
         <Avatar
-          src={userLogo}
+          src={`/roles/${userrole}_circular.png`}
           sx={{
             width: 50,
             height: 50,
@@ -91,7 +93,7 @@ const RightNavbar = ({ username, userLogo, liveEvents, activity, onClose }) => {
             gap={2}
           >
             <Avatar
-              src={`/roles/student_circular.png`}
+              src={`/logo/event.png`}
               sx={{
                 width: 40,
                 height: 40,
@@ -115,23 +117,6 @@ const RightNavbar = ({ username, userLogo, liveEvents, activity, onClose }) => {
                 {event.title}
               </Typography>
             </Box>
-            <Button
-              variant="contained"
-              size="small"
-              fullWidth={isMobile}
-              sx={{
-                bgcolor: "#ff6600",
-                whiteSpace: "nowrap",
-                transition: "all 0.3s ease-in-out",
-                "&:hover": {
-                  bgcolor: "#e65c00",
-                  transform: "scale(1.1)",
-                },
-              }}
-              href={event.link}
-            >
-              Join
-            </Button>
           </Box>
           <Typography
             variant="body2"
@@ -142,55 +127,6 @@ const RightNavbar = ({ username, userLogo, liveEvents, activity, onClose }) => {
             {event.description}
           </Typography>
         </Paper>
-      ))}
-
-      {/* Activity Section */}
-      <Typography
-        variant="subtitle1"
-        color="text.secondary"
-        fontWeight="bold"
-        gutterBottom
-        sx={{ fontSize: { xs: "0.9rem", sm: "1rem" } }}
-      >
-        Activity
-      </Typography>
-
-      {activity.map((act, index) => (
-        <Box
-          key={index}
-          display="flex"
-          alignItems="center"
-          mb={2}
-          sx={{
-            transition: "all 0.3s ease-in-out",
-            "&:hover": { transform: "scale(1.02)" },
-          }}
-        >
-          <Box
-            sx={{
-              width: 4,
-              height: 40,
-              bgcolor: "rgb(183,102,32)",
-              borderRadius: 2,
-              mr: 2,
-              flexShrink: 0,
-            }}
-          />
-          <Avatar
-            src={`/roles/student_circular.png`}
-            sx={{
-              width: 30,
-              height: 30,
-              mr: 2,
-              transition: "all 0.3s",
-              "&:hover": { transform: "scale(1.1)" },
-              flexShrink: 0,
-            }}
-          />
-          <Typography variant="body2" sx={{ fontSize: { xs: "0.8rem", sm: "0.9rem" } }}>
-            <b>{act.user}</b> has replied on <b>{act.club}</b>
-          </Typography>
-        </Box>
       ))}
     </Box>
   );

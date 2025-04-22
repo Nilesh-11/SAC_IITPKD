@@ -8,13 +8,13 @@ class Event(BaseEvents):
 
     id = Column(Integer, primary_key=True, index=True)
     organizer = Column(String, nullable=False)
-    registered_by = Column(String, nullable=False)
     title = Column(String, nullable=False)
-    description = Column(Text)
-    council = Column(String, nullable=False, unique=True)
-    event_timestamp = Column(DateTime, nullable=False)
-    duration = Column(Interval, nullable=False)
+    description = Column(Text, nullable=False)
+    start_time = Column(DateTime, nullable=False)
+    end_time = Column(DateTime, nullable=False)
     venue = Column(String, nullable=False)
+    registered_by = Column(String, nullable=False)
+    council = Column(String, nullable=False)
     cancelled = Column(Boolean, default=False)
 
     @hybrid_property
@@ -30,11 +30,11 @@ class Event(BaseEvents):
         else:
             return "completed"
 
-class EventParticipant(BaseEvents):
-    __tablename__ = "event_participants"
+# class EventParticipant(BaseEvents):
+#     __tablename__ = "event_participants"
 
-    id = Column(Integer, primary_key=True, index=True)
-    event_id = Column(Integer, nullable=False)
-    name = Column(String, nullable=False)
-    email = Column(String, index=True, nullable=False)
-    phone_number = Column(String, nullable=True)
+#     id = Column(Integer, primary_key=True, index=True)
+#     event_id = Column(Integer, nullable=False)
+#     name = Column(String, nullable=False)
+#     email = Column(String, index=True, nullable=False)
+#     phone_number = Column(String, nullable=True)

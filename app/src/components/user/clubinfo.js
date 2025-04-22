@@ -1,4 +1,4 @@
-import { React, useState, useEffect  } from "react";
+import { React, useState, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
 import {
   Box,
@@ -13,22 +13,26 @@ import {
 } from "@mui/material";
 import timeAgo from "./../../utils/parser";
 import ClubProjects from "./clubProjects";
-import {JoinClub, getClubInfo} from "../../api/club";
+import { JoinClub, getClubInfo } from "../../api/club";
 
 const ClubInfo = () => {
   const [searchParams] = useSearchParams();
   const club_id = searchParams.get("club_id");
-  const [alert, setAlert] = useState({ open: false, type: "success", message: "" });
+  const [alert, setAlert] = useState({
+    open: false,
+    type: "success",
+    message: "",
+  });
   const [clubData, setClubData] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
   const [userRole, setUserRole] = useState("");
+  const [isJoining, setIsJoining] = useState(false);
 
   useEffect(() => {
     const fetchClubData = async () => {
       try {
         const data = await getClubInfo({ club_id });
-        console.log(data);
         if (data.type === "ok") {
           setClubData(data.club);
           setUserRole(data.club.role);
@@ -46,10 +50,10 @@ const ClubInfo = () => {
   }, [club_id]);
 
   const handleJoinClub = async () => {
+    setIsJoining(true);
     try {
       const res = await JoinClub({ club_id });
       if (res?.type === "ok") {
-        // Refresh club data after successful join
         const updatedData = await getClubInfo({ club_id });
         setClubData(updatedData.club);
         setUserRole(updatedData.club.role);
@@ -71,13 +75,15 @@ const ClubInfo = () => {
         type: "error",
         message: "An unexpected error occurred while joining the club.",
       });
+    } finally {
+      setIsJoining(false);
     }
   };
-  
+
   const handleCloseAlert = () => {
     setAlert({ ...alert, open: false });
   };
-  
+
   if (isLoading) return <div>loading...</div>;
   if (error) return <div>Error: {error}</div>;
   if (!clubData) return <div>Club not found</div>;
@@ -166,7 +172,9 @@ const ClubInfo = () => {
               <Typography variant="h6" gutterBottom>
                 ● Club CoHead(s)
               </Typography>
-              <Typography variant="body2">{clubData.coheads.join(", ")}</Typography>
+              <Typography variant="body2">
+                {clubData.coheads.join(", ")}
+              </Typography>
             </Card>
 
             {/* Email Card */}
@@ -316,59 +324,40 @@ const ClubInfo = () => {
           sx={{ flexWrap: "wrap" }}
         >
           <Button
-            variant="outlined"
-            sx={{
-              borderColor: "gray",
-              color: "gray",
-              borderRadius: 2,
-              px: 3,
-              textTransform: "none",
-              "&:hover": { backgroundColor: "#f0f0f0" },
-            }}
-          >
-            Back
-          </Button>
-          <Button
-        variant="contained"
-        onClick={handleJoinClub}
-        disabled={!!userRole}
-        sx={{
-          backgroundColor: userRole ? "#aaa" : "rgb(243,130,33)",
-          color: "white",
-          borderRadius: 2,
-          px: 3,
-          textTransform: "none",
-          "&:hover": {
-            backgroundColor: userRole ? "#aaa" : "rgb(220,100,30)",
-          },
-        }}
-      >
-        {userRole ? `${userRole}` : "Join as Member"}
-      </Button>
-          <Button
             variant="contained"
+            onClick={handleJoinClub}
+            disabled={!!userRole || isJoining}
             sx={{
-              backgroundColor: "rgb(243,130,33)",
+              backgroundColor: userRole ? "#aaa" : "rgb(243,130,33)",
               color: "white",
               borderRadius: 2,
               px: 3,
               textTransform: "none",
               "&:hover": {
-                backgroundColor: "rgb(220,100,30)",
+                backgroundColor: userRole ? "#aaa" : "rgb(220,100,30)",
               },
             }}
           >
-            Core Team
+            {userRole
+              ? `${userRole}`
+              : isJoining
+              ? "Joining..."
+              : "Join as Member"}
           </Button>
         </Stack>
       </Box>
+
       <Snackbar
         open={alert.open}
         autoHideDuration={3000}
         onClose={handleCloseAlert}
         anchorOrigin={{ vertical: "top", horizontal: "right" }}
       >
-        <Alert onClose={handleCloseAlert} severity={alert.type} sx={{ width: "100%" }}>
+        <Alert
+          onClose={handleCloseAlert}
+          severity={alert.type}
+          sx={{ width: "100%" }}
+        >
           {alert.message}
         </Alert>
       </Snackbar>

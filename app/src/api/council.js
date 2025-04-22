@@ -237,3 +237,139 @@ export const PostgraduateInfo = async () => {
     throw error;
   }
 };
+
+export const AddClubApi = async (data) => {
+  const url = `${BACKEND_URL}` + "/api/user/council/club/add";
+  try {
+    const response = await fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem("token") || ""}`,
+      },
+      body: JSON.stringify(data),
+    });
+    const responseData = await response.json();
+    if (response.ok) {
+      if (responseData?.content?.type == "ok"){
+        return responseData.content;
+      }
+      else{
+        if (responseData?.content?.type){
+          return responseData?.content
+        }
+        else{
+          return {'type': "error", 'details': "An error occurred"};
+        }
+      }
+    } else {
+      console.log(response);
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+  } catch (error) {
+    console.error("Error in adding event list:", error);
+    throw error;
+  }
+};
+
+export const ClubListApi = async () => {
+  const url = `${BACKEND_URL}` + "/api/user/council/club/list";
+  try {
+    const response = await fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem("token") || ""}`,
+      },
+      body: JSON.stringify({}),
+    });
+    const responseData = await response.json();
+    if (response.ok) {
+      if (responseData?.content?.type == "ok"){
+        return responseData.content;
+      }
+      else{
+        if (responseData?.content?.type){
+          return responseData?.content
+        }
+        else{
+          return {'type': "error", 'details': "An error occurred"};
+        }
+      }
+    } else {
+      console.log(response);
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+  } catch (error) {
+    console.error("Error in adding event list:", error);
+    throw error;
+  }
+};
+
+export const UpdateClubApi = async (data) => {
+  const url = `${BACKEND_URL}` + "/api/user/council/club/update";
+  try {
+    const response = await fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem("token") || ""}`,
+      },
+      body: JSON.stringify(data),
+    });
+    const responseData = await response.json();
+    if (response.ok) {
+      if (responseData?.content?.type == "ok"){
+        return responseData.content;
+      }
+      else{
+        if (responseData?.content?.type){
+          return responseData?.content
+        }
+        else{
+          return {'type': "error", 'details': "An error occurred"};
+        }
+      }
+    } else {
+      console.log(response);
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+  } catch (error) {
+    console.error("Error in adding event list:", error);
+    throw error;
+  }
+};
+
+export const DeleteClubApi = async (data) => {
+  const url = `${BACKEND_URL}` + "/api/user/council/club/delete";
+  try {
+    const response = await fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem("token") || ""}`,
+      },
+      body: JSON.stringify(data),
+    });
+    const responseData = await response.json();
+    if (response.ok) {
+      if (responseData?.content?.type == "ok"){
+        return responseData.content;
+      }
+      else{
+        if (responseData?.content?.type){
+          return responseData?.content
+        }
+        else{
+          return {'type': "error", 'details': "An error occurred"};
+        }
+      }
+    } else {
+      console.log(response);
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+  } catch (error) {
+    console.error("Error in adding event list:", error);
+    throw error;
+  }
+};

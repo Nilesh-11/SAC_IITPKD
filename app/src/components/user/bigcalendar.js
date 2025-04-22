@@ -57,7 +57,6 @@ const EventCalendar = ({ events = [] }) => {
   const [endDate, setEndDate] = useState(null);
   const [selectedTypes, setSelectedTypes] = useState([]);
 
-  // Normalize events
   const normalizedEvents = events.map((event) => {
     const start = new Date(event.start_time);
     const end = event.end_time
@@ -70,7 +69,8 @@ const EventCalendar = ({ events = [] }) => {
       date: start.toISOString().split("T")[0],
       startTime: start.toISOString(),
       endTime: end.toISOString(),
-      council: event.council || "default",
+      council: event.council_name || "default",
+      councilTitle: event.council_title || "default", // ← New line
     };
   });
 
@@ -80,7 +80,7 @@ const EventCalendar = ({ events = [] }) => {
       (!startDate || eventDay.isSameOrAfter(startDate, "day")) &&
       (!endDate || eventDay.isSameOrBefore(endDate, "day"));
     const matchesType =
-      selectedTypes.length === 0 || selectedTypes.includes(event.council);
+      selectedTypes.length === 0 || selectedTypes.includes(event.councilTitle); // ← Changed from event.council
 
     return matchesDate && matchesType;
   });
@@ -203,12 +203,11 @@ const EventCalendar = ({ events = [] }) => {
                 {eventsByDate[date].map((event, index) => {
                   const start = new Date(event.startTime);
                   const end = new Date(event.endTime);
-                  const startHour =
-                    start.getHours() + start.getMinutes() / 60;
+                  const startHour = start.getHours() + start.getMinutes() / 60;
                   const endHour = end.getHours() + end.getMinutes() / 60;
                   const color =
-                    COUNCIL_COLORS[event.council] || COUNCIL_COLORS.default;
-
+                    COUNCIL_COLORS[event.councilTitle] ||
+                    COUNCIL_COLORS.default;
                   const top = `${(startHour - startDisplayHour) * 60}px`;
                   const height = `${(endHour - startHour) * 60}px`;
 
@@ -216,9 +215,6 @@ const EventCalendar = ({ events = [] }) => {
                     <Box
                       key={index}
                       className="event-block"
-                      onClick={() =>
-                        window.location.href = `/event/${event.id}`
-                      }
                       style={{
                         top,
                         height,

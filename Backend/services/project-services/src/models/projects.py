@@ -9,20 +9,20 @@ import enum
 class MeetingType(enum.Enum):
     ONLINE = "online"
     OFFLINE = "offline"
-
 class Project(BaseProjects):
     __tablename__ = 'projects'
 
     id = Column(Integer, primary_key=True, autoincrement=True)
     coordinator = Column(String(50), nullable=False)
-    proj_type = Column(String(50), nullable=False)  # E.g., Research, Software, Business
-    member_roles = Column(ARRAY(String), nullable=True)
-    proj_domain = Column(String(100), nullable=False)  # E.g., AI, Web Dev, ML
+    coordinator_role = Column(String(50), nullable=False)
+    proj_type = Column(String(50), nullable=False)
+    member_roles = Column(ARRAY(String), nullable=False)
+    proj_domain = Column(String(100), nullable=False)
     title = Column(String(255), nullable=False)
     description = Column(Text, nullable=True)
     start_date = Column(Date, nullable=False)
-    duration = Column(Interval, nullable=False)
-    skills = Column(ARRAY(String), nullable=True)
+    end_date = Column(Date, nullable=False)
+    skills = Column(ARRAY(String), nullable=False)
     max_members_count = Column(Integer, nullable=False)
     current_members_count = Column(Integer, nullable=False, default=1)
 
@@ -31,25 +31,24 @@ class Project(BaseProjects):
     meetings = relationship('Meetings', back_populates='project', cascade="all, delete-orphan")
 
     @hybrid_property
-    def project_status(self):
+    def status(self):
         now = datetime.datetime.utcnow()
         project_start = datetime.datetime.combine(self.start_date, datetime.time(0, 0))
-        project_end = project_start + self.duration
+        project_end = datetime.datetime.combine(self.end_date, datetime.time(0, 0))
         if now < project_start:
             return "upcoming"
         elif project_start <= now < project_end:
             return "ongoing"
         else:
             return "completed"
-
 class UnverifiedParticipant(BaseProjects):
     __tablename__ = 'unverified_participants'
 
     id = Column(Integer, primary_key=True, autoincrement=True)
     project_id = Column(Integer, ForeignKey('projects.id', ondelete='CASCADE'), nullable=False)
     email = Column(String(100), nullable=False)
-    roles_applied = Column(ARRAY(String), nullable=True)
-    skills = Column(ARRAY(String), nullable=True)
+    roles_applied = Column(ARRAY(String), nullable=False)
+    skills = Column(ARRAY(String), nullable=False)
     phone_number = Column(String(15), nullable=True)
     project = relationship('Project', back_populates='unverified_participants')
 
@@ -60,7 +59,7 @@ class ApprovedParticipant(BaseProjects):
     project_id = Column(Integer, ForeignKey('projects.id', ondelete='CASCADE'), nullable=False)
     email = Column(String(100), nullable=False)
     role = Column(String(50), nullable=False)
-    skills = Column(ARRAY(String), nullable=True)
+    skills = Column(ARRAY(String), nullable=False)
     phone_number = Column(String(15), nullable=True)
     project = relationship('Project', back_populates='approved_participants')
 

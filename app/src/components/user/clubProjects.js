@@ -14,6 +14,11 @@ const ClubProjects = ({ projects }) => {
   const sortedProjects = [...projects].sort(
     (a, b) => new Date(b.dateCreated) - new Date(a.dateCreated)
   );
+  console.log(projects);
+
+  if (!projects || projects.length == 0){
+    return <Typography>No Projects found</Typography>
+  }
 
   return (
     <Box
@@ -24,7 +29,7 @@ const ClubProjects = ({ projects }) => {
         px: { xs: 1, sm: 2 },
       }}
     >
-      <Grid container spacing={2}>
+      <Grid container spacing={2} sx={{flexDirection:"column"}}>
         {sortedProjects.map((project, index) => (
           <Grid item xs={12} sm={6} md={4} key={index}>
             <Card

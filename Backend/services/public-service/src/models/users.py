@@ -84,7 +84,7 @@ class Council(BaseUser):
     name = Column(String, nullable=False, unique=True)
     title = Column(String, nullable=False, unique=True)
     description = Column(Text, nullable=False, unique=True)
-    faculty_advisor = Column(String, unique=True, index=True, nullable=False)
+    faculty_advisor = Column(String, nullable=True)
     
     secretary_id = Column(Integer, ForeignKey('students.id', ondelete="SET NULL"), nullable=True) 
     

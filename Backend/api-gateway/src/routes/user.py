@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Request, Depends
 from src.schemas.auth import UsersRequest
-from src.services.projects_service import forward_projects_request
+from src.services.user_service import forward_user_request
 from src.middleware.authenticate import authenticate_jwt
 from src.utils.jwt import get_token_from_header
 
@@ -15,5 +15,5 @@ async def users(path: str, data: UsersRequest, token: str = Depends(get_token_fr
 
     data_dict = data.model_dump()
     data_dict['request_by'] = payload['email']
-    response = await forward_projects_request(f"/{path}", data_dict)
+    response = await forward_user_request(f"/{path}", data_dict)
     return response

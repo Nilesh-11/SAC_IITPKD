@@ -14,6 +14,38 @@ class ClubInfoRequest(BaseModel):
     def validate_mail(cls, value: str) -> str:
         return validate_mail(value)
 
+class MemberInfoRequest(BaseModel):
+    student_mail: EmailStr
+    request_by: EmailStr
+
+    @field_validator("request_by")
+    @classmethod
+    def validate_mail(cls, value: str) -> str:
+        return validate_mail(value)
+    
+    @field_validator("student_mail")
+    @classmethod
+    def validate_mail(cls, value: str) -> str:
+        return validate_mail(value)
+
+
+class RolesListRequest(BaseModel):
+    request_by: EmailStr
+    
+    @field_validator("request_by")
+    @classmethod
+    def validate_mail(cls, value: str) -> str:
+        return validate_mail(value)
+
+class DeleteRoleRequest(BaseModel):
+    role_id: int
+    request_by: EmailStr
+    
+    @field_validator("request_by")
+    @classmethod
+    def validate_mail(cls, value: str) -> str:
+        return validate_mail(value)
+
 class UpdateRolesRequest(BaseModel):
     role_id: int
     title: str
@@ -69,6 +101,47 @@ class JoinClubRequest(BaseModel):
     def validate_mail(cls, value: str) -> str:
         return validate_mail(value)
 
+class CouncilListRequest(BaseModel):
+    request_by: str
+    
+    @field_validator("request_by")
+    @classmethod
+    def validate_mail(cls, value: str) -> str:
+        return validate_mail(value)
+
+class AddCouncilRequest(BaseModel):
+    email: EmailStr
+    password: str
+    name: str
+    title: str
+    description: str
+    faculty_advisor: Optional[str]
+    secretary: str
+    deputy: Optional[List[str]]
+    request_by: EmailStr
+    
+    @field_validator("request_by")
+    @classmethod
+    def validate_mail(cls, value: str) -> str:
+        return validate_mail(value)
+
+class UpdateCouncilRequest(BaseModel):
+    council_id: int
+    email: str
+    password: str
+    name: str
+    title: str
+    description: str
+    faculty_advisor: Optional[str]
+    secretary: str
+    deputy: Optional[List[str]]
+    request_by: str
+    
+    @field_validator("request_by")
+    @classmethod
+    def validate_mail(cls, value: str) -> str:
+        return validate_mail(value)
+
 class DeleteCouncilRequest(BaseModel):
     id: int
     request_by: EmailStr
@@ -107,15 +180,7 @@ class UpdateClubRequest(BaseModel):
                 validate_mail(value)
         return values
 
-class AddCouncilRequest(BaseModel):
-    email: EmailStr
-    name: str
-    title: str
-    password: str
-    description: str
-    faculty_advisor: str
-    secretary: str
-    deputy: Optional[List[str]]
+class ClubListRequest(BaseModel):
     request_by: EmailStr
     
     @field_validator("request_by")
@@ -161,6 +226,14 @@ class AddClubRequest(BaseModel):
                 validate_mail(value)
         return values
 
+class UsernameRequest(BaseModel):
+    request_by: EmailStr
+    
+    @field_validator("request_by")
+    @classmethod
+    def validate_mail(cls, value: str) -> str:
+        return validate_mail(value)
+
 class AddAnnouncementRequest(BaseModel):
     title: str = Field(..., max_length=255)
     body: str
@@ -178,6 +251,14 @@ class UpdateAnnouncementRequest(BaseModel):
     body: str
     expires_at: datetime
     priority: Optional[AnnouncementPriority] = AnnouncementPriority.normal
+    request_by: EmailStr
+    
+    @field_validator("request_by")
+    @classmethod
+    def validate_mail(cls, value: str) -> str:
+        return validate_mail(value)
+
+class OwnAnnouncementRequest(BaseModel):
     request_by: EmailStr
     
     @field_validator("request_by")

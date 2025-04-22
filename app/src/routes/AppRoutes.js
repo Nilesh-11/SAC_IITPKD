@@ -16,6 +16,9 @@ import Hostel from "../pages/Hostel";
 import Research from "../pages/Research";
 import Sports from "../pages/Sports";
 import ResetPassword from "../pages/ResetPassword";
+import CouncilDashboard from "../pages/council/Dashboard";
+import ProjectInfo from "../components/user/ProjectInfo";
+import ClubInfo from "../components/user/clubinfo";
 
 const AppRoutes = () => (
   <Routes>
@@ -35,12 +38,20 @@ const AppRoutes = () => (
     <Route element={<ProtectedRoute allowedRoles={['student']} />}>
       <Route path="/student/dashboard" element={<StudentDashboard />} />
       <Route path="/student/settings" element={<StudentDashboard />} />
+      <Route path="/project/info" element={<ProjectInfo />} />
+      <Route path="/club/info" element={<ClubInfo />} />
     </Route>
     <Route element={<ProtectedRoute allowedRoles={['admin']} />}>
       <Route path="/admin/dashboard" element={<AdminDashboard />} />
+      <Route path="/admin/project" element={<StudentDashboard />} />
     </Route>
     <Route element={<ProtectedRoute allowedRoles={['club']} />}>
       <Route path="/club/dashboard" element={<ClubDashboard />} />
+      <Route path="/club/project" element={<ProjectInfo />} />
+    </Route>
+    <Route element={<ProtectedRoute allowedRoles={['council']} />}>
+      <Route path="/council/dashboard" element={<CouncilDashboard />} />
+      <Route path="/council/project" element={<ProjectInfo />} />
     </Route>
 
     <Route path="*" element={<NotFound />} />

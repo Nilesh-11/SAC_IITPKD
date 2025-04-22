@@ -13,8 +13,8 @@ Write-Host "Starting services..."
 
 Start-ServiceJob "public-service"   "D:\YACC\SAC_IITPKD\Backend\services\public-service"    8005
 Start-ServiceJob "auth-service"     "D:\YACC\SAC_IITPKD\Backend\services\auth-service"      8001
-# Start-ServiceJob "api-gateway"      "D:\YACC\SAC_IITPKD\Backend\api-gateway"                8000
-# Start-ServiceJob "projects-service" "D:\YACC\SAC_IITPKD\Backend\services\projects-service"  8003
+Start-ServiceJob "api-gateway"      "D:\YACC\SAC_IITPKD\Backend\api-gateway"                8000
+Start-ServiceJob "projects-service" "D:\YACC\SAC_IITPKD\Backend\services\projects-service"  8003
 Start-ServiceJob "user-service"     "D:\YACC\SAC_IITPKD\Backend\services\user-service"      8004
 Start-ServiceJob "events-service"   "D:\YACC\SAC_IITPKD\Backend\services\events-service"    8002
 

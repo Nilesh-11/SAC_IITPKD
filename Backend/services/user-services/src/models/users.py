@@ -38,12 +38,14 @@ class Student(BaseUser):
     __tablename__ = "students"
 
     id = Column(Integer, primary_key=True, index=True)
-    name = Column(String)
+    name = Column(String, nullable=False)
+    full_name = Column(String, nullable=False)
     registered_date = Column(DateTime, default=datetime.utcnow())
     email = Column(String, unique=True, index=True, nullable=False)
     batch = Column(String, nullable=True)
     department = Column(String, nullable=True)
     stream = Column(String, nullable=True)
+    degree_level = Column(String, nullable=False, server_default="BTech")
     password_hash = Column(String, nullable=False)
     phone_number = Column(String, nullable=True)
 
@@ -82,7 +84,7 @@ class Council(BaseUser):
     name = Column(String, nullable=False, unique=True)
     title = Column(String, nullable=False, unique=True)
     description = Column(Text, nullable=False, unique=True)
-    faculty_advisor = Column(String, unique=True, index=True, nullable=False)
+    faculty_advisor = Column(String, nullable=True)
     
     secretary_id = Column(Integer, ForeignKey('students.id', ondelete="SET NULL"), nullable=True) 
     
@@ -146,7 +148,7 @@ class ClubMembership(BaseUser):
     id = Column(Integer, primary_key=True, index=True)
     student_id = Column(Integer, ForeignKey("students.id", ondelete="RESTRICT"), nullable=False)
     club_id = Column(Integer, ForeignKey("clubs.id", ondelete="CASCADE"), nullable=False)
-    role_id = Column(Integer, ForeignKey("club_roles.id", ondelete="SET NULL"), nullable=True)
+    role_id = Column(Integer, ForeignKey("club_roles.id", ondelete="CASCADE"), nullable=True)
     joined_date = Column(DateTime, default=datetime.utcnow())
     updated_date = Column(DateTime, default=datetime.utcnow(), onupdate=datetime.utcnow)
 
@@ -167,4 +169,9 @@ class ClubRole(BaseUser):
     updated_at = Column(DateTime, default=datetime.utcnow(), onupdate=datetime.utcnow())
 
     club = relationship("Club", back_populates="custom_roles")
-    memberships = relationship("ClubMembership", back_populates="role")
+    memberships = relationship(
+        "ClubMembership", 
+        back_populates="role", 
+        cascade="all, delete-orphan",  # Added cascade
+        passive_deletes=True
+    )

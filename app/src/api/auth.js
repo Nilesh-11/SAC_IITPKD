@@ -5,7 +5,7 @@ const handleAPIError = () => {
   window.location.href = "/login"; // Use navigate only inside React component
 };
 
-const Api = async (path, { data }) => {
+export const Api = async (path, { data }) => {
   const url = `${BACKEND_URL}` + path;
   try {
     const response = await fetch(url, {
@@ -119,5 +119,36 @@ export const ResetPasswordApi = async ({new_password, token}) => {
   }
 };
 
-
-export default Api;
+export const getUsername = async () => {
+  const url = `${BACKEND_URL}` + "/api/user/username";
+  try {
+    const response = await fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem("token") || ""}`,
+      },
+      body: JSON.stringify({}),
+    });
+    const responseData = await response.json();
+    if (response.ok) {
+      if (responseData?.content?.type === "ok"){
+        return responseData.content;
+      }
+      else{
+        if (responseData?.content?.type){
+          return responseData?.content
+        }
+        else{
+          return {'type': "error", 'details': "An error occurred"};
+        }
+      }
+    } else {
+      console.log(response);
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+  } catch (error) {
+    console.error("Error in fetching events list:", error);
+    throw error;
+  }
+};

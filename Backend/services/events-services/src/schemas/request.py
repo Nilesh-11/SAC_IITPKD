@@ -1,19 +1,32 @@
 from src.utils.verify import validate_mail
 from pydantic import BaseModel, field_validator, EmailStr
-from datetime import date, time, timedelta, datetime
+from datetime import timedelta, datetime
+from typing import Optional
+
+
+class MyEventRequest(BaseModel):
+    request_by: EmailStr
+
+    @field_validator("request_by")
+    @classmethod
+    def validate_mail(cls, value: str) -> str:
+        return validate_mail(value)
+    
 
 class AddEventRequest(BaseModel):
-    request_by: EmailStr
     organizer: EmailStr
     title: str
     description: str
-    event_timestamp: datetime
+    start_time: datetime
+    end_time: datetime
     venue: str
-    duration: timedelta
-    
+    request_by: EmailStr
+
     @field_validator("organizer")
     @classmethod
     def validate_mail(cls, value: str) -> str:
+        if value is None:
+            return True
         return validate_mail(value)
     
     @field_validator("request_by")
@@ -37,16 +50,16 @@ class GetEventRequest(BaseModel):
     @classmethod
     def validate_mail(cls, value: str) -> str:
         return validate_mail(value)
-    
+
 class UpdateEventRequest(BaseModel):
-    request_by: EmailStr
     id: int
     organizer: EmailStr
     title: str
     description: str
-    event_timestamp: datetime
+    start_time: datetime
+    end_time: datetime
     venue: str
-    duration: timedelta
+    request_by: EmailStr
     
     @field_validator("organizer")
     @classmethod
@@ -57,7 +70,6 @@ class UpdateEventRequest(BaseModel):
     @classmethod
     def validate_mail(cls, value: str) -> str:
         return validate_mail(value)
-    
     
 class DeleteEventRequest(BaseModel):
     request_by: EmailStr

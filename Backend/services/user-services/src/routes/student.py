@@ -21,7 +21,9 @@ def join_club(data: JoinClubRequest, db: Session = Depends(get_users_db)):
         if not existing_club:
             return {'content':{'type': "error", 'details': "Club not found"}}
         existing_membership = db.query(ClubMembership)\
-                                .filter(ClubMembership.student_id == existing_student.id, ClubMembership.club_id == existing_club.id)\
+                                .filter(ClubMembership.student_id == existing_student.id, 
+                                        ClubMembership.club_id == existing_club.id,
+                                        ~ClubRole.title.startswith('ex-'))\
                                 .first()
         if existing_membership:
             return {'content':{'type': "error", 'details': f"Already a member as {existing_membership.role.title}"}}
@@ -117,3 +119,4 @@ def club_information(data: ClubInfoRequest, db: Session = Depends(get_users_db),
         print("Error in club info:", e)
         db.rollback()
         return {'content':{"type": "error", "detail": "An error occurred with club info", 'status_code': 500}}
+
