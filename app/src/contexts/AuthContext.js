@@ -37,13 +37,13 @@ export const AuthProvider = ({ children }) => {
     verifyToken().then((result) => {
         if (!result.valid) {
           console.warn("Token invalid or expired:", result.reason);
-          logout(); // force logout
+          logout();
         } else {
           const user = decodeToken(token);
           setAuth({ user, token, loading: false });
         }
       }).catch(() => {
-        logout(); // fallback for unexpected issues
+        logout();
       });
   }, []);
 

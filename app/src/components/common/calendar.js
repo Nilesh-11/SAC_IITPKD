@@ -13,7 +13,10 @@ const COUNCIL_COLORS = {
   "Technical Council": "#f38221",
   "Cultural Council": "#7e57c2",
   "Sports Council": "#43a047",
-  "Academic Council": "#039be5",
+  "Hostel Council": "#ff7043",
+  "Research Affairs": "#5c6bc0",
+  "General Affairs": "#00897b",
+  "Post Graduate Affairs": "#c2185b",
   default: "#546e7a",
 };
 
@@ -26,17 +29,19 @@ const CalendarComponent = ({ events }) => {
     setIsLoading(true);
     const map = {};
 
-    events.forEach((event) => {
-      const eventDate = dayjs(event.start_time);
-      if (
-        eventDate.month() === date.month() &&
-        eventDate.year() === date.year()
-      ) {
-        const day = eventDate.date();
-        if (!map[day]) map[day] = [];
-        map[day].push(event);
-      }
-    });
+    if (Array.isArray(events)) {
+      events.forEach((event) => {
+        const eventDate = dayjs(event.start_time);
+        if (
+          eventDate.month() === date.month() &&
+          eventDate.year() === date.year()
+        ) {
+          const day = eventDate.date();
+          if (!map[day]) map[day] = [];
+          map[day].push(event);
+        }
+      });
+    }
 
     setHighlightedDaysMap(map);
     setIsLoading(false);
@@ -57,6 +62,12 @@ const CalendarComponent = ({ events }) => {
   function CustomDay(props) {
     const { day, outsideCurrentMonth, ...other } = props;
     const dayNum = day.date();
+
+    if (!events || events.length === 0) {
+      // If no events, render default day without customization
+      return <PickersDay {...other} day={day} outsideCurrentMonth={outsideCurrentMonth} />;
+    }
+
     const dayEvents = highlightedDaysMap[dayNum] || [];
     const isHighlighted = !outsideCurrentMonth && dayEvents.length > 0;
   

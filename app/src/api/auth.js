@@ -2,7 +2,8 @@ import BACKEND_URL from './../utils/config'
 
 const handleAPIError = () => {
   localStorage.removeItem("token");
-  window.location.href = "/login"; // Use navigate only inside React component
+  console.log("redirecting");
+  window.location.href = "/login";
 };
 
 export const Api = async (path, { data }) => {

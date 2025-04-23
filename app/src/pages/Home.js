@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Container, Grid, Box, Typography, Avatar } from "@mui/material";
+import { Container, Grid, Box, Typography, Avatar, CircularProgress } from "@mui/material";
 import Header from "./../components/common/header";
 import CalendarComponent from "./../components/common/calendar";
 import Footer from "./../components/common/footer";
@@ -11,21 +11,25 @@ import { getEventsList } from "../api/events";
 const Home = () => {
   const [announcements, setAnnouncements] = useState([]);
   const [events, setEvents] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchAnnouncements = async () => {
-      const data = await getAnnouncementsList();
-      setAnnouncements(data);
+    const fetchData = async () => {
+      try {
+        const [announcementsData, eventsData] = await Promise.all([
+          getAnnouncementsList(),
+          getEventsList(),
+        ]);
+        setAnnouncements(announcementsData);
+        setEvents(eventsData);
+      } catch (err) {
+        console.error("Error fetching data", err);
+      } finally {
+        setLoading(false);
+      }
     };
 
-    const fetchEvents = async () => {
-      const data = await getEventsList();
-      console.log(data);
-      setEvents(data);
-    };
-
-    fetchAnnouncements();
-    fetchEvents();
+    fetchData();
   }, []);
 
   const about_images = [
@@ -60,6 +64,22 @@ const Home = () => {
       image: "/people/Samuel.jpg",
     },
   ];
+
+  if (loading) {
+    return (
+      <Box
+        sx={{
+          minHeight: "100vh",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          backgroundColor: "#f5f5f5",
+        }}
+      >
+        <CircularProgress size={60} thickness={3} color="pink"/>
+      </Box>
+    );
+  }
 
   return (
     <Box

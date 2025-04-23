@@ -5,9 +5,22 @@ import "swiper/css";
 import "swiper/css/effect-coverflow";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
-// import "./SquareGallery.css"; // Import CSS for additional styles
+import { Typography } from "@mui/material";
 
 const SquareGallery = ({ images, galleryId }) => {
+  if (!images || images.length == 0){
+    return <Typography
+    sx={{
+      fontSize: { xs: '0.9rem', sm: '1rem' },
+      fontStyle: 'italic',
+      color: 'gray',
+      textAlign: 'center',
+      marginTop: '20px',
+    }}
+  >
+    No Images available.
+  </Typography>
+  }
   return (
     <div className="flex justify-center items-center py-4">
       <Swiper

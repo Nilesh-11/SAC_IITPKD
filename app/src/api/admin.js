@@ -5,6 +5,37 @@ const handleAPIError = () => {
   window.location.href = "/login";
 };
 
+export const AddStudentApi = async (data) => {
+  const url = `${BACKEND_URL}` + "/api/user/admin/student/add";
+  try {
+    const response = await fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem("token") || ""}`,
+      },
+      body: JSON.stringify(data),
+    });
+    const responseData = await response.json();
+    if (
+      responseData?.content?.type === "error" &&
+      (responseData.content.details === "JWTExpired" ||
+        responseData.content.details === "JWTInvalid")
+    ) {
+      handleAPIError();
+      return;
+    }
+    if (response.ok) {
+      return responseData.content;
+    } else {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+  } catch (error) {
+    console.error("Error in AuthApi:", error);
+    throw error;
+  }
+};
+
 export const AddCouncilApi = async (data) => {
   const url = `${BACKEND_URL}` + "/api/user/admin/council/add";
   try {

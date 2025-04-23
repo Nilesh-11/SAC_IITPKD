@@ -23,13 +23,14 @@ import AddEventForm from "../../components/user/AddEvent";
 import UpdateEventForm from "../../components/user/UpdateEventForm";
 import AddCouncilForm from "../../components/user/AddCouncilForm";
 import UpdateCouncilForm from "../../components/user/UpdateCouncilForm";
+import AddStudentForm from "../../components/user/AddStudentForm";
 
 const AdminDashboard = () => {
   const navigate = useNavigate();
   const [events, setEvents] = useState([]);
   const [announcements, setAnnouncements] = useState([]);
   const [projects, setProjects] = useState([]);
-  const [currSection, setCurrentSection] = useState("dashboard");
+  const [currSection, setCurrentSection] = useState("addcouncil");
 
   useEffect(() => {
     const fetchAnnouncements = async () => {
@@ -57,22 +58,10 @@ const AdminDashboard = () => {
   };
 
   const menuItems = [
-    { name: "Dashboard", icon: "📊", link: "dashboard" },
     { name: "Add Council", icon: "🏫", link: "addcouncil" },
     { name: "Update Council", icon: "🏫", link: "updatecouncil" },
+    { name: "Add Student", icon: "🏫", link: "addstudent" },
   ];
-
-  const status = [
-    { title: "Clubs", count: 5 },
-    { title: "Events", count: 10 },
-    { title: "Ongoing Projects", count: 2 },
-    { title: "Projects Completed", count: "10" },
-    { title: "Add Functionalities", count: "+" },
-  ];
-
-  const handleClubNavigation = (link) => {
-    console.log(link);
-  };
   
   return (
     <div>
@@ -81,21 +70,6 @@ const AdminDashboard = () => {
         liveEvents={events}
         menuItems={menuItems}
       ></Header>
-      {currSection == "dashboard" && (
-        <Dashboard
-          announcements={announcements}
-          status={status}
-          myClubs={myClubs}
-          handleAllAnnouncementClick={() => {
-            setCurrentSection("announcements");
-          }}
-          handleAllClubLink={() => {
-            setCurrentSection("clubs");
-          }}
-        >
-          {" "}
-        </Dashboard>
-      )}
 
       {currSection == "addcouncil" && (
         <AddCouncilForm />
@@ -105,6 +79,9 @@ const AdminDashboard = () => {
         <UpdateCouncilForm />
       )}
 
+      {currSection == "addstudent" && (
+        <AddStudentForm />
+      )}
 
     </div>
   );

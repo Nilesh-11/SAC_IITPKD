@@ -9,17 +9,15 @@ import {
   Alert,
   CircularProgress,
 } from "@mui/material";
-import EventIcon from "@mui/icons-material/Event";
-import { AddEventApi } from "../../api/events"; // Make sure this is the correct path
+import PersonAddIcon from "@mui/icons-material/PersonAdd";
+import { AddStudentApi } from "../../api/admin";
 
-const AddEventForm = () => {
+const AddStudentForm = () => {
   const [formData, setFormData] = useState({
-    organizer: "",
-    title: "",
-    description: "",
-    start_time: "",
-    end_time: "",
-    venue: "",
+    name: "",
+    full_name: "",
+    email: "",
+    password: "",
   });
 
   const [error, setError] = useState("");
@@ -39,7 +37,7 @@ const AddEventForm = () => {
         borderColor: orange,
         boxShadow: `0 0 0 2px rgba(243,130,33,0.2)`,
       },
-      "& input, & textarea": {
+      "& input": {
         fontFamily: "Roboto, sans-serif",
         padding: "10px",
       },
@@ -64,29 +62,25 @@ const AddEventForm = () => {
     setSuccess("");
     setLoading(true);
 
-    const requiredFields = ["title", "description", "start_time", "end_time", "venue"];
-    for (let field of requiredFields) {
-      if (!formData[field]) {
-        setError("Please fill in all required fields.");
-        setLoading(false);
-        return;
-      }
+    const { name, full_name, email, password } = formData;
+    if (!name || !full_name || !email || !password) {
+      setError("All fields are required.");
+      setLoading(false);
+      return;
     }
 
     try {
-      const res = await AddEventApi(formData);
+      const res = await AddStudentApi(formData);
       if (res?.type === "ok") {
-        setSuccess("Event successfully added!");
+        setSuccess("Student added successfully!");
         setFormData({
-          organizer: "",
-          title: "",
-          description: "",
-          start_time: "",
-          end_time: "",
-          venue: "",
+          name: "",
+          full_name: "",
+          email: "",
+          password: "",
         });
       } else {
-        setError(res?.details || "Error adding event.");
+        setError(res?.details || "Failed to add student.");
       }
     } catch (err) {
       setError("Something went wrong. Please try again.");
@@ -112,7 +106,7 @@ const AddEventForm = () => {
         elevation={4}
         sx={{
           width: "100%",
-          maxWidth: 700,
+          maxWidth: 600,
           p: 4,
           borderRadius: 4,
           backgroundColor: "white",
@@ -130,91 +124,36 @@ const AddEventForm = () => {
             color: orange,
           }}
         >
-          Add Event
+          Add Student
         </Typography>
 
         <Box component="form" onSubmit={handleSubmit} noValidate>
-          <Grid container spacing={2} sx={{flexDirection: "column"}}>
-
-            <Grid item xs={12}>
-              <TextField
-                fullWidth
-                name="organizer"
-                label="Organizer Email"
-                value={formData.organizer}
-                onChange={handleChange}
-                sx={textFieldSx}
-              />
-            </Grid>
-
-            <Grid item xs={12}>
-              <TextField
-                fullWidth
-                name="title"
-                label="Event Title"
-                value={formData.title}
-                onChange={handleChange}
-                sx={textFieldSx}
-              />
-            </Grid>
-
-            <Grid item xs={12}>
-              <TextField
-                fullWidth
-                name="description"
-                label="Description"
-                value={formData.description}
-                onChange={handleChange}
-                sx={textFieldSx}
-                multiline
-                minRows={3}
-              />
-            </Grid>
-
-            <Grid item xs={12} sm={6}>
-              <TextField
-                fullWidth
-                name="start_time"
-                label="Start Time"
-                type="datetime-local"
-                value={formData.start_time}
-                onChange={handleChange}
-                sx={textFieldSx}
-                InputLabelProps={{ shrink: true }}
-              />
-            </Grid>
-
-            <Grid item xs={12} sm={6}>
-              <TextField
-                fullWidth
-                name="end_time"
-                label="End Time"
-                type="datetime-local"
-                value={formData.end_time}
-                onChange={handleChange}
-                sx={textFieldSx}
-                InputLabelProps={{ shrink: true }}
-              />
-            </Grid>
-
-            <Grid item xs={12}>
-              <TextField
-                fullWidth
-                name="venue"
-                label="Venue"
-                value={formData.venue}
-                onChange={handleChange}
-                sx={textFieldSx}
-              />
-            </Grid>
+          <Grid container spacing={2} sx={{ flexDirection: "column" }}>
+            {["name", "full_name", "email", "password"].map((field) => (
+              <Grid item xs={12} key={field}>
+                <TextField
+                  fullWidth
+                  name={field}
+                  label={
+                    field === "full_name"
+                      ? "Full Name"
+                      : field.charAt(0).toUpperCase() + field.slice(1)
+                  }
+                  type={field === "password" ? "password" : "text"}
+                  value={formData[field]}
+                  onChange={handleChange}
+                  sx={textFieldSx}
+                />
+              </Grid>
+            ))}
 
             {error && (
-              <Alert severity="error" sx={{ width: "100%" }}>
+              <Alert severity="error" sx={{ mb: 2 }}>
                 {error}
               </Alert>
             )}
             {success && (
-              <Alert severity="success" sx={{ width: "100%" }}>
+              <Alert severity="success" sx={{ mb: 2 }}>
                 {success}
               </Alert>
             )}
@@ -239,11 +178,11 @@ const AddEventForm = () => {
                   loading ? (
                     <CircularProgress size={20} color="inherit" />
                   ) : (
-                    <EventIcon />
+                    <PersonAddIcon />
                   )
                 }
               >
-                {loading ? "Adding..." : "Add Event"}
+                {loading ? "Adding..." : "Add Student"}
               </Button>
             </Grid>
           </Grid>
@@ -253,4 +192,4 @@ const AddEventForm = () => {
   );
 };
 
-export default AddEventForm;
+export default AddStudentForm;

@@ -42,7 +42,6 @@ const ManageProject = () => {
       const res = await MyProjectListApi();
       if (res?.type === "ok") {
         setProjects(res.projects);
-        console.log(res.projects);
         if (selectedProject) {
           const refreshedProject = res.projects.find(
             (p) => p.id === selectedProject.id
@@ -98,7 +97,6 @@ const ManageProject = () => {
 
   const handleConfirmVerification = async (role) => {
     if (!selectedProject || !selectedMember) return;
-    console.log(selectedMember);
     const payload = {
       participant_id: selectedMember.id,
       project_id: selectedProject.id,
@@ -107,7 +105,6 @@ const ManageProject = () => {
     };
 
     const res = await ShortlistMemberApi(payload);
-    console.log(res);
     if (res?.type === "ok") {
       fetchProjects();
     }

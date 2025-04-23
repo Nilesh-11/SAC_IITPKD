@@ -11,7 +11,6 @@ const CouncilClubs = ({ handleNavigation, adminEmail }) => {
     const fetchClubs = async () => {
       try {
         const response = await ClubsListApi();
-        console.log(response);
         if (response?.type === "ok") {
           const grouped = {};
           response.clubs.forEach(club => {

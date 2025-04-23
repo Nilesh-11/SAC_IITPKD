@@ -13,9 +13,9 @@ import LocalLibraryIcon from "@mui/icons-material/LocalLibrary";
 import SquareGallery from "./squareGallery";
 import timeAgo from "../../utils/parser";
 const Dashboard = ({
-  announcements,
-  status,
-  myClubs,
+  announcements = [],
+  status = [],
+  myClubs = [],
   handleAllAnnouncementClick,
   handleAllClubLink,
 }) => {
@@ -65,7 +65,7 @@ const Dashboard = ({
             VIEW ALL
           </Button>
         </Box>
-
+        {announcements.length > 0 ? (
         <Card elevation={2} sx={{ borderRadius: 2 }}>
           {announcements.map((announcement, index) => (
             <React.Fragment key={index}>
@@ -108,7 +108,11 @@ const Dashboard = ({
               {index !== announcements.length - 1 && <Divider />}
             </React.Fragment>
           ))}
-        </Card>
+        </Card>): (
+  <Typography variant="body2" color="text.secondary" mt={1}>
+    No announcements at the moment.
+  </Typography>
+)}
       </Box>
 
       {/* Status Section */}
@@ -120,7 +124,7 @@ const Dashboard = ({
       >
         Status
       </Typography>
-
+      {status.length > 0 ? (
       <Card
         elevation={2}
         sx={{
@@ -159,6 +163,11 @@ const Dashboard = ({
           ))}
         </Grid>
       </Card>
+      ) : (
+        <Typography variant="body2" color="text.secondary" mt={1}>
+          Status information not available.
+        </Typography>
+      )}
 
       {/* My Clubs Section */}
       <Box mt={3}>

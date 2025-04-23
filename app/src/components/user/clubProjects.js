@@ -14,7 +14,6 @@ const ClubProjects = ({ projects }) => {
   const sortedProjects = [...projects].sort(
     (a, b) => new Date(b.dateCreated) - new Date(a.dateCreated)
   );
-  console.log(projects);
 
   if (!projects || projects.length == 0){
     return <Typography>No Projects found</Typography>

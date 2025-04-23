@@ -14,7 +14,6 @@ import CloseIcon from "@mui/icons-material/Close";
 import EventIcon from '@mui/icons-material/Event';
 
 const RightNavbar = ({ username, userLogo, liveEvents, userrole }) => {
-  console.log(liveEvents);
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 

@@ -91,10 +91,10 @@ const Technical = () => {
           )}
 
           {/* Main Content */}
-          {!loading && council && (
+          {!loading && (
             <>
               {/* Leadership Section - Conditionally Rendered */}
-              {council.secretary && (
+              {council && council.secretary && (
                 <Grid item xs={12}>
                   <motion.div
                     initial={{ opacity: 0, y: 20 }}
