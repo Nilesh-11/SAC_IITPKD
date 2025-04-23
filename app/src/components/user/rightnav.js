@@ -3,15 +3,11 @@ import {
   Box,
   Typography,
   Avatar,
-  Button,
   Paper,
   Divider,
-  IconButton,
   useMediaQuery,
   useTheme,
 } from "@mui/material";
-import CloseIcon from "@mui/icons-material/Close";
-import EventIcon from '@mui/icons-material/Event';
 
 const RightNavbar = ({ username, userLogo, liveEvents, userrole }) => {
   const theme = useTheme();
@@ -67,8 +63,8 @@ const RightNavbar = ({ username, userLogo, liveEvents, userrole }) => {
       >
         Live Events
       </Typography>
-
-      {liveEvents.map((event, index) => (
+      {liveEvents && liveEvents.length > 0 ? (
+      liveEvents.map((event, index) => (
         <Paper
           key={index}
           elevation={3}
@@ -126,7 +122,11 @@ const RightNavbar = ({ username, userLogo, liveEvents, userrole }) => {
             {event.description}
           </Typography>
         </Paper>
-      ))}
+      )) ) : (
+        <Typography variant="body2" color="text.secondary" mt={1}>
+          No live events at the moment.
+        </Typography>
+      )}
     </Box>
   );
 };

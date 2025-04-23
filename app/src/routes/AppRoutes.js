@@ -19,6 +19,7 @@ import ResetPassword from "../pages/ResetPassword";
 import CouncilDashboard from "../pages/council/Dashboard";
 import ProjectInfo from "../components/user/ProjectInfo";
 import ClubInfo from "../components/user/clubinfo";
+import GuestDashboard from "../pages/guest/Dashboard";
 
 const AppRoutes = () => (
   <Routes>
@@ -34,6 +35,7 @@ const AppRoutes = () => (
     <Route path="/sports" element={<Sports />} />
     <Route path="/signup" element={<Signup />} />
     <Route path="/developers" element={<Developers />} />
+    <Route path="/guest/dashboard" element={<GuestDashboard />} />
 
     <Route element={<ProtectedRoute allowedRoles={['student']} />}>
       <Route path="/student/dashboard" element={<StudentDashboard />} />
@@ -43,15 +45,12 @@ const AppRoutes = () => (
     </Route>
     <Route element={<ProtectedRoute allowedRoles={['admin']} />}>
       <Route path="/admin/dashboard" element={<AdminDashboard />} />
-      <Route path="/admin/project" element={<StudentDashboard />} />
     </Route>
     <Route element={<ProtectedRoute allowedRoles={['club']} />}>
       <Route path="/club/dashboard" element={<ClubDashboard />} />
-      <Route path="/club/project" element={<ProjectInfo />} />
     </Route>
     <Route element={<ProtectedRoute allowedRoles={['council']} />}>
       <Route path="/council/dashboard" element={<CouncilDashboard />} />
-      <Route path="/council/project" element={<ProjectInfo />} />
     </Route>
 
     <Route path="*" element={<NotFound />} />

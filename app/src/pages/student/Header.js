@@ -104,7 +104,6 @@ const Header = ({ menuItems, handleMenuNavigation, recentActivity, liveEvents, u
         <RightNavbar
           username={username}
           userrole={userrole}
-          userLogo="logo192.png"
           liveEvents={liveEvents}
           activity={recentActivity}
           onClose={() => setIsRightDrawerOpen(false)}
