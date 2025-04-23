@@ -1,5 +1,5 @@
 from src.utils.auth import hash_password
-from src.schemas.request import CouncilListRequest, UpdateCouncilRequest, DeleteCouncilRequest, AddCouncilRequest
+from src.schemas.request import AddStudentRequest, CouncilListRequest, UpdateCouncilRequest, DeleteCouncilRequest, AddCouncilRequest
 from src.models.users import Admin, Council, Student
 from src.database.connection import get_users_db
 from fastapi import APIRouter, Depends
@@ -7,6 +7,35 @@ from sqlalchemy.orm import Session
 from sqlalchemy.orm import joinedload
 
 router = APIRouter()
+
+@router.post("/student/add")
+def add_student(request: AddStudentRequest, db: Session = Depends(get_users_db)):
+    name=request.name
+    full_name=request.full_name
+    email = request.email
+    password=request.password
+    request_by = request.request_by
+    password_hash = hash_password(password)
+    try:
+        existing_admin = db.query(Admin).filter(Admin.email == request_by).first()
+        if not existing_admin:
+            return {'content': {'type':"error", 'details': "Admin not found"}}
+        existing_student = db.query(Student).filter(Student.email == email).first()
+        if existing_student:
+            return {'content': {'type':"error", 'details': "Student already found"}}
+        new_student = Student(
+            name=name,
+            full_name=full_name,
+            email=email,
+            password_hash=password_hash,
+        )
+        db.add(new_student)
+        db.commit()
+        db.refresh(new_student)
+        return {'content': {'type':"ok", 'details': "Council added",'id': new_student.id}}
+    except Exception as e:
+        print("ERROR in add council:", e)
+        return {'content':{'type': "error", 'details':"An error occurred"}}
 
 @router.post("/council/add")
 def add_council(request: AddCouncilRequest, db: Session = Depends(get_users_db)):

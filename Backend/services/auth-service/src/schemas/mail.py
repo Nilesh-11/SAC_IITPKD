@@ -61,7 +61,7 @@ def html_formatted_otp(otp, my_mail):
     </head>
     <body>
         <div class="container">
-            <img src="https://i.postimg.cc/tgTcJVgc/iitpkdlogo.jpg" alt="IIT Palakkad Logo" class="logo">  
+            <img src="https://iitpkd.ac.in/sites/default/files/IITWEBLOGO%20%283%29.jpg" alt="IIT Palakkad Logo" class="logo">  
             <h2>🔐 Your OTP Code to login to SAC</h2>
             <p class="text">Use the OTP below to complete your authentication. It expires in {otp_expiration_time} minutes.</p>
             <div class="otp-box">{otp}</div>
@@ -137,7 +137,7 @@ def html_formatted_password_reset(reset_link, my_mail):
         </head>
         <body>
             <div class="container">
-                <img src="https://i.postimg.cc/tgTcJVgc/iitpkdlogo.jpg" alt="IIT Palakkad Logo" class="logo">  
+                <img src="https://iitpkd.ac.in/sites/default/files/IITWEBLOGO%20%283%29.jpg" alt="IIT Palakkad Logo" class="logo">  
                 <h2>🔐 Reset Your SAC Password</h2>
                 <p class="text">We received a request to reset your SAC password. Click the button below to continue:</p>
                 <a href="{reset_link}" class="button">Reset Password</a>

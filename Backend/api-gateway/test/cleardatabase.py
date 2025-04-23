@@ -4,10 +4,10 @@ from psycopg2 import sql
 # List of PostgreSQL database connection configs
 databases = [
     {"dbname": "auth", "user": "postgres", "password": "acoolpassword", "host": "localhost", "port": "5432"},
-    # {"dbname": "events", "user": "postgres", "password": "acoolpassword", "host": "localhost", "port": "5432"},
-    # {"dbname": "projects", "user": "postgres", "password": "acoolpassword", "host": "localhost", "port": "5432"},
-    # {"dbname": "public", "user": "postgres", "password": "acoolpassword", "host": "localhost", "port": "5432"},
-    # {"dbname": "users", "user": "postgres", "password": "acoolpassword", "host": "localhost", "port": "5432"},
+    {"dbname": "events", "user": "postgres", "password": "acoolpassword", "host": "localhost", "port": "5432"},
+    {"dbname": "projects", "user": "postgres", "password": "acoolpassword", "host": "localhost", "port": "5432"},
+    {"dbname": "public", "user": "postgres", "password": "acoolpassword", "host": "localhost", "port": "5432"},
+    {"dbname": "users", "user": "postgres", "password": "acoolpassword", "host": "localhost", "port": "5432"},
     # Add more databases as needed
 ]
 

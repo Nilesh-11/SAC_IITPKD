@@ -1,9 +1,25 @@
-from src.utils.verify import validate_mail
+from src.utils.verify import validate_mail, validate_password
 from pydantic import BaseModel, field_validator, EmailStr, Field
 from typing import Optional, List
 from datetime import date, time, timedelta, datetime
 from src.models.public import AnnouncementPriority
 
+class AddStudentRequest(BaseModel):
+    name: str = Field(..., min_length=3, max_length=30, pattern="^[a-zA-Z]+$")
+    full_name: str = Field(..., pattern=r"^[a-zA-Z]+(?: [a-zA-Z]+)*$")
+    password: str = Field(..., min_length=8, max_length=50)
+    email: EmailStr
+    request_by: EmailStr
+    
+    @field_validator("request_by")
+    @classmethod
+    def validate_mail(cls, value: str) -> str:
+        return validate_mail(value)
+    
+    @field_validator("password")
+    @classmethod
+    def validate_password(cls, value: str) -> str:
+        return validate_password(value)
 
 class ClubInfoRequest(BaseModel):
     club_id: int
@@ -59,7 +75,7 @@ class UpdateRolesRequest(BaseModel):
         return validate_mail(value)
 
 class AddRolesRequest(BaseModel):
-    title: str
+    title: str = Field(..., pattern=r"^[a-zA-Z]+(?: [a-zA-Z]+)*$")
     privilege: int = Field(..., ge=5, le=80)
     description: str
     request_by: EmailStr
@@ -111,9 +127,9 @@ class CouncilListRequest(BaseModel):
 
 class AddCouncilRequest(BaseModel):
     email: EmailStr
-    password: str
-    name: str
-    title: str
+    password: str = Field(..., min_length=8, max_length=50)
+    name: str = Field(..., min_length=3, max_length=30, pattern="^[a-zA-Z]+$")
+    title: str = Field(..., pattern=r"^[a-zA-Z]+(?: [a-zA-Z]+)*$")
     description: str
     faculty_advisor: Optional[str]
     secretary: str
@@ -124,11 +140,16 @@ class AddCouncilRequest(BaseModel):
     @classmethod
     def validate_mail(cls, value: str) -> str:
         return validate_mail(value)
+    
+    @field_validator("password")
+    @classmethod
+    def validate_password(cls, value: str) -> str:
+        return validate_password(value)
 
 class UpdateCouncilRequest(BaseModel):
     council_id: int
     email: str
-    password: str
+    password: str = Field(..., min_length=8, max_length=50)
     name: str
     title: str
     description: str
@@ -141,6 +162,11 @@ class UpdateCouncilRequest(BaseModel):
     @classmethod
     def validate_mail(cls, value: str) -> str:
         return validate_mail(value)
+    
+    @field_validator("password")
+    @classmethod
+    def validate_password(cls, value: str) -> str:
+        return validate_password(value)
 
 class DeleteCouncilRequest(BaseModel):
     id: int
@@ -156,11 +182,21 @@ class UpdateClubRequest(BaseModel):
     title: str
     email: EmailStr
     description: str
-    password: str
+    password: str = Field(..., min_length=8, max_length=50)
     faculty_advisor: str
     head: str
     coheads: Optional[List[str]]
     request_by: EmailStr
+    
+    @field_validator("password")
+    @classmethod
+    def validate_password(cls, value: str) -> str:
+        return validate_password(value)
+    
+    @field_validator("email")
+    @classmethod
+    def validate_mail(cls, value: str) -> str:
+        return validate_mail(value)
     
     @field_validator("request_by")
     @classmethod
@@ -198,11 +234,11 @@ class DeleteClubRequest(BaseModel):
         return validate_mail(value)
 
 class AddClubRequest(BaseModel):
-    name: str
-    title: str
+    name: str = Field(..., min_length=3, max_length=30, pattern="^[a-zA-Z]+$")
+    title: str = Field(..., pattern=r"^[a-zA-Z]+(?: [a-zA-Z]+)*$")
     description: str
     email: EmailStr
-    password: str
+    password: str = Field(..., min_length=8, max_length=50)
     faculty_advisor: str
     head: str
     coheads: Optional[List[str]]
@@ -247,7 +283,7 @@ class AddAnnouncementRequest(BaseModel):
 
 class UpdateAnnouncementRequest(BaseModel):
     id: int
-    title: str = Field(..., max_length=255)
+    title: str = Field(..., pattern=r"^[a-zA-Z]+(?: [a-zA-Z]+)*$")
     body: str
     expires_at: datetime
     priority: Optional[AnnouncementPriority] = AnnouncementPriority.normal

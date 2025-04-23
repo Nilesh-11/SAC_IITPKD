@@ -58,7 +58,7 @@ def html_meeting_invitation(meeting: Meetings, project_title: str, contact_email
     </head>
     <body>
         <div class="container">
-            <img src="https://i.postimg.cc/tgTcJVgc/iitpkdlogo.jpg" alt="IIT Palakkad Logo" class="logo">
+            <img src="https://iitpkd.ac.in/sites/default/files/IITWEBLOGO%20%283%29.jpg" alt="IIT Palakkad Logo" class="logo">
             <div class="title">📅 You're Invited to a Meeting</div>
             <p class="text"><strong>Project:</strong> {project_title}</p>
             <p class="text"><strong>Meeting Title:</strong> {meeting.title}</p>
@@ -132,7 +132,7 @@ def html_meeting_reminder(meeting: Meetings, project_title: str, contact_email: 
     </head>
     <body>
         <div class="container">
-            <img src="https://i.postimg.cc/tgTcJVgc/iitpkdlogo.jpg" alt="IIT Palakkad Logo" class="logo">
+            <img src="https://iitpkd.ac.in/sites/default/files/IITWEBLOGO%20%283%29.jpg" alt="IIT Palakkad Logo" class="logo">
             <div class="title">⏰ Reminder: Upcoming Meeting</div>
             <p class="text"><strong>Project:</strong> {project_title}</p>
             <p class="text"><strong>Meeting:</strong> {meeting.title}</p>
