@@ -12,13 +12,7 @@ import {
   useMediaQuery,
   useTheme,
 } from "@mui/material";
-import {
-  Email,
-  Person,
-  Groups,
-  Info,
-  AlternateEmail,
-} from "@mui/icons-material";
+import { FaEnvelope, FaUser, FaUsers, FaInfoCircle, FaRegEnvelope } from "react-icons/fa"; // React Icons
 import Header from "../components/common/header";
 import Footer from "../components/common/footer";
 import Gallery from "../components/common/gallery";
@@ -49,13 +43,12 @@ const Technical = () => {
   }, []);
 
   const galleryImages = [
-    "/council/technical/photo1.jpg",
-    "/council/technical/photo2.jpg",
-    "/council/technical/photo3.jpg",
+    "/council/technical/photo1.webp",
+    "/council/technical/photo2.webp",
   ];
 
   return (
-    <Box sx={{ minHeight: "100vh", display: "flex", flexDirection: "column", backgroundImage: "url('/bg1.jpg')",
+    <Box sx={{ minHeight: "100vh", display: "flex", flexDirection: "column", backgroundImage: "url('/bg1.webp')",
               backgroundSize: "cover",
               backgroundPosition: "center",
               backgroundRepeat: "no-repeat", }}>
@@ -119,7 +112,7 @@ const Technical = () => {
                           >
                             <Avatar
                               alt={council.secretary.full_name}
-                              src={`/student/${council.secretary.email}/photo.jpg`}
+                              src={`/student/${council.secretary.email}/photo.webp`}
                               sx={{
                                 width: { xs: 96, sm: 128 },
                                 height: { xs: 96, sm: 128 },
@@ -151,7 +144,7 @@ const Technical = () => {
                                 width: "100%",
                               }}
                             >
-                              <Info fontSize={isMobile ? "small" : "medium"} />
+                              <FaInfoCircle fontSize={isMobile ? "small" : "medium"} />
                               {council.council_title}
                             </Typography>
 
@@ -163,7 +156,7 @@ const Technical = () => {
                               }}
                             >
                               <Box display="flex" alignItems="center" gap={1}>
-                                <Person fontSize={isMobile ? "small" : "medium"} />
+                                <FaUser fontSize={isMobile ? "small" : "medium"} />
                                 <strong>Secretary:</strong>
                                 <span>
                                   {council.secretary.full_name}
@@ -176,7 +169,7 @@ const Technical = () => {
                                 gap={1}
                                 flexWrap="wrap"
                               >
-                                <Email fontSize={isMobile ? "small" : "medium"} />
+                                <FaEnvelope fontSize={isMobile ? "small" : "medium"} />
                                 <strong>Email:</strong>
                                 <span style={{ wordBreak: "break-all" }}>
                                   {council.secretary.email}
@@ -195,7 +188,7 @@ const Technical = () => {
                                       mb: 1,
                                     }}
                                   >
-                                    <Groups fontSize={isMobile ? "small" : "medium"} />
+                                    <FaUsers fontSize={isMobile ? "small" : "medium"} />
                                     Deputy Secretaries
                                   </Typography>
                                   {council.deputies.map((deputy, index) => (
@@ -230,7 +223,7 @@ const Technical = () => {
                                 flexWrap="wrap"
                                 mt={1.5}
                               >
-                                <AlternateEmail fontSize={isMobile ? "small" : "medium"} />
+                                <FaRegEnvelope fontSize={isMobile ? "small" : "medium"} />
                                 <strong>Council Email:</strong>
                                 <span style={{ wordBreak: "break-all" }}>
                                   {council.council_email}

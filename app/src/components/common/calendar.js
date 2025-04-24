@@ -1,14 +1,14 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState } from "react";
 import dayjs from "dayjs";
-import Badge from "@mui/material/Badge";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { PickersDay } from "@mui/x-date-pickers/PickersDay";
-import { DateCalendar } from "@mui/x-date-pickers/DateCalendar";
-import { DayCalendarSkeleton } from "@mui/x-date-pickers/DayCalendarSkeleton";
-import { Box, Typography, Tooltip, Chip } from "@mui/material";
+import isSameOrBefore from "dayjs/plugin/isSameOrBefore";
+import isSameOrAfter from "dayjs/plugin/isSameOrAfter";
+import { Box, Typography, Tooltip, Paper, Button } from "@mui/material";
+import { FaChevronRight, FaChevronLeft } from "react-icons/fa";
 
-// Color map for different councils
+// Extend dayjs with plugins
+dayjs.extend(isSameOrBefore);
+dayjs.extend(isSameOrAfter);
+
 const COUNCIL_COLORS = {
   "Technical Council": "#f38221",
   "Cultural Council": "#7e57c2",
@@ -21,170 +21,187 @@ const COUNCIL_COLORS = {
 };
 
 const CalendarComponent = ({ events }) => {
-  const requestAbortController = useRef(null);
-  const [isLoading, setIsLoading] = useState(false);
-  const [highlightedDaysMap, setHighlightedDaysMap] = useState({});
+  const [currentMonth, setCurrentMonth] = useState(dayjs());
 
-  const fetchHighlightedDays = (date) => {
-    setIsLoading(true);
-    const map = {};
-
-    if (Array.isArray(events)) {
-      events.forEach((event) => {
-        const eventDate = dayjs(event.start_time);
-        if (
-          eventDate.month() === date.month() &&
-          eventDate.year() === date.year()
-        ) {
-          const day = eventDate.date();
-          if (!map[day]) map[day] = [];
-          map[day].push(event);
-        }
+  // Generate days for the current month view
+  const generateMonthDays = () => {
+    const startOfMonth = currentMonth.startOf("month");
+    const endOfMonth = currentMonth.endOf("month");
+    const daysInMonth = currentMonth.daysInMonth();
+    
+    // Add days from previous month to fill the week
+    const startDay = startOfMonth.day();
+    const daysFromPrevMonth = startDay === 0 ? 6 : startDay - 1;
+    
+    // Add days from next month to fill the week
+    const endDay = endOfMonth.day();
+    const daysFromNextMonth = endDay === 0 ? 0 : 7 - endDay;
+    
+    const days = [];
+    
+    // Previous month days
+    for (let i = daysFromPrevMonth; i > 0; i--) {
+      days.push({
+        date: startOfMonth.subtract(i, "day"),
+        currentMonth: false,
+        events: []
       });
     }
-
-    setHighlightedDaysMap(map);
-    setIsLoading(false);
+    
+    // Current month days
+    for (let i = 1; i <= daysInMonth; i++) {
+      const date = currentMonth.date(i);
+      days.push({
+        date,
+        currentMonth: true,
+        events: events?.filter(e => dayjs(e.start_time).isSame(date, "day")) || []
+      });
+    }
+    
+    // Next month days
+    for (let i = 1; i <= daysFromNextMonth; i++) {
+      days.push({
+        date: endOfMonth.add(i, "day"),
+        currentMonth: false,
+        events: []
+      });
+    }
+    
+    return days;
   };
 
-  const handleMonthChange = (date) => {
-    if (requestAbortController.current) {
-      requestAbortController.current.abort();
-    }
-    fetchHighlightedDays(date);
+  const handleMonthChange = (monthsToAdd) => {
+    setCurrentMonth(currentMonth.add(monthsToAdd, "month"));
   };
 
-  useEffect(() => {
-    fetchHighlightedDays(dayjs());
-    return () => requestAbortController.current?.abort();
-  }, [events]);
+  const renderDay = (day) => {
+    const hasEvents = day.events.length > 0;
+    const councils = [...new Set(day.events.map(e => e.council))];
+    const primaryColor = councils.length === 1 
+      ? COUNCIL_COLORS[councils[0]] || COUNCIL_COLORS.default 
+      : COUNCIL_COLORS.default;
 
-  function CustomDay(props) {
-    const { day, outsideCurrentMonth, ...other } = props;
-    const dayNum = day.date();
-
-    if (!events || events.length === 0) {
-      // If no events, render default day without customization
-      return <PickersDay {...other} day={day} outsideCurrentMonth={outsideCurrentMonth} />;
-    }
-
-    const dayEvents = highlightedDaysMap[dayNum] || [];
-    const isHighlighted = !outsideCurrentMonth && dayEvents.length > 0;
-  
-    // Get all involved councils for the day
-    const councils = [...new Set(dayEvents.map((e) => e.council))];
-    const primaryColor =
-      councils.length === 1
-        ? COUNCIL_COLORS[councils[0]] || COUNCIL_COLORS["default"]
-        : COUNCIL_COLORS["default"];
-  
-    const tooltipContent = dayEvents
-      .map((e) => `${dayjs(e.start_time).format("HH:mm")} - ${e.title}`)
+    const tooltipContent = day.events
+      .map(e => `${dayjs(e.start_time).format("HH:mm")} - ${e.title}`)
       .join("\n");
-  
-    const pickersDay = (
-      <PickersDay
-        {...other}
-        day={day}
-        outsideCurrentMonth={outsideCurrentMonth}
-        sx={{
-          ...(isHighlighted && {
-            backgroundColor: primaryColor,
-            color: "white",
-            "&:hover": {
-              backgroundColor: dayjs().isSame(day, 'day') ? primaryColor : "#333",
-              color: "white",
-            },
-          }),
-          "&.Mui-selected": {
-            backgroundColor: primaryColor + " !important",
-            color: "white",
-          },
-          "&.Mui-focusVisible": {
-            backgroundColor: primaryColor + " !important",
-            color: "white",
-          },
-        }}
-      />
-    );
-  
-    return isHighlighted ? (
-      <Tooltip title={<pre style={{ margin: 0 }}>{tooltipContent}</pre>} arrow>
-        {pickersDay}
-      </Tooltip>
-    ) : (
-      pickersDay
-    );
-  }
-  
 
-  return (
-    <LocalizationProvider dateAdapter={AdapterDayjs}>
-      <Box
-        sx={{
-          width: "100%",
-          maxWidth: 600,
-          margin: "0 auto",
-          padding: 2,
-        }}
+    return (
+      <Tooltip 
+        key={day.date.toString()} 
+        title={hasEvents ? <pre style={{ margin: 0 }}>{tooltipContent}</pre> : ""} 
+        arrow
       >
-        {/* Header */}
         <Box
           sx={{
+            width: "100%",
+            height: "36px",
             display: "flex",
-            flexDirection: "column",
-            alignItems: "flex-end",
-            marginBottom: 2,
-            "@media (max-width: 600px)": {
-              alignItems: "center",
+            alignItems: "center",
+            justifyContent: "center",
+            borderRadius: "50%",
+            backgroundColor: hasEvents ? primaryColor : "transparent",
+            color: hasEvents ? "white" : day.currentMonth ? "text.primary" : "text.disabled",
+            cursor: hasEvents ? "pointer" : "default",
+            "&:hover": {
+              backgroundColor: hasEvents ? "#333" : "action.hover",
             },
           }}
         >
-          <Typography
-            variant="h6"
-            sx={{
-              marginBottom: "5px",
-              fontSize: { xs: "16px", sm: "18px", md: "20px" },
-            }}
-          >
-            CALENDAR
-          </Typography>
-          <Box
-            sx={{
-              backgroundColor: "#f38221",
-              width: "30%",
-              height: "6px",
-              borderRadius: "10px",
-              "@media (max-width: 600px)": {
-                width: "50%",
-              },
-            }}
-          />
+          {day.date.date()}
         </Box>
+      </Tooltip>
+    );
+  };
 
-        <DateCalendar
-          defaultValue={dayjs()}
-          loading={isLoading}
-          onMonthChange={handleMonthChange}
-          renderLoading={() => <DayCalendarSkeleton />}
+  return (
+    <Box
+      sx={{
+        width: "100%",
+        maxWidth: 600,
+        margin: "0 auto",
+        padding: 2,
+      }}
+    >
+      {/* Header */}
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "flex-end",
+          marginBottom: 2,
+          "@media (max-width: 600px)": {
+            alignItems: "center",
+          },
+        }}
+      >
+        <Typography
+          variant="h6"
           sx={{
-            backgroundColor: "rgb(250, 199, 170)",
-            borderRadius: "8px",
-            padding: "10px",
-            width: "90%",
-            maxWidth: "400px",
-            height: "300px",
-            marginLeft: "auto",
+            marginBottom: "5px",
+            fontSize: { xs: "16px", sm: "18px", md: "20px" },
+          }}
+        >
+          CALENDAR
+        </Typography>
+        <Box
+          sx={{
+            backgroundColor: "#f38221",
+            width: "30%",
+            height: "6px",
+            borderRadius: "10px",
             "@media (max-width: 600px)": {
-              padding: "5px",
-              width: "100%",
-              height: "250px",
+              width: "50%",
             },
           }}
-          slots={{ day: CustomDay }}
         />
       </Box>
-    </LocalizationProvider>
+
+      {/* Calendar Controls */}
+      <Box sx={{ display: "flex", justifyContent: "space-between", mb: 2 }}>
+        <Button onClick={() => handleMonthChange(-1)} sx={{color:"orange"}}><FaChevronLeft fontSize="20px" /></Button>
+        <Typography variant="h6" sx={{ textAlign: "center" }}>
+          {currentMonth.format("MMMM YYYY")}
+        </Typography>
+        <Button onClick={() => handleMonthChange(1)} sx={{color:"orange"}}><FaChevronRight fontSize="20px" /></Button>
+      </Box>
+
+      {/* Calendar Grid */}
+      <Paper
+        sx={{
+          backgroundColor: "rgb(250, 199, 170)",
+          borderRadius: "8px",
+          padding: "10px",
+          width: "90%",
+          maxWidth: "400px",
+          marginLeft: "auto",
+          "@media (max-width: 600px)": {
+            padding: "5px",
+            width: "100%",
+          },
+        }}
+      >
+        {/* Weekday Headers */}
+        <Box sx={{ 
+          display: "grid", 
+          gridTemplateColumns: "repeat(7, 1fr)",
+          textAlign: "center",
+          mb: 1
+        }}>
+          {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map(day => (
+            <Typography key={day} variant="caption">{day}</Typography>
+          ))}
+        </Box>
+
+        {/* Days Grid */}
+        <Box sx={{ 
+          display: "grid", 
+          gridTemplateColumns: "repeat(7, 1fr)",
+          gap: 1
+        }}>
+          {generateMonthDays().map(renderDay)}
+        </Box>
+      </Paper>
+    </Box>
   );
 };
 

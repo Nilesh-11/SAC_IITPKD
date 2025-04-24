@@ -1,8 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import Header from "./Header";
-import { LocalizationProvider } from "@mui/x-date-pickers";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import Dashboard from "../../components/user/dash";
 import ProjectList from "../../components/user/projects";
 import AnnouncementsDash from "../../components/user/announcementsDash";
@@ -10,7 +8,7 @@ import EventCalendar from "../../components/user/bigcalendar";
 import {getAnnouncementsList} from "../../api/announcement";
 import {getEventsList} from "../../api/events";
 import {ClubsListApi, StatusApi} from "../../api/public";
-import { CircularProgress } from "@mui/material";
+import { Box, CircularProgress } from "@mui/material";
 import AddProjectForm from "../../components/user/AddProjectForm";
 import ManageProject from "../../components/user/ManageProject";
 import UpdateProjectForm from "../../components/user/UpdateProjectForm";
@@ -83,7 +81,9 @@ const StudentDashboard = () => {
   };
   
   return (
-    <div>
+    <Box sx={{backgroundImage: `linear-gradient(rgba(255,255,255,0.1), rgba(255,255,255,0.2)), url('/bg1.webp')`,
+      backgroundSize: "cover",
+      backgroundPosition: "center",}}>
       <Header
         handleMenuNavigation={handleMenuNavigation}
         liveEvents={events}
@@ -91,7 +91,7 @@ const StudentDashboard = () => {
         username={username}
         userrole={userrole}
       ></Header>
-      {currSection == "dashboard" && (
+      {currSection === "dashboard" && (
         <Dashboard
           announcements={announcements}
           status={status}
@@ -107,38 +107,36 @@ const StudentDashboard = () => {
         </Dashboard>
       )}
 
-      {currSection == "clubs" && (
+      {currSection === "clubs" && (
         <CouncilClubs handleNavigation={handleClubNavigation}></CouncilClubs>
       )}
 
-      {currSection == "addproject" && (
+      {currSection === "addproject" && (
         <AddProjectForm></AddProjectForm>
       )}
 
-      {currSection == "manageproject" && (
+      {currSection === "manageproject" && (
         <ManageProject></ManageProject>
       )}
 
-      {currSection == "updateproject" && (
+      {currSection === "updateproject" && (
         <UpdateProjectForm></UpdateProjectForm>
       )}
       
-      {currSection == "projects" && (
+      {currSection === "projects" && (
         <ProjectList handleAddProject={() => {
           setCurrentSection("addproject");
         }}></ProjectList>
       )}
 
-      {currSection == "announcements" && (
+      {currSection === "announcements" && (
         <AnnouncementsDash announcements={announcements}></AnnouncementsDash>
       )}
 
-      {currSection == "calendar" && (
-        <LocalizationProvider dateAdapter={AdapterDayjs}>
+      {currSection === "calendar" && (
           <EventCalendar events={events} />
-        </LocalizationProvider>
       )}
-    </div>
+    </Box>
   );
 };
 

@@ -9,7 +9,8 @@ import {
   useMediaQuery,
   useTheme,
 } from "@mui/material";
-import LocalLibraryIcon from "@mui/icons-material/LocalLibrary";
+import { FaUniversity } from "react-icons/fa";
+
 import SquareGallery from "./squareGallery";
 import timeAgo from "../../utils/parser";
 const Dashboard = ({
@@ -152,7 +153,7 @@ const Dashboard = ({
                   py: isSmallScreen ? 1 : 0,
                 }}
               >
-                <LocalLibraryIcon
+                <FaUniversity
                   sx={{ fontSize: 50, color: "orange", mb: 1 }}
                 />
                 <Typography fontSize={14} fontWeight={500}>

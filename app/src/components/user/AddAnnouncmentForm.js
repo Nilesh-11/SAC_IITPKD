@@ -10,8 +10,8 @@ import {
   CircularProgress,
   MenuItem,
 } from "@mui/material";
-import CampaignIcon from "@mui/icons-material/Campaign";
-import { AddAnnouncementApi } from "../../api/announcement"; // Adjust import path as needed
+import { MdCampaign } from "react-icons/md";
+import { AddAnnouncementApi } from "../../api/announcement";
 
 const AddAnnouncementForm = () => {
   const [formData, setFormData] = useState({
@@ -96,7 +96,7 @@ const AddAnnouncementForm = () => {
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        backgroundImage: `linear-gradient(rgba(255,255,255,0.1), rgba(255,255,255,0.2)), url('/bg1.jpg')`,
+        backgroundImage: `linear-gradient(rgba(255,255,255,0.1), rgba(255,255,255,0.2)), url('/bg1.webp')`,
         backgroundSize: "cover",
         backgroundPosition: "center",
         p: 2,
@@ -202,7 +202,7 @@ const AddAnnouncementForm = () => {
                   loading ? (
                     <CircularProgress size={20} color="inherit" />
                   ) : (
-                    <CampaignIcon />
+                    <MdCampaign size={20} />
                   )
                 }
               >

@@ -1,24 +1,14 @@
-import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import Header from "../student/Header";
-import { LocalizationProvider } from "@mui/x-date-pickers";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import Dashboard from "../../components/user/dash";
-import ProjectList from "../../components/user/projects";
 import AnnouncementsDash from "../../components/user/announcementsDash";
 import EventCalendar from "../../components/user/bigcalendar";
 import {getAnnouncementsList} from "../../api/announcement";
 import {getEventsList} from "../../api/events";
 import {ClubsListApi, StatusApi} from "../../api/public";
 import { CircularProgress } from "@mui/material";
-import AddProjectForm from "../../components/user/AddProjectForm";
-import ManageProject from "../../components/user/ManageProject";
-import UpdateProjectForm from "../../components/user/UpdateProjectForm";
-import CouncilClubs from "../../components/user/CouncilClubs";
-import { getUsername } from "../../api/auth";
 
 const GuestDashboard = () => {
-  const navigate = useNavigate();
   const [events, setEvents] = useState([]);
   const [announcements, setAnnouncements] = useState([]);
   const [currSection, setCurrentSection] = useState("dashboard");
@@ -31,7 +21,7 @@ const GuestDashboard = () => {
   useEffect(() => {
     const fetchAllData = async () => {
       try {
-        const [annData, eventData, clubData, userData, statData] = await Promise.all([
+        const [annData, eventData, clubData, statData] = await Promise.all([
           getAnnouncementsList(),
           getEventsList(),
           ClubsListApi(),
@@ -100,9 +90,7 @@ const GuestDashboard = () => {
       )}
 
       {currSection == "calendar" && (
-        <LocalizationProvider dateAdapter={AdapterDayjs}>
           <EventCalendar events={events} />
-        </LocalizationProvider>
       )}
     </div>
   );

@@ -11,9 +11,8 @@ import {
   Alert,
   CircularProgress,
 } from "@mui/material";
-import CloseIcon from "@mui/icons-material/Close";
-import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import { AddClubApi } from "../../api/council";
+import { MdClose, MdPersonAdd } from "react-icons/md";
 
 const AddClubForm = () => {
   const [formData, setFormData] = useState({
@@ -149,7 +148,7 @@ const AddClubForm = () => {
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        backgroundImage: `linear-gradient(rgba(255,255,255,0.1), rgba(255,255,255,0.2)), url('/bg1.jpg')`,
+        backgroundImage: `linear-gradient(rgba(255,255,255,0.1), rgba(255,255,255,0.2)), url('/bg1.webp')`,
         backgroundSize: "cover",
         backgroundPosition: "center",
         p: 2,
@@ -230,7 +229,7 @@ const AddClubForm = () => {
                           "&:hover": { backgroundColor: darkOrange },
                         }}
                       >
-                        <PersonAddIcon fontSize="small" />
+                        <MdPersonAdd fontSize="small" />
                       </Button>
                     </InputAdornment>
                   ),
@@ -245,7 +244,7 @@ const AddClubForm = () => {
                     key={index}
                     label={cohead}
                     onDelete={() => removeCohead(index)}
-                    deleteIcon={<CloseIcon />}
+                    deleteIcon={<MdClose />}
                     sx={{
                       borderRadius: "8px",
                       backgroundColor: "#f0f0f0",

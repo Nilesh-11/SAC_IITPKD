@@ -18,7 +18,7 @@ const Gallery = ({ images, galleryId }) => {
         coverflowEffect={{
           rotate: window.innerWidth < 768 ? 0 : 50, // Less rotation for small screens
           stretch: window.innerWidth < 768 ? 50 : 100, // Responsive stretch
-          depth: 300, // Adjust depth
+          depth: 300,
           modifier: 1,
           slideShadows: true,
         }}

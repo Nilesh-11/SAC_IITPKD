@@ -56,13 +56,13 @@ const CouncilDashboard = () => {
   const menuItems = [
     { name: "Dashboard", icon: "📊", link: "dashboard" },
     { name: "Add Club", icon: "🏫", link: "addclub" },
-    { name: "Update Club", icon: "🏫", link: "updateclub" },
-    { name: "Add Announcement", icon: "🏫", link: "addannouncement" },
-    { name: "Update Announcement", icon: "🏫", link: "updateannouncement" },
-    { name: "Add Event", icon: "🏫", link: "addevent" },
-    { name: "Update Event", icon: "🏫", link: "updateevent" },
+    { name: "Update Club", icon: "✏️", link: "updateclub" },
+    { name: "Add Announcement", icon: "📢", link: "addannouncement" },
+    { name: "Update Announcement", icon: "📝", link: "updateannouncement" },
+    { name: "Add Event", icon: "📅", link: "addevent" },
+    { name: "Update Event", icon: "🖋️", link: "updateevent" },
   ];
-
+  
   if (loading) {
     return (
       <div style={{ textAlign: "center", marginTop: "100px" }}>

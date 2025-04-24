@@ -9,11 +9,7 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
-ENVIRONMENT = os.getenv("ENV", "development")
-if ENVIRONMENT == "development":
-    load_dotenv(".env.dev") 
-else:
-    load_dotenv(".env")
+load_dotenv(".env")
 
 EVENTS_DATABASE_URL = os.getenv("EVENTS_DATABASE_URL", "sqlite:///dev.db")
 USERS_DATABASE_URL = os.getenv("USERS_DATABASE_URL", "sqlite:///dev.db")

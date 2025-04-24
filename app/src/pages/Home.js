@@ -33,20 +33,16 @@ const Home = () => {
   }, []);
 
   const about_images = [
-    "/about/photo1.jpg",
-    "/about/photo2.jpg",
-    "/about/photo3.jpg",
-    "/about/photo1.jpg",
-    "/about/photo2.jpg",
-    "/about/photo3.jpg",
+    "/council/photo9.webp",
+    "/council/photo7.webp",
+    "/council/photo11.webp",
+    "/council/photo10.webp",
+    "/council/photo14.webp",
   ];
   const council_images = [
-    "/council/photo1.jpg",
-    "/council/photo2.jpg",
-    "/council/photo3.jpg",
-    "/council/photo1.jpg",
-    "/council/photo2.jpg",
-    "/council/photo3.jpg",
+    "/council/photo6.webp",
+    "/council/photo13.webp",
+    "/council/photo12.webp",
   ];
 
   const deanOfficePeople = [
@@ -55,13 +51,13 @@ const Home = () => {
       title:
         "Associate Professor in Computer Science & Engineering and Dean of Student Affairs",
       email: "deanstudents@iitpkd.ac.in",
-      image: "/people/DeepakR.jpg",
+      image: "/people/DeepakR.webp",
     },
     {
       name: "S Samuel",
       title: "Advisor (Student Matters)",
       email: "samuel@iitpkd.ac.in",
-      image: "/people/Samuel.jpg",
+      image: "/people/Samuel.webp",
     },
   ];
 
@@ -85,7 +81,7 @@ const Home = () => {
     <Box
       sx={{
         minHeight: "100vh",
-        backgroundImage: "url('/bg1.jpg')",
+        backgroundImage: "url('/bg1.webp')",
         backgroundSize: "cover",
         backgroundPosition: "center",
         backgroundRepeat: "no-repeat",

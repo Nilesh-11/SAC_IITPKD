@@ -1,4 +1,5 @@
-import { Add } from "@mui/icons-material";
+import { FaPlus } from "react-icons/fa";
+
 import {
   Box,
   Button,
@@ -144,7 +145,7 @@ const ManageProject = () => {
 
   return (
     <Box sx={{
-        backgroundImage: `linear-gradient(rgba(255,255,255,0.1), rgba(255,255,255,0.2)), url('/bg1.jpg')`,
+        backgroundImage: `linear-gradient(rgba(255,255,255,0.1), rgba(255,255,255,0.2)), url('/bg1.webp')`,
         p: 4,
       }}>
       <Typography variant="h4" sx={{ color: orange, mb: 3 }}>
@@ -197,7 +198,7 @@ const ManageProject = () => {
                 textTransform: "none",
                 "&:hover": { backgroundColor: "rgba(243,130,33,0.8)" },
               }}
-              startIcon={<Add />}
+              startIcon={<FaPlus />}
             >
               New Meeting
             </Button>

@@ -9,7 +9,9 @@ import {
   useMediaQuery,
   useTheme,
 } from "@mui/material";
-import MenuIcon from "@mui/icons-material/Menu";
+// Import React Icons
+import { FaBars } from "react-icons/fa"; // For the menu icon
+import { FaUserCircle } from "react-icons/fa"; // For the user avatar icon
 
 import LeftNav from "../../components/user/leftnav";
 import RightNavbar from "../../components/user/rightnav";
@@ -31,7 +33,7 @@ const Header = ({ menuItems, handleMenuNavigation, recentActivity, liveEvents, u
             onClick={() => setIsLeftDrawerOpen(true)}
             sx={{ color: "rgb(243, 130, 33)" }}
           >
-            <MenuIcon />
+            <FaBars size={24} />
           </IconButton>
 
           {/* Centered Logo */}
@@ -58,7 +60,7 @@ const Header = ({ menuItems, handleMenuNavigation, recentActivity, liveEvents, u
                 "&:hover": { transform: "scale(1.1)" },
               }}
             >
-              <Avatar src="logo192.png" sx={{ width: 40, height: 40 }} />
+              <FaUserCircle size={40} />
             </IconButton>
           )}
         </Toolbar>
@@ -91,16 +93,15 @@ const Header = ({ menuItems, handleMenuNavigation, recentActivity, liveEvents, u
         onClose={() => setIsRightDrawerOpen(false)}
         transitionDuration={400}
         sx={{
-            "& .MuiDrawer-paper": {
+          "& .MuiDrawer-paper": {
             width: { xs: "80vw", sm: 350 },
             maxWidth: 400,
             p: 2,
             boxShadow: 4,
             overflowY: "auto",
-            },
+          },
         }}
-        >
-
+      >
         <RightNavbar
           username={username}
           userrole={userrole}

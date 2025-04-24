@@ -2,8 +2,7 @@
 
 import React from 'react';
 import { Box, Card, Typography, Stack, Button, Chip } from '@mui/material';
-import LinkIcon from "@mui/icons-material/Link";
-import LocationOnIcon from "@mui/icons-material/LocationOn";
+import { FaLink, FaMapMarkerAlt } from "react-icons/fa";
 import dayjs from 'dayjs';
 
 const orange = "rgb(243,130,33)";
@@ -59,7 +58,7 @@ const MeetingList = ({ meetings, onEditMeeting, onDeleteMeeting }) => {
                       variant="body2"
                       sx={{ mt: 1, display: "flex", alignItems: "center" }}
                     >
-                      <LinkIcon fontSize="small" sx={{ mr: 0.5, color: orange }} />
+                      <FaLink fontSize="small" sx={{ mr: 0.5, color: orange }} />
                       Join Online Meeting
                     </Typography>
                   </a>
@@ -69,7 +68,7 @@ const MeetingList = ({ meetings, onEditMeeting, onDeleteMeeting }) => {
                     sx={{ mt: 1, display: "flex", alignItems: "center" }}
                     color="text.secondary"
                   >
-                    <LocationOnIcon fontSize="small" sx={{ mr: 0.5 }} />
+                    <FaMapMarkerAlt fontSize="small" sx={{ mr: 0.5 }} />
                     Venue: {meeting.venue}
                   </Typography>
                 )}

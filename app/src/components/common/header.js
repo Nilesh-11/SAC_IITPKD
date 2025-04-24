@@ -2,9 +2,8 @@ import React, { useState, useEffect } from 'react';
 import {
   AppBar, Toolbar, Button, Box, useMediaQuery, IconButton, Drawer, Menu, MenuItem
 } from '@mui/material';
-import MenuIcon from '@mui/icons-material/Menu';
-import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import { useNavigate } from 'react-router-dom';
+import { MdMenu, MdArrowDropDown } from 'react-icons/md';
 
 const Header = () => {
   const [scrollY, setScrollY] = useState(0);
@@ -47,7 +46,7 @@ const Header = () => {
       position="sticky"
       sx={{
         background: `rgba(0, 0, 0, ${opacity})`,
-        backgroundImage: 'url("/background.jpg")',
+        backgroundImage: 'url("/background.webp")',
         backgroundSize: 'cover',
         padding: '10px 0',
         transition: 'background 0.3s ease',
@@ -64,17 +63,17 @@ const Header = () => {
             onClick={toggleDrawer}
             sx={{ color: 'rgb(243, 130, 33)' }}
           >
-            <MenuIcon />
+            <MdMenu size={24} />
           </IconButton>
         ) : (
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
             {navButton('Home', '/')}
             {navButton('Academics', '/academics')}
-            
+
             <Button
               color="inherit"
               onClick={handleMenuOpen(setAnchorElPG)}
-              endIcon={<ArrowDropDownIcon />}
+              endIcon={<MdArrowDropDown />}
               sx={{
                 '&:hover': { color: '#fff', backgroundColor: 'transparent' },
                 color: textColor,
@@ -97,7 +96,7 @@ const Header = () => {
             <Button
               color="inherit"
               onClick={handleMenuOpen(setAnchorElMore)}
-              endIcon={<ArrowDropDownIcon />}
+              endIcon={<MdArrowDropDown />}
               sx={{
                 '&:hover': { color: '#fff', backgroundColor: 'transparent' },
                 color: textColor,
@@ -131,7 +130,6 @@ const Header = () => {
         )}
       </Toolbar>
 
-      {/* Drawer for small screens */}
       <Drawer
         anchor="right"
         open={openDrawer}
@@ -145,7 +143,7 @@ const Header = () => {
         }}
       >
         <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
-          {[
+          {[ 
             { label: 'Home', path: '/' },
             { label: 'Academics', path: '/academics' },
             { label: 'PG', path: '/post-graduate' },

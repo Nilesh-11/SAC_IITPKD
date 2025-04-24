@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import "./bigcalendar.css";
 import {
   Box,
@@ -15,31 +15,16 @@ import {
   OutlinedInput,
   Checkbox,
   ListItemText,
+  TextField,
 } from "@mui/material";
-import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import dayjs from "dayjs";
 import isSameOrAfter from "dayjs/plugin/isSameOrAfter";
 import isSameOrBefore from "dayjs/plugin/isSameOrBefore";
+import customParseFormat from "dayjs/plugin/customParseFormat";
 
 dayjs.extend(isSameOrAfter);
 dayjs.extend(isSameOrBefore);
-
-const getHoursArray = () => {
-  return Array.from({ length: 17 }, (_, i) => `${i + 7}:00`);
-};
-
-const startDisplayHour = 7;
-
-const groupEventsByDate = (events) => {
-  const grouped = {};
-  events.forEach((event) => {
-    if (!grouped[event.date]) {
-      grouped[event.date] = [];
-    }
-    grouped[event.date].push(event);
-  });
-  return grouped;
-};
+dayjs.extend(customParseFormat);
 
 const COUNCIL_COLORS = {
   "Technical Council": "#f38221",
@@ -52,43 +37,68 @@ const COUNCIL_COLORS = {
   default: "#546e7a",
 };
 
+const HOURS = Array.from({ length: 17 }, (_, i) => `${i + 7}:00`);
+const START_HOUR = 7;
+
 const EventCalendar = ({ events = [] }) => {
   const [startDate, setStartDate] = useState(dayjs());
   const [endDate, setEndDate] = useState(null);
   const [selectedTypes, setSelectedTypes] = useState([]);
 
-  const normalizedEvents = events.map((event) => {
-    const start = new Date(event.start_time);
-    const end = event.end_time
-      ? new Date(event.end_time)
-      : new Date(start.getTime() + 60 * 60 * 1000); // default 1 hour
-    return {
-      id: event.title.replace(/\s+/g, "-").toLowerCase(),
-      title: event.title,
-      description: event.description || "",
-      date: start.toISOString().split("T")[0],
-      startTime: start.toISOString(),
-      endTime: end.toISOString(),
-      council: event.council_name || "default",
-      councilTitle: event.council_title || "default", // ← New line
-    };
-  });
+  const normalizedEvents = useMemo(() => {
+    return events.map((event) => {
+      const start = dayjs(event.start_time);
+      const end = event.end_time ? dayjs(event.end_time) : start.add(1, 'hour');
+      
+      return {
+        id: event.title.replace(/\s+/g, "-").toLowerCase(),
+        title: event.title,
+        description: event.description || "",
+        date: start.format("YYYY-MM-DD"),
+        startTime: start,
+        endTime: end,
+        council: event.council_name || "default",
+        councilTitle: event.council_title || "default",
+      };
+    });
+  }, [events]);
 
-  const filteredEvents = normalizedEvents.filter((event) => {
-    const eventDay = dayjs(event.date);
-    const matchesDate =
-      (!startDate || eventDay.isSameOrAfter(startDate, "day")) &&
-      (!endDate || eventDay.isSameOrBefore(endDate, "day"));
-    const matchesType =
-      selectedTypes.length === 0 || selectedTypes.includes(event.councilTitle); // ← Changed from event.council
+  const filteredEvents = useMemo(() => {
+    return normalizedEvents.filter((event) => {
+      const eventDay = dayjs(event.date);
+      const matchesDate =
+        (!startDate || eventDay.isSameOrAfter(startDate, "day")) &&
+        (!endDate || eventDay.isSameOrBefore(endDate, "day"));
+      const matchesType =
+        selectedTypes.length === 0 || selectedTypes.includes(event.councilTitle);
 
-    return matchesDate && matchesType;
-  });
+      return matchesDate && matchesType;
+    });
+  }, [normalizedEvents, startDate, endDate, selectedTypes]);
 
-  const eventsByDate = groupEventsByDate(filteredEvents);
-  const dates = Object.keys(eventsByDate).sort();
+  const eventsByDate = useMemo(() => {
+    const grouped = {};
+    filteredEvents.forEach((event) => {
+      if (!grouped[event.date]) {
+        grouped[event.date] = [];
+      }
+      grouped[event.date].push(event);
+    });
+    return grouped;
+  }, [filteredEvents]);
 
-  const hours = getHoursArray();
+  const dates = useMemo(() => Object.keys(eventsByDate).sort(), [eventsByDate]);
+
+  const handleDateChange = (setter) => (e) => {
+    const value = e.target.value;
+    setter(value ? dayjs(value) : null);
+  };
+
+  const handleClearFilters = () => {
+    setStartDate(null);
+    setEndDate(null);
+    setSelectedTypes([]);
+  };
 
   return (
     <Box sx={{ padding: 2, px: { xs: 2, sm: 5, md: 10 }, py: 3 }}>
@@ -104,28 +114,28 @@ const EventCalendar = ({ events = [] }) => {
         CALENDAR
       </Typography>
 
-      {/* Filters */}
-      <Grid
-        container
-        spacing={2}
-        alignItems="center"
-        sx={{ mb: 2, flexWrap: "wrap" }}
-      >
-        <Grid item xs={12} sm={"auto"}>
-          <DatePicker
+      <Grid container spacing={2} alignItems="center" sx={{ mb: 2, flexWrap: "wrap" }}>
+        <Grid item xs={12} sm="auto">
+          <TextField
             label="Start Date"
-            value={startDate}
-            onChange={(newValue) => setStartDate(newValue)}
+            type="date"
+            value={startDate?.format("YYYY-MM-DD") || ""}
+            onChange={handleDateChange(setStartDate)}
+            InputLabelProps={{ shrink: true }}
+            fullWidth
           />
         </Grid>
-        <Grid item xs={12} sm={"auto"}>
-          <DatePicker
+        <Grid item xs={12} sm="auto">
+          <TextField
             label="End Date"
-            value={endDate}
-            onChange={(newValue) => setEndDate(newValue)}
+            type="date"
+            value={endDate?.format("YYYY-MM-DD") || ""}
+            onChange={handleDateChange(setEndDate)}
+            InputLabelProps={{ shrink: true }}
+            fullWidth
           />
         </Grid>
-        <Grid item xs={12} sm={"auto"}>
+        <Grid item xs={12} sm="auto">
           <FormControl sx={{ minWidth: { xs: 150, sm: 200 }, width: "100%" }}>
             <InputLabel id="council-label">Council</InputLabel>
             <Select
@@ -140,22 +150,18 @@ const EventCalendar = ({ events = [] }) => {
                 .filter((type) => type !== "default")
                 .map((type) => (
                   <MenuItem key={type} value={type}>
-                    <Checkbox checked={selectedTypes.indexOf(type) > -1} />
+                    <Checkbox checked={selectedTypes.includes(type)} />
                     <ListItemText primary={type} />
                   </MenuItem>
                 ))}
             </Select>
           </FormControl>
         </Grid>
-        <Grid item xs={12} sm={"auto"}>
+        <Grid item xs={12} sm="auto">
           <Button
             variant="contained"
             color="error"
-            onClick={() => {
-              setStartDate(null);
-              setEndDate(null);
-              setSelectedTypes([]);
-            }}
+            onClick={handleClearFilters}
           >
             Clear Filters
           </Button>
@@ -178,12 +184,9 @@ const EventCalendar = ({ events = [] }) => {
 
       {/* Calendar */}
       <Box className="calendar-wrapper" sx={{ overflowX: "auto" }}>
-        <Box
-          className="calendar"
-          sx={{ minWidth: { xs: "600px", md: "100%" } }}
-        >
+        <Box className="calendar" sx={{ minWidth: { xs: "600px", md: "100%" } }}>
           <Box className="time-column">
-            {hours.map((hour) => (
+            {HOURS.map((hour) => (
               <Box
                 key={hour}
                 className="time-slot"
@@ -197,18 +200,14 @@ const EventCalendar = ({ events = [] }) => {
           {dates.map((date) => (
             <Box className="day-column" key={date}>
               <Paper elevation={2} className="date-header">
-                {new Date(date).toDateString()}
+                {dayjs(date).format("ddd, MMM D, YYYY")}
               </Paper>
               <Box className="events-column">
                 {eventsByDate[date].map((event, index) => {
-                  const start = new Date(event.startTime);
-                  const end = new Date(event.endTime);
-                  const startHour = start.getHours() + start.getMinutes() / 60;
-                  const endHour = end.getHours() + end.getMinutes() / 60;
-                  const color =
-                    COUNCIL_COLORS[event.councilTitle] ||
-                    COUNCIL_COLORS.default;
-                  const top = `${(startHour - startDisplayHour) * 60}px`;
+                  const startHour = event.startTime.hour() + event.startTime.minute() / 60;
+                  const endHour = event.endTime.hour() + event.endTime.minute() / 60;
+                  const color = COUNCIL_COLORS[event.councilTitle] || COUNCIL_COLORS.default;
+                  const top = `${(startHour - START_HOUR) * 60}px`;
                   const height = `${(endHour - startHour) * 60}px`;
 
                   return (
@@ -226,22 +225,14 @@ const EventCalendar = ({ events = [] }) => {
                         e.currentTarget.style.transform = "scale(1.03)";
                       }}
                       onMouseLeave={(e) => {
-                        e.currentTarget.style.transform = "scale(1)";
+                        e.currentTarget.styleTransform = "scale(1)";
                       }}
                     >
                       <Typography variant="body2" fontWeight="bold">
                         {event.title}
                       </Typography>
                       <Typography variant="caption">
-                        {start.toLocaleTimeString([], {
-                          hour: "2-digit",
-                          minute: "2-digit",
-                        })}{" "}
-                        -{" "}
-                        {end.toLocaleTimeString([], {
-                          hour: "2-digit",
-                          minute: "2-digit",
-                        })}
+                        {event.startTime.format("h:mm A")} - {event.endTime.format("h:mm A")}
                       </Typography>
                     </Box>
                   );

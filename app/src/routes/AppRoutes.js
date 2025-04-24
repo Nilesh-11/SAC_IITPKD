@@ -20,6 +20,7 @@ import CouncilDashboard from "../pages/council/Dashboard";
 import ProjectInfo from "../components/user/ProjectInfo";
 import ClubInfo from "../components/user/clubinfo";
 import GuestDashboard from "../pages/guest/Dashboard";
+import ClubCoreTeam from "../components/user/ClubCoreTeam";
 
 const AppRoutes = () => (
   <Routes>
@@ -39,9 +40,9 @@ const AppRoutes = () => (
 
     <Route element={<ProtectedRoute allowedRoles={['student']} />}>
       <Route path="/student/dashboard" element={<StudentDashboard />} />
-      <Route path="/student/settings" element={<StudentDashboard />} />
       <Route path="/project/info" element={<ProjectInfo />} />
       <Route path="/club/info" element={<ClubInfo />} />
+      <Route path="/club/coreteam" element={<ClubCoreTeam />} />
     </Route>
     <Route element={<ProtectedRoute allowedRoles={['admin']} />}>
       <Route path="/admin/dashboard" element={<AdminDashboard />} />

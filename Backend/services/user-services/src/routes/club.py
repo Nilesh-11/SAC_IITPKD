@@ -1,83 +1,12 @@
 from src.schemas.request import DeleteRoleRequest, MemberInfoRequest, RolesListRequest, UpdateRolesRequest, AddRolesRequest, MembersListRequest, UpdateMembershipRequest, DeleteAnnouncementRequest, AddAnnouncementRequest, UpdateAnnouncementRequest
-from src.utils.verify import verify_user
-from src.models.projects import Project
 from src.models.users import Student, Club, ClubMembership, ClubRole
-from src.models.public import Announcements
-from src.database.connection import get_public_db, get_users_db
-from fastapi.responses import JSONResponse
+from src.database.connection import get_users_db
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 from sqlalchemy.orm import joinedload
 from sqlalchemy import func
-import datetime
 
 router = APIRouter()
-
-@router.post("/announcement/add")
-def add_announcment(request: AddAnnouncementRequest, db: Session = Depends(get_public_db)):
-    title=request.title
-    body=request.body
-    priority=request.priority
-    request_by = request.request_by
-    try:
-        new_announcement = Announcements(
-            title=title,
-            body=body,
-            created_at=datetime.datetime.utcnow(),
-            updated_at=datetime.datetime.utcnow(),
-            expires_at=datetime.datetime.utcnow() + datetime.timedelta(days=30),
-            priority=priority,
-            author=request_by,
-            author_role="club"
-        )
-        db.add(new_announcement)
-        db.commit()
-        return {'content': {'type':"ok", 'details': "Announcement added"}}
-    except Exception as e:
-        print("ERROR in add announcement:", e)
-        return {'content':{'type': "error", 'details':"An error occurred"}}
-
-@router.post("/announcement/update")
-def add_announcment(request: UpdateAnnouncementRequest, db: Session = Depends(get_public_db)):
-    id=request.id
-    title=request.title
-    body=request.body
-    priority=request.priority
-    request_by = request.request_by
-    try:
-        existing_announcement = db.query(Announcements).filter(Announcements.id == id).first()
-        if not existing_announcement:
-            return {'content': {'type':"error", 'details': "Announcement not found"}}
-        if existing_announcement.author != request_by:
-            return {'content': {'type':"error", 'details': "Unauthorized"}}
-        existing_announcement.title=title
-        existing_announcement.body=body
-        existing_announcement.updated_at=datetime.datetime.utcnow()
-        existing_announcement.expires_at=datetime.datetime.utcnow() + datetime.timedelta(days=30)
-        existing_announcement.priority=priority
-        db.commit()
-        db.refresh(existing_announcement)
-        return {'content': {'type':"ok", 'details': "Announcement updated",'id': existing_announcement.id}}
-    except Exception as e:
-        print("ERROR in add announcement:", e)
-        return {'content':{'type': "error", 'details':"An error occurred"}}
-
-@router.post("/announcement/delete")
-def add_announcment(request: DeleteAnnouncementRequest, db: Session = Depends(get_public_db)):
-    id=request.id
-    request_by = request.request_by
-    try:
-        existing_announcement = db.query(Announcements).filter(Announcements.id == id).first()
-        if not existing_announcement:
-            return {'content': {'type':"error", 'details': "Announcement not found"}}
-        if existing_announcement.author != request_by:
-            return {'content': {'type':"error", 'details': "Unauthorized"}}
-        db.delete(existing_announcement)
-        db.commit()
-        return {'content': {'type':"ok", 'details': "Announcement updated",'id': existing_announcement.id}}
-    except Exception as e:
-        print("ERROR in delete announcement:", e)
-        return {'content':{'type': "error", 'details':"An error occurred"}}
 
 @router.post("/role/add")
 def add_roles(data: AddRolesRequest, db: Session = Depends(get_users_db)):
@@ -120,7 +49,7 @@ def update_roles(data: UpdateRolesRequest, db: Session = Depends(get_users_db)):
         existing_role = db.query(ClubRole).filter(ClubRole.id == role_id, ClubRole.club_id == existing_club.id).first()
         if not existing_role:
             return {'content':{'type': "error", 'details': "Role not found"}}
-        if existing_role.privilege > 90:
+        if existing_role.privilege > 90 or existing_role.privilege <= 5:
             return {'content':{'type': "error", 'details': "Club is unauthorized, contact council!"}}
         existing_role.title = title
         existing_role.description = description
@@ -142,6 +71,8 @@ def delete_roles(data: DeleteRoleRequest, db: Session = Depends(get_users_db)):
         existing_role = db.query(ClubRole).filter(ClubRole.id == id).first()
         if not existing_club:
             return {'content': {'type': "error", 'details': "Club Role not found"}}
+        if existing_role.privilege > 90 or existing_role.privilege <= 5:
+            return {'content':{'type': "error", 'details': "Club is unauthorized, contact council!"}}
         db.delete(existing_role)
         db.commit()
         return {'content': {'type':"ok", 'details': "Role deleted"}}

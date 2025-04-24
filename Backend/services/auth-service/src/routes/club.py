@@ -8,7 +8,6 @@ from src.database.connection import get_users_db, get_auth_db
 from src.utils.mail import send_mail_otp
 from fastapi import APIRouter, HTTPException, Depends
 from sqlalchemy.orm import Session
-import datetime
 
 router = APIRouter()
 

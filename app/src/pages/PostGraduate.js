@@ -13,12 +13,12 @@ import {
   useTheme,
 } from "@mui/material";
 import {
-  Email,
-  Person,
-  Groups,
-  Info,
-  AlternateEmail,
-} from "@mui/icons-material";
+  FaUserAlt,
+  FaEnvelope,
+  FaUsers,
+  FaInfoCircle,
+  FaRegEnvelope,
+} from "react-icons/fa";  // Importing React Icons
 import Header from "../components/common/header";
 import Footer from "../components/common/footer";
 import Gallery from "../components/common/gallery";
@@ -49,13 +49,13 @@ const Postgraduate = () => {
   }, []);
 
   const galleryImages = [
-    "/council/postgraduate/photo1.jpg",
-    "/council/postgraduate/photo2.jpg",
-    "/council/postgraduate/photo3.jpg",
+    "/council/postgraduate/photo1.webp",
+    "/council/postgraduate/photo2.webp",
+    "/council/postgraduate/photo3.webp",
   ];
 
   return (
-    <Box sx={{ minHeight: "100vh", display: "flex", flexDirection: "column", backgroundImage: "url('/bg1.jpg')",
+    <Box sx={{ minHeight: "100vh", display: "flex", flexDirection: "column", backgroundImage: "url('/bg1.webp')",
           backgroundSize: "cover",
           backgroundPosition: "center",
           backgroundRepeat: "no-repeat", }}>
@@ -92,7 +92,7 @@ const Postgraduate = () => {
                           <Box display="flex" justifyContent={{ xs: "center", sm: "flex-start" }}>
                             <Avatar
                               alt={council.secretary.full_name}
-                              src={`/student/${council.secretary.email}/photo.jpg`}
+                              src={`/student/${council.secretary.email}/photo.webp`}
                               sx={{ width: { xs: 96, sm: 128 }, height: { xs: 96, sm: 128 }, boxShadow: 2 }}
                             />
                           </Box>
@@ -100,19 +100,19 @@ const Postgraduate = () => {
                         <Grid item xs={12} sm={8} md={9}>
                           <Box sx={{ display: "flex", flexDirection: "column", alignItems: "flex-start" }}>
                             <Typography variant="h5" sx={{ fontSize: { xs: "1.3rem", sm: "1.5rem" }, mb: 1.5, display: "flex", alignItems: "center", gap: 1 }}>
-                              <Info fontSize={isMobile ? "small" : "medium"} />
+                              <FaInfoCircle size={isMobile ? 18 : 22} />
                               {council.council_title}
                             </Typography>
 
                             <Box sx={{ "& > *:not(:last-child)": { mb: 1 }, fontSize: { xs: "0.9rem", sm: "1rem" } }}>
                               <Box display="flex" alignItems="center" gap={1}>
-                                <Person fontSize={isMobile ? "small" : "medium"} />
+                                <FaUserAlt size={isMobile ? 18 : 22} />
                                 <strong>Secretary:</strong>
                                 <span>{council.secretary.full_name}</span>
                               </Box>
 
                               <Box display="flex" alignItems="center" gap={1} flexWrap="wrap">
-                                <Email fontSize={isMobile ? "small" : "medium"} />
+                                <FaEnvelope size={isMobile ? 18 : 22} />
                                 <strong>Email:</strong>
                                 <span style={{ wordBreak: "break-all" }}>{council.secretary.email}</span>
                               </Box>
@@ -120,7 +120,7 @@ const Postgraduate = () => {
                               {council.deputies?.length > 0 && (
                                 <Box mt={1.5}>
                                   <Typography variant="subtitle1" sx={{ fontSize: { xs: "1rem", sm: "1.1rem" }, display: "flex", alignItems: "center", gap: 1, mb: 1 }}>
-                                    <Groups fontSize={isMobile ? "small" : "medium"} />
+                                    <FaUsers size={isMobile ? 18 : 22} />
                                     Deputy Secretaries
                                   </Typography>
                                   {council.deputies.map((deputy, index) => (
@@ -133,7 +133,7 @@ const Postgraduate = () => {
                               )}
 
                               <Box display="flex" alignItems="center" gap={1} flexWrap="wrap" mt={1.5}>
-                                <AlternateEmail fontSize={isMobile ? "small" : "medium"} />
+                                <FaRegEnvelope size={isMobile ? 18 : 22} />
                                 <strong>Council Email:</strong>
                                 <span style={{ wordBreak: "break-all" }}>{council.council_email}</span>
                               </Box>

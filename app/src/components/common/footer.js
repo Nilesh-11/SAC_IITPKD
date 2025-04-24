@@ -1,7 +1,6 @@
 import React from "react";
 import "./footer.css";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTwitter, faLinkedin, faYoutube } from "@fortawesome/free-brands-svg-icons";
+import { FaTwitter, FaLinkedin, FaYoutube } from "react-icons/fa";
 
 const Footer = () => {
   return (
@@ -23,13 +22,13 @@ const Footer = () => {
         <p>Kerala | Pin: 678623</p>
         <div className="social-icons">
           <a href="https://twitter.com" target="_blank" rel="noopener noreferrer">
-            <FontAwesomeIcon icon={faTwitter} />
+            <FaTwitter size={18} />
           </a>
           <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer">
-            <FontAwesomeIcon icon={faLinkedin} />
+            <FaLinkedin size={18} />
           </a>
           <a href="https://youtube.com" target="_blank" rel="noopener noreferrer">
-            <FontAwesomeIcon icon={faYoutube} />
+            <FaYoutube size={18} />
           </a>
         </div>
       </div>

@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import React, { useEffect, useState } from "react";
 import {
   Box,
@@ -14,12 +15,13 @@ import {
   useTheme,
   CircularProgress,
 } from "@mui/material";
-import { Add } from "@mui/icons-material";
+import { FaUserPlus } from "react-icons/fa";
 import { motion } from "framer-motion";
 import { formatToIST } from "./../../utils/parser";
 import { getProjectsList } from "../../api/projects";
 
 const ProjectList = ( {handleAddProject} ) => {
+  const navigate = useNavigate();
   const [projects, setProjects] = useState([]);
   const [loading, setLoading] = useState(true);
   const [filterType, setFilterType] = useState("All");
@@ -54,6 +56,10 @@ const ProjectList = ( {handleAddProject} ) => {
     const statusMatch = filterStatus === "All" || proj.status === filterStatus;
     return typeMatch && roleMatch && statusMatch;
   });
+
+  const handleNavigation = (projectId) => {
+    navigate(`/project/info?project_id=${projectId}`); // Navigate to the project info page
+  };
 
   if (loading) {
     return (
@@ -218,7 +224,7 @@ const ProjectList = ( {handleAddProject} ) => {
             textTransform: "none",
             "&:hover": { backgroundColor: "#fff2e0" },
           }}
-          startIcon={<Add />}
+          startIcon={<FaUserPlus />}
         >
           New Project
         </Button>
@@ -327,6 +333,7 @@ const ProjectList = ( {handleAddProject} ) => {
                       component={motion.div}
                       whileHover={{ scale: 1.05 }}
                       whileTap={{ scale: 0.95 }}
+                      onClick={() => handleNavigation(project.id)}
                       sx={{
                         mt: 1,
                         backgroundColor:

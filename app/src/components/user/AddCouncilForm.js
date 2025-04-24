@@ -9,9 +9,8 @@ import {
   Alert,
   CircularProgress,
 } from "@mui/material";
-import GroupAddIcon from "@mui/icons-material/GroupAdd";
 import { AddCouncilApi } from "../../api/admin"; // Replace with actual path
-
+import { FaUserPlus } from "react-icons/fa";
 const AddCouncilForm = () => {
   const [formData, setFormData] = useState({
     email: "",
@@ -114,7 +113,7 @@ const AddCouncilForm = () => {
         alignItems: "center",
         justifyContent: "center",
         p: 2,
-        backgroundImage: `linear-gradient(rgba(255,255,255,0.2), rgba(255,255,255,0.3)), url('/bg1.jpg')`,
+        backgroundImage: `linear-gradient(rgba(255,255,255,0.2), rgba(255,255,255,0.3)), url('/bg1.webp')`,
         backgroundSize: "cover",
         backgroundPosition: "center",
       }}
@@ -202,7 +201,7 @@ const AddCouncilForm = () => {
                   loading ? (
                     <CircularProgress size={20} color="inherit" />
                   ) : (
-                    <GroupAddIcon />
+                    <FaUserPlus />
                   )
                 }
               >

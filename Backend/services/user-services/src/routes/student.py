@@ -1,13 +1,51 @@
 
 from src.utils.auth import hash_password
 from src.models.users import Student, Club, ClubMembership, ClubRole
-from src.schemas.request import ClubInfoRequest, JoinClubRequest
+from src.schemas.request import CoreteamRequest, ClubInfoRequest, JoinClubRequest
+from src.schemas.objects import CoreTeamMember
 from src.models.projects import Project
 from src.database.connection import get_users_db, get_projects_db
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 
 router = APIRouter()
+
+@router.post("/club/coreteam")
+def core_team(data: CoreteamRequest, db: Session = Depends(get_users_db)):
+    try:
+        existing_student = db.query(Student).filter(Student.email == data.request_by).first()
+        if not existing_student:
+            return {'content':{'type': "error", 'details': "Student not found"}}
+        requesting_club = db.query(Club).filter(Club.email == data.club_email).first()
+        if not requesting_club:
+            return {'content': {'type': 'error', 'details': 'Club not found'}}
+        memberships = db.query(ClubMembership).join(ClubRole).filter(
+            ClubMembership.club_id == requesting_club.id,
+            (
+                (~ClubRole.title.startswith('ex-')) | 
+                (ClubRole.privilege > 50)
+            )
+        ).all()
+        core_team_members = []
+        for membership in memberships:
+            core_team_members.append(CoreTeamMember(
+                user_id=membership.student.id,
+                name=membership.student.name,
+                email=membership.student.email,
+                role_title=membership.role.title if membership.role else None,
+                role_privilege=membership.role.privilege if membership.role else 0,
+                club_name=requesting_club.name
+            ))
+        return {
+            'content': {
+                'type': 'ok',
+                'details': 'Core team retrieved',
+                'core_team': [member.dict() for member in core_team_members]
+            }
+        }
+    except Exception as e:
+        print("ERROR in getting core team:", e)
+        return {'content': {'type': 'error', 'details': 'An error occurred'}}
 
 @router.post("/club/join")
 def join_club(data: JoinClubRequest, db: Session = Depends(get_users_db)):

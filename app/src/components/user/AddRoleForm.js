@@ -10,7 +10,7 @@ import {
   CircularProgress,
   InputAdornment,
 } from "@mui/material";
-import AssignmentIndIcon from "@mui/icons-material/AssignmentInd";
+import { FaIdBadge } from "react-icons/fa";
 import { AddRoleApi } from "../../api/club";
 
 const AddRoleForm = () => {
@@ -98,7 +98,7 @@ const AddRoleForm = () => {
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        backgroundImage: `linear-gradient(rgba(255,255,255,0.1), rgba(255,255,255,0.2)), url('/bg1.jpg')`,
+        backgroundImage: `linear-gradient(rgba(255,255,255,0.1), rgba(255,255,255,0.2)), url('/bg1.webp')`,
         backgroundSize: "cover",
         backgroundPosition: "center",
         p: 2,
@@ -199,7 +199,7 @@ const AddRoleForm = () => {
                   loading ? (
                     <CircularProgress size={20} color="inherit" />
                   ) : (
-                    <AssignmentIndIcon />
+                    <FaIdBadge />
                   )
                 }
               >

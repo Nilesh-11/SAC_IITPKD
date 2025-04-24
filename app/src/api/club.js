@@ -378,3 +378,44 @@ export const MemberInfoApi = async (data) => {
   }
 };
 
+export const CoreTeamApi = async (data) => {
+  const url = `${BACKEND_URL}` + "/api/user/student/club/coreteam";
+  try {
+    const response = await fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem("token") || ""}`,
+      },
+      body: JSON.stringify(data),
+    });
+    const responseData = await response.json();
+    if (
+      responseData?.content?.type === "error" &&
+      (responseData.content.details === "JWTExpired" ||
+        responseData.content.details === "JWTInvalid")
+    ) {
+      handleAPIError();
+      return;
+    }
+    if (response.ok) {
+      if (responseData?.content?.type == "ok"){
+        return responseData.content;
+      }
+      else{
+        if (responseData?.content?.type){
+          return responseData?.content
+        }
+        else{
+          return {'type': "error", 'details': "An error occurred"};
+        }
+      }
+    } else {
+      console.log(response);
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+  } catch (error) {
+    console.error("Error in fetching events list:", error);
+    throw error;
+  }
+};

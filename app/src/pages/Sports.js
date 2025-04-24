@@ -12,14 +12,7 @@ import {
   useMediaQuery,
   useTheme,
 } from "@mui/material";
-import {
-  Email,
-  Person,
-  Groups,
-  Info,
-  AlternateEmail,
-  SportsSoccer,
-} from "@mui/icons-material";
+import { FaEnvelope, FaUser, FaUsers, FaInfoCircle, FaRegEnvelope, FaFutbol } from "react-icons/fa";
 import Header from "../components/common/header";
 import Footer from "../components/common/footer";
 import Gallery from "../components/common/gallery";
@@ -50,13 +43,14 @@ const Sports = () => {
   }, []);
 
   const galleryImages = [
-    "/council/sports/photo1.jpg",
-    "/council/sports/photo2.jpg",
-    "/council/sports/photo3.jpg",
+    "/council/sports/photo1.webp",
+    "/council/sports/photo2.webp",
+    "/council/sports/photo3.webp",
+    "/council/sports/photo4.webp",
   ];
 
   return (
-    <Box sx={{ minHeight: "100vh", display: "flex", flexDirection: "column", backgroundImage: "url('/bg1.jpg')",
+    <Box sx={{ minHeight: "100vh", display: "flex", flexDirection: "column", backgroundImage: "url('/bg1.webp')",
               backgroundSize: "cover",
               backgroundPosition: "center",
               backgroundRepeat: "no-repeat", }}>
@@ -99,7 +93,7 @@ const Sports = () => {
                           <Box display="flex" justifyContent={{ xs: "center", sm: "flex-start" }}>
                             <Avatar
                               alt={council.secretary.full_name}
-                              src={`/student/${council.secretary.email}/photo.jpg`}
+                              src={`/student/${council.secretary.email}/photo.webp`}
                               sx={{ width: { xs: 96, sm: 128 }, height: { xs: 96, sm: 128 }, boxShadow: 2 }}
                             />
                           </Box>
@@ -107,24 +101,24 @@ const Sports = () => {
 
                         <Grid item xs={12} sm={8} md={9}>
                           <Typography variant="h5" sx={{ mb: 1.5, display: "flex", alignItems: "center", gap: 1 }}>
-                            <Info fontSize={isMobile ? "small" : "medium"} />
+                            <FaInfoCircle size={isMobile ? 20 : 24} />
                             {council.council_title}
                           </Typography>
 
                           <Box sx={{ "& > *:not(:last-child)": { mb: 1 } }}>
                             <Box display="flex" alignItems="center" gap={1}>
-                              <Person fontSize={isMobile ? "small" : "medium"} />
+                              <FaUser size={isMobile ? 20 : 24} />
                               <strong>Secretary:</strong> {council.secretary.full_name}
                             </Box>
                             <Box display="flex" alignItems="center" gap={1} flexWrap="wrap">
-                              <Email fontSize={isMobile ? "small" : "medium"} />
+                              <FaEnvelope size={isMobile ? 20 : 24} />
                               <strong>Email:</strong> <span style={{ wordBreak: "break-all" }}>{council.secretary.email}</span>
                             </Box>
 
                             {council.deputies?.length > 0 && (
                               <Box mt={1.5}>
                                 <Typography variant="subtitle1" sx={{ mb: 1, display: "flex", alignItems: "center", gap: 1 }}>
-                                  <Groups fontSize={isMobile ? "small" : "medium"} />
+                                  <FaUsers size={isMobile ? 20 : 24} />
                                   Deputy Secretaries
                                 </Typography>
                                 {council.deputies.map((deputy, index) => (
@@ -137,7 +131,7 @@ const Sports = () => {
                             )}
 
                             <Box display="flex" alignItems="center" gap={1} flexWrap="wrap" mt={1.5}>
-                              <AlternateEmail fontSize={isMobile ? "small" : "medium"} />
+                              <FaRegEnvelope size={isMobile ? 20 : 24} />
                               <strong>Council Email:</strong> <span style={{ wordBreak: "break-all" }}>{council.council_email}</span>
                             </Box>
                           </Box>

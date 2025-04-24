@@ -1,4 +1,3 @@
-import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import Header from "../student/Header";
 import Dashboard from "../../components/user/dash";
@@ -16,14 +15,13 @@ import UpdateProjectForm from "../../components/user/UpdateProjectForm";
 import ManageProject from "../../components/user/ManageProject";
 import AddEventForm from "../../components/user/AddEvent";
 import UpdateEventForm from "../../components/user/UpdateEventForm";
-import {Api, getUsername} from "../../api/auth";
+import { getUsername } from "../../api/auth";
 import { ClubsListApi, StatusApi } from "../../api/public";
-import { CircularProgress } from "@mui/material";
+import { Box, CircularProgress } from "@mui/material";
 import ProjectList from "../../components/user/projects";
 import { getEventsList } from "../../api/events";
 
 const ClubDashboard = () => {
-  const navigate = useNavigate();
   const [events, setEvents] = useState([]);
   const [announcements, setAnnouncements] = useState([]);
   const [status, setStatus] = useState("");
@@ -93,7 +91,11 @@ const ClubDashboard = () => {
     ];
   
   return (
-    <div>
+    <Box
+    sx={{backgroundImage: `linear-gradient(rgba(255,255,255,0.1), rgba(255,255,255,0.2)), url('/bg1.webp')`,
+      backgroundSize: "cover",
+      backgroundPosition: "center",}}
+    >
       <Header
         handleMenuNavigation={handleMenuNavigation}
         liveEvents={events}
@@ -101,81 +103,81 @@ const ClubDashboard = () => {
         username={username}
         userrole={userrole}
       ></Header>
-      {currSection == "dashboard" && (
+      {currSection === "dashboard" && (
         <Dashboard
           announcements={announcements}
           status={status}
           myClubs={allClubs}
           handleAllAnnouncementClick={() => {
-            setCurrentSection("announcements");
+            setCurrentSection("dashboard");
           }}
           handleAllClubLink={() => {
-            setCurrentSection("clubs");
+            setCurrentSection("dashboard");
           }}
         >
           {" "}
         </Dashboard>
       )}
 
-      {currSection == "updateevent" && (
+      {currSection === "updateevent" && (
         <UpdateEventForm></UpdateEventForm>
       )}
 
-      {currSection == "addevent" && (
+      {currSection === "addevent" && (
         <AddEventForm></AddEventForm>
       )}
 
-      {currSection == "addannouncement" && (
+      {currSection === "addannouncement" && (
         <AddAnnouncementForm></AddAnnouncementForm>
       )}
 
-      {currSection == "updateannouncement" && (
+      {currSection === "updateannouncement" && (
         <UpdateAnnouncementForm></UpdateAnnouncementForm>
       )}
 
-      {currSection == "addrole" && (
+      {currSection === "addrole" && (
         <AddRoleForm></AddRoleForm>
       )}
 
-      {currSection == "updaterole" && (
+      {currSection === "updaterole" && (
         <UpdateRoleForm></UpdateRoleForm>
       )}
 
-      {currSection == "addproject" && (
+      {currSection === "addproject" && (
         <AddProjectForm></AddProjectForm>
       )}
 
-      {currSection == "manageproject" && (
+      {currSection === "manageproject" && (
         <ManageProject></ManageProject>
       )}
 
-      {currSection == "updateproject" && (
+      {currSection === "updateproject" && (
         <UpdateProjectForm></UpdateProjectForm>
       )}
 
-      {currSection == "updatemember" && (
+      {currSection === "updatemember" && (
         <UpdateMembershipForm></UpdateMembershipForm>
       )}
 
-      {currSection == "projects" && (
+      {currSection === "projects" && (
         <ProjectList handleAddProject={() => {
           setCurrentSection("addproject");
         }}></ProjectList>
       )}
 
 
-      {currSection == "members" && (
+      {currSection === "members" && (
         <MembersSection></MembersSection>
       )}
 
-      {currSection == "more" && (
+      {currSection === "more" && (
         <ClubInfo />
       )}
 
-      {currSection == "announcements" && (
+      {currSection === "announcements" && (
         <AnnouncementsDash announcements={announcements}></AnnouncementsDash>
       )}
-    </div>
+    </Box>
   );
 };
 

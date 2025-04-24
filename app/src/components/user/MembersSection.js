@@ -13,7 +13,8 @@ import {
   InputLabel,
   Fade,
 } from "@mui/material";
-import PersonIcon from "@mui/icons-material/Person";
+import { FaUser } from "react-icons/fa";
+
 import { MembersListApi } from "../../api/club";
 
 const MembersSection = () => {
@@ -83,7 +84,7 @@ const MembersSection = () => {
     <Box
       sx={{
         minHeight: "100vh",
-        backgroundImage: `linear-gradient(rgba(255,255,255,0.1), rgba(255,255,255,0.2)), url('/bg1.jpg')`,
+        backgroundImage: `linear-gradient(rgba(255,255,255,0.1), rgba(255,255,255,0.2)), url('/bg1.webp')`,
         backgroundSize: "cover",
         backgroundPosition: "center",
         p: { xs: 2, md: 4 },
@@ -201,7 +202,7 @@ const MembersSection = () => {
                         }}
                       >
                         <Chip
-                          icon={<PersonIcon />}
+                          icon={<FaUser />}
                           label={`${member.role.title}`}
                           sx={{
                             backgroundColor: member.role.is_active

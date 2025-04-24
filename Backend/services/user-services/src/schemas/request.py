@@ -4,6 +4,20 @@ from typing import Optional, List
 from datetime import date, time, timedelta, datetime
 from src.models.public import AnnouncementPriority
 
+class CoreteamRequest(BaseModel):
+    club_email: EmailStr
+    request_by: EmailStr
+    
+    @field_validator("request_by")
+    @classmethod
+    def validate_mail(cls, value: str) -> str:
+        return validate_mail(value)
+    
+    @field_validator("club_email")
+    @classmethod
+    def validate_mail(cls, value: str) -> str:
+        return validate_mail(value)
+
 class AddStudentRequest(BaseModel):
     name: str = Field(..., min_length=3, max_length=30, pattern="^[a-zA-Z]+$")
     full_name: str = Field(..., pattern=r"^[a-zA-Z]+(?: [a-zA-Z]+)*$")

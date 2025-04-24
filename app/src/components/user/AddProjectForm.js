@@ -11,8 +11,7 @@ import {
   Alert,
   CircularProgress,
 } from "@mui/material";
-import CloseIcon from "@mui/icons-material/Close";
-import AddIcon from "@mui/icons-material/Add";
+import { MdClose, MdPersonAdd } from "react-icons/md";
 import { AddProjectApi } from "../../api/projects";
 
 const AddProjectForm = () => {
@@ -147,7 +146,7 @@ const AddProjectForm = () => {
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        backgroundImage: `linear-gradient(rgba(255,255,255,0.1), rgba(255,255,255,0.2)), url('/bg1.jpg')`,
+        backgroundImage: `linear-gradient(rgba(255,255,255,0.1), rgba(255,255,255,0.2)), url('/bg1.webp')`,
         backgroundSize: "cover",
         backgroundPosition: "center",
         p: 2,
@@ -218,7 +217,7 @@ const AddProjectForm = () => {
                         }}
                         variant="contained"
                       >
-                        <AddIcon fontSize="small" />
+                        <MdPersonAdd fontSize="small" />
                       </Button>
                     </InputAdornment>
                   ),
@@ -230,7 +229,7 @@ const AddProjectForm = () => {
                     key={idx}
                     label={role}
                     onDelete={() => removeItem(idx, "member_roles")}
-                    deleteIcon={<CloseIcon />}
+                    deleteIcon={<MdClose />}
                   />
                 ))}
               </Box>
@@ -258,7 +257,7 @@ const AddProjectForm = () => {
                         }}
                         variant="contained"
                       >
-                        <AddIcon fontSize="small" />
+                        <MdPersonAdd fontSize="small" />
                       </Button>
                     </InputAdornment>
                   ),
@@ -270,7 +269,7 @@ const AddProjectForm = () => {
                     key={idx}
                     label={skill}
                     onDelete={() => removeItem(idx, "skills")}
-                    deleteIcon={<CloseIcon />}
+                    deleteIcon={<MdClose />}
                   />
                 ))}
               </Box>

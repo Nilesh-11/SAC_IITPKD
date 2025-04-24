@@ -12,8 +12,8 @@ import {
   CircularProgress,
   MenuItem,
 } from "@mui/material";
-import CloseIcon from "@mui/icons-material/Close";
-import PersonAddIcon from "@mui/icons-material/PersonAdd";
+import { FaTimes } from "react-icons/fa";
+import { FaUserPlus } from "react-icons/fa";
 import { ClubListApi, UpdateClubApi, DeleteClubApi } from "../../api/council";
 
 const UpdateClubForm = ({ userEmail }) => {
@@ -184,7 +184,7 @@ const UpdateClubForm = ({ userEmail }) => {
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        backgroundImage: `linear-gradient(rgba(255,255,255,0.1), rgba(255,255,255,0.2)), url('/bg1.jpg')`,
+        backgroundImage: `linear-gradient(rgba(255,255,255,0.1), rgba(255,255,255,0.2)), url('/bg1.webp')`,
         backgroundSize: "cover",
         backgroundPosition: "center",
         p: 2,
@@ -258,7 +258,7 @@ const UpdateClubForm = ({ userEmail }) => {
                           }}
                           variant="contained"
                         >
-                          <PersonAddIcon />
+                          <FaUserPlus />
                         </Button>
                       </InputAdornment>
                     ),
@@ -273,7 +273,7 @@ const UpdateClubForm = ({ userEmail }) => {
                       key={index}
                       label={email}
                       onDelete={() => removeCohead(index)}
-                      deleteIcon={<CloseIcon />}
+                      deleteIcon={<FaTimes />}
                     />
                   ))}
                 </Box>

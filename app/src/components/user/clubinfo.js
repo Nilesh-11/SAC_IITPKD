@@ -14,6 +14,7 @@ import {
 import timeAgo from "./../../utils/parser";
 import ClubProjects from "./clubProjects";
 import { JoinClub, getClubInfo } from "../../api/club";
+import CoreTeamHeader from "./ClubHeader";
 
 const ClubInfo = () => {
   const [searchParams] = useSearchParams();
@@ -92,9 +93,12 @@ const ClubInfo = () => {
     <Box
       sx={{
         p: { xs: 2, sm: 4 },
-        backgroundColor: "#fafafa",
+        backgroundImage: `linear-gradient(rgba(255,255,255,0.1), rgba(255,255,255,0.2)), url('/bg1.webp')`,
+        backgroundSize: "cover",
+        backgroundPosition: "center",
       }}
     >
+      <CoreTeamHeader memberCount={clubData.members.length} title={clubData.title}></CoreTeamHeader>
       <Typography
         variant="h4"
         fontWeight="bold"
@@ -343,6 +347,24 @@ const ClubInfo = () => {
               : isJoining
               ? "Joining..."
               : "Join as Member"}
+          </Button>
+          <Button
+            variant="contained"
+            onClick={() =>
+              window.open(`/club/coreteam?club_email=${clubData.email}&club_title=${clubData.title}`, "_blank")
+            }
+            sx={{
+              backgroundColor: "rgb(243,130,33)",
+              color: "white",
+              borderRadius: 2,
+              px: 3,
+              textTransform: "none",
+              "&:hover": {
+                backgroundColor: "rgb(220,100,30)",
+              },
+            }}
+          >
+            View Core Team
           </Button>
         </Stack>
       </Box>

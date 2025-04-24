@@ -10,7 +10,7 @@ import {
   Link,
   IconButton,
 } from "@mui/material";
-import { GitHub, LinkedIn } from "@mui/icons-material";
+import { FaGithub, FaLinkedin } from "react-icons/fa";
 import Header from "../components/common/header";
 
 const developers = {
@@ -18,7 +18,7 @@ const developers = {
     {
       name: "Nilesh Jamre",
       role: "Frontend + Backend developer",
-      image: "/developers/nilesh.jpg",
+      image: "/developers/nilesh.webp",
       github: "https://github.com/Nilesh-11",
       linkedin: "https://linkedin.com/in/nileshjamre",
     },
@@ -27,14 +27,14 @@ const developers = {
     {
       name: "Hemant Pathak",
       role: "Frontend Lead",
-      image: "/developers/hemantpathak.jpg",
+      image: "/developers/hemantpathak.webp",
       github: "https://github.com/hemant030406",
       linkedin: "https://www.linkedin.com/in/hemant030406/",
     },
     {
       name: "Kaushik Rawat",
       role: "Backend Lead",
-      image: "/developers/kaushikrawat.jpg",
+      image: "/developers/kaushikrawat.webp",
       github: "https://github.com/enchanteddev",
       linkedin: "https://www.linkedin.com/in/kaushik-rawat/",
     },
@@ -43,35 +43,35 @@ const developers = {
     {
       name: "Devapriya Pradeep",
       role: "Frontend Developer",
-      image: "/developers/girl.jpg",
+      image: "/developers/girl.webp",
       github: "https://github.com/aadi-sun",
       linkedin: "https://www.linkedin.com/in/devapriya-pradeep-36a643331/",
     },
     {
       name: "Vishesh Srivastava",
       role: "Frontend Developer",
-      image: "/developers/vishesh.jpg",
+      image: "/developers/vishesh.webp",
       github: "https://github.com/Iambeastofhell",
       linkedin: "https://www.linkedin.com/in/vishesh-srivastava-85a799301/",
     },
     {
       name: "Zeeshan Mohammed Rangrej",
       role: "Frontend Developer",
-      image: "/developers/zeeshan.jpg",
+      image: "/developers/zeeshan.webp",
       github: "https://github.com/Zeeshan1903",
       linkedin: "https://www.linkedin.com/in/zeeshan-mohammed-rangrej-946ab927b/",
     },
     {
       name: "Abhishek Iyer",
       role: "Frontend Developer",
-      image: "/developers/abhishek.jpg",
+      image: "/developers/abhishek.webp",
       github: "https://github.com/Abhi-Iyer10",
       linkedin: "https://www.linkedin.com/in/abhishek-iyer-9394a0321/",
     },
     {
       name: "Shubham Yadav",
       role: "Frontend Developer",
-      image: "/developers/boy.jpg",
+      image: "/developers/boy.webp",
       github: "https://github.com/Shubham04567",
       linkedin: "https://www.linkedin.com/in/abhishek-iyer-9394a0321/",
     },
@@ -133,7 +133,7 @@ const renderSection = (title, devList) => (
                     rel="noopener"
                     aria-label="GitHub"
                   >
-                    <GitHub />
+                    <FaGithub />
                   </IconButton>
                 )}
                 {dev.linkedin && (
@@ -144,7 +144,7 @@ const renderSection = (title, devList) => (
                     rel="noopener"
                     aria-label="LinkedIn"
                   >
-                    <LinkedIn />
+                    <FaLinkedin />
                   </IconButton>
                 )}
               </Box>
@@ -161,7 +161,7 @@ const Developers = () => {
     <Box
       sx={{
         minHeight: "100vh",
-        backgroundImage: "url('/bg1.jpg')",
+        backgroundImage: "url('/bg1.webp')",
         backgroundSize: "cover",
         backgroundPosition: "center",
         backgroundRepeat: "no-repeat",

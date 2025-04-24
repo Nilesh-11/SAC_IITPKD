@@ -17,8 +17,8 @@ import {
   DialogContent,
   DialogTitle,
 } from "@mui/material";
-import LoginIcon from "@mui/icons-material/Login";
-import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
+import { FaSignInAlt } from "react-icons/fa"; // Login Icon from react-icons
+import { FaUserAlt } from "react-icons/fa";  // Person Icon from react-icons
 
 const LoginDashboard = () => {
   const { loginUser } = useAuth();
@@ -120,6 +120,7 @@ const LoginDashboard = () => {
       setLoading(false);
     }
   };
+
   const handleForgotPasswordSubmit = async () => {
     setLoading(true);
     try {
@@ -137,21 +138,19 @@ const LoginDashboard = () => {
     }
   };
 
-
   return (
     <Box
-  sx={{
-    minHeight: "100vh",
-    backgroundImage: `linear-gradient(rgba(255,255,255,0.15), rgba(255,255,255,0.25)), url('/bg2.jpg')`,
-    backgroundSize: "cover",
-    backgroundPosition: "center",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    p: 2,
-  }}
->
-
+      sx={{
+        minHeight: "100vh",
+        backgroundImage: `linear-gradient(rgba(255,255,255,0.15), rgba(255,255,255,0.25)), url('/bg2.webp')`,
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        p: 2,
+      }}
+    >
       <Box
         sx={{
           backgroundColor: "white",
@@ -166,7 +165,7 @@ const LoginDashboard = () => {
         onSubmit={handleSubmit}
       >
         <img
-          src="/sac_circular.jpg"
+          src="/sac_circular.webp"
           alt="SAC Logo"
           style={{ width: 80, marginBottom: 12 }}
         />
@@ -233,7 +232,7 @@ const LoginDashboard = () => {
           type="submit"
           fullWidth
           variant="contained"
-          startIcon={<LoginIcon />}
+          startIcon={<FaSignInAlt />}
           sx={{
             mt: 2,
             py: 1.2,
@@ -255,7 +254,7 @@ const LoginDashboard = () => {
         <Button
           fullWidth
           variant="outlined"
-          startIcon={<PersonOutlineIcon />}
+          startIcon={<FaUserAlt />}
           sx={{
             mt: 1.5,
             py: 1.2,

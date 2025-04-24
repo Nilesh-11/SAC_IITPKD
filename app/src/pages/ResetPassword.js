@@ -112,7 +112,7 @@ const ResetPassword = () => {
     <Box
       sx={{
         minHeight: "100vh",
-        backgroundImage: `linear-gradient(rgba(255,255,255,0.15), rgba(255,255,255,0.25)), url('/bg2.jpg')`,
+        backgroundImage: `linear-gradient(rgba(255,255,255,0.15), rgba(255,255,255,0.25)), url('/bg2.webp')`,
         backgroundSize: "cover",
         backgroundPosition: "center",
         display: "flex",
@@ -136,7 +136,7 @@ const ResetPassword = () => {
       >
         <Box sx={{ mb: 2 }}>
           <img
-            src="/sac_circular.jpg"
+            src="/sac_circular.webp"
             alt="SAC Logo"
             style={{ height: "64px", objectFit: "contain" }}
           />

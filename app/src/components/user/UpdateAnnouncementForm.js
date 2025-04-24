@@ -134,7 +134,7 @@ const UpdateAnnouncementForm = () => {
         alignItems: "center",
         justifyContent: "center",
         p: 2,
-        backgroundImage: `linear-gradient(rgba(255,255,255,0.2), rgba(255,255,255,0.2)), url('/bg1.jpg')`,
+        backgroundImage: `linear-gradient(rgba(255,255,255,0.2), rgba(255,255,255,0.2)), url('/bg1.webp')`,
         backgroundSize: "cover",
         backgroundPosition: "center",
       }}
