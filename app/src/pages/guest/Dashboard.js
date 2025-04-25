@@ -69,7 +69,7 @@ const GuestDashboard = () => {
         username={username}
         userrole={userrole}
       ></Header>
-      {currSection == "dashboard" && (
+      {currSection === "dashboard" && (
         <Dashboard
           announcements={announcements}
           status={status}
@@ -85,11 +85,11 @@ const GuestDashboard = () => {
         </Dashboard>
       )}
 
-      {currSection == "announcements" && (
+      {currSection === "announcements" && (
         <AnnouncementsDash announcements={announcements}></AnnouncementsDash>
       )}
 
-      {currSection == "calendar" && (
+      {currSection === "calendar" && (
           <EventCalendar events={events} />
       )}
     </div>

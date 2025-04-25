@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
-import Header from "../student/Header";
-import {getEventsList} from "../../api/events";
-import AddCouncilForm from "../../components/user/AddCouncilForm";
-import UpdateCouncilForm from "../../components/user/UpdateCouncilForm";
-import AddStudentForm from "../../components/user/AddStudentForm";
+import Header from "./../student/Header";
+import {getEventsList} from "./../../api/events";
+import AddCouncilForm from "./../../components/user/AddCouncilForm";
+import UpdateCouncilForm from "./../../components/user/UpdateCouncilForm";
+import AddStudentForm from "./../../components/user/AddStudentForm";
 import { Box } from "@mui/material";
 
 const AdminDashboard = () => {
@@ -42,15 +42,15 @@ const AdminDashboard = () => {
         menuItems={menuItems}
       ></Header>
 
-      {currSection == "addcouncil" && (
+      {currSection === "addcouncil" && (
         <AddCouncilForm />
       )}
 
-      {currSection == "updatecouncil" && (
+      {currSection === "updatecouncil" && (
         <UpdateCouncilForm />
       )}
 
-      {currSection == "addstudent" && (
+      {currSection === "addstudent" && (
         <AddStudentForm />
       )}
 

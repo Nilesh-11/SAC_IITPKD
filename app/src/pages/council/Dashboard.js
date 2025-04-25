@@ -82,7 +82,7 @@ const CouncilDashboard = () => {
         userrole={userrole}
       ></Header>
 
-      {currSection == "dashboard" && (
+      {currSection === "dashboard" && (
         <Dashboard
           announcements={announcements}
           status={status}
@@ -98,27 +98,27 @@ const CouncilDashboard = () => {
         </Dashboard>
       )}
 
-      {currSection == "addannouncement" && (
+      {currSection === "addannouncement" && (
         <AddAnnouncementForm></AddAnnouncementForm>
       )}
 
-      {currSection == "updateannouncement" && (
+      {currSection === "updateannouncement" && (
         <UpdateAnnouncementForm></UpdateAnnouncementForm>
       )}
 
-      {currSection == "updateevent" && (
+      {currSection === "updateevent" && (
         <UpdateEventForm></UpdateEventForm>
       )}
 
-      {currSection == "addevent" && (
+      {currSection === "addevent" && (
         <AddEventForm></AddEventForm>
       )}
 
-      {currSection == "addclub" && (
+      {currSection === "addclub" && (
         <AddClubForm></AddClubForm>
       )}
 
-      {currSection == "updateclub" && (
+      {currSection === "updateclub" && (
         <UpdateClubForm></UpdateClubForm>
       )}
     </div>

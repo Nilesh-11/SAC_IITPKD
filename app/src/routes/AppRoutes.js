@@ -1,26 +1,26 @@
 import { Routes, Route } from "react-router-dom";
 import Home from "./../pages/Home";
-import Login from "../pages/Login";
+import Login from "./../pages/Login";
 import StudentDashboard from "../pages/student/Dashboard";
 import AdminDashboard from "./../pages/admin/Dashboard";
 import ClubDashboard from "./../pages/club/Dashboard";
 import NotFound from "./../pages/NotFound";
 import ProtectedRoute from "./../components/ProtectedRoute";
 import Signup from "./../pages/SignUp"
-import Technical from "../pages/Technical";
-import Academic from "../pages/Academic";
-import Developers from "../pages/Developers";
-import Culturals from "../pages/Culturals";
-import Postgraduate from "../pages/PostGraduate";
-import Hostel from "../pages/Hostel";
-import Research from "../pages/Research";
-import Sports from "../pages/Sports";
+import Technical from "./../pages/Technical";
+import Academic from "./../pages/Academic";
+import Developers from "./../pages/Developers";
+import Culturals from "./../pages/Culturals";
+import Postgraduate from "./../pages/PostGraduate";
+import Hostel from "./../pages/Hostel";
+import Research from "./../pages/Research";
+import Sports from "./../pages/Sports";
 import ResetPassword from "../pages/ResetPassword";
 import CouncilDashboard from "../pages/council/Dashboard";
-import ProjectInfo from "../components/user/ProjectInfo";
-import ClubInfo from "../components/user/clubinfo";
-import GuestDashboard from "../pages/guest/Dashboard";
-import ClubCoreTeam from "../components/user/ClubCoreTeam";
+import ProjectInfo from "./../components/user/ProjectInfo";
+import ClubInfo from "./../components/user/clubinfo";
+import GuestDashboard from "./../pages/guest/Dashboard";
+import ClubCoreTeam from "./../components/user/ClubCoreTeam";
 
 const AppRoutes = () => (
   <Routes>

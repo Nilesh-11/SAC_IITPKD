@@ -21,13 +21,13 @@ const Footer = () => {
         <p>Kanjikkode | Palakkad</p>
         <p>Kerala | Pin: 678623</p>
         <div className="social-icons">
-          <a href="https://twitter.com" target="_blank" rel="noopener noreferrer">
+          <a href="https://twitter.com/PalakkadIIT" target="_blank" rel="noopener noreferrer">
             <FaTwitter size={18} />
           </a>
-          <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer">
+          <a href="https://in.linkedin.com/school/iitpkd/" target="_blank" rel="noopener noreferrer">
             <FaLinkedin size={18} />
           </a>
-          <a href="https://youtube.com" target="_blank" rel="noopener noreferrer">
+          <a href="https://www.youtube.com/@IITPalakkad_Official" target="_blank" rel="noopener noreferrer">
             <FaYoutube size={18} />
           </a>
         </div>
