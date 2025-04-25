@@ -1,20 +1,18 @@
 import { useNavigate } from "react-router-dom";
 import React, { useEffect, useState } from "react";
-import {
-  Box,
-  Typography,
-  Button,
-  Card,
-  CardContent,
-  Select,
-  MenuItem,
-  Avatar,
-  FormControl,
-  Grid,
-  useMediaQuery,
-  useTheme,
-  CircularProgress,
-} from "@mui/material";
+import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
+import Button from '@mui/material/Button';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import Select from '@mui/material/Select';
+import MenuItem from '@mui/material/MenuItem';
+import Avatar from '@mui/material/Avatar';
+import FormControl from '@mui/material/FormControl';
+import Grid from '@mui/material/Grid';
+import useMediaQuery from '@mui/material/useMediaQuery';
+import {useTheme} from '@mui/material/styles';
+import CircularProgress from '@mui/material/CircularProgress';
 import { FaUserPlus } from "react-icons/fa";
 import { motion } from "framer-motion";
 import { formatToIST } from "./../../utils/parser";

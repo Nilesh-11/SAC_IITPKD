@@ -38,11 +38,9 @@ export const JoinClub = async ({ club_id }) => {
         }
       }
     } else {
-      console.log(response);
       throw new Error(`HTTP error! Status: ${response.status}`);
     }
   } catch (error) {
-    console.error("Error in fetching events list:", error);
     throw error;
   }
 };
@@ -83,7 +81,6 @@ export const getClubInfo = async ({ club_id }) => {
       throw new Error(`HTTP error! Status: ${response.status}`);
     }
   } catch (error) {
-    console.error("Error in fetching events list:", error);
     throw error;
   }
 };
@@ -125,7 +122,6 @@ export const DeleteRoleApi = async (data) => {
       throw new Error(`HTTP error! Status: ${response.status}`);
     }
   } catch (error) {
-    console.error("Error in fetching events list:", error);
     throw error;
   }
 };
@@ -167,7 +163,6 @@ export const AddRoleApi = async (data) => {
       throw new Error(`HTTP error! Status: ${response.status}`);
     }
   } catch (error) {
-    console.error("Error in fetching events list:", error);
     throw error;
   }
 };
@@ -209,7 +204,6 @@ export const RolesListApi = async () => {
       throw new Error(`HTTP error! Status: ${response.status}`);
     }
   } catch (error) {
-    console.error("Error in fetching events list:", error);
     throw error;
   }
 };
@@ -250,7 +244,6 @@ export const UpdateRoleApi = async (data) => {
       throw new Error(`HTTP error! Status: ${response.status}`);
     }
   } catch (error) {
-    console.error("Error in fetching events list:", error);
     throw error;
   }
 };
@@ -291,7 +284,6 @@ export const MembersListApi = async () => {
       throw new Error(`HTTP error! Status: ${response.status}`);
     }
   } catch (error) {
-    console.error("Error in fetching events list:", error);
     throw error;
   }
 };
@@ -332,7 +324,6 @@ export const UpdateMembershipApi = async (data) => {
       throw new Error(`HTTP error! Status: ${response.status}`);
     }
   } catch (error) {
-    console.error("Error in fetching events list:", error);
     throw error;
   }
 };
@@ -373,7 +364,6 @@ export const MemberInfoApi = async (data) => {
       throw new Error(`HTTP error! Status: ${response.status}`);
     }
   } catch (error) {
-    console.error("Error in fetching events list:", error);
     throw error;
   }
 };
@@ -411,11 +401,9 @@ export const CoreTeamApi = async (data) => {
         }
       }
     } else {
-      console.log(response);
       throw new Error(`HTTP error! Status: ${response.status}`);
     }
   } catch (error) {
-    console.error("Error in fetching events list:", error);
     throw error;
   }
 };

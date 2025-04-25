@@ -1,18 +1,16 @@
 import React, { useEffect, useState } from "react";
-import {
-  Container,
-  Grid,
-  Box,
-  Typography,
-  Avatar,
-  Paper,
-  CircularProgress,
-  Alert,
-  Divider,
-  useMediaQuery,
-  useTheme,
-} from "@mui/material";
-import { FaEnvelope, FaUser, FaUsers, FaInfoCircle, FaRegEnvelope, FaFutbol } from "react-icons/fa";
+import Container from '@mui/material/Container';
+import Grid from '@mui/material/Grid';
+import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
+import Avatar from '@mui/material/Avatar';
+import Paper from '@mui/material/Paper';
+import CircularProgress from '@mui/material/CircularProgress';
+import Alert from '@mui/material/Alert';
+import Divider from '@mui/material/Divider';
+import useMediaQuery from '@mui/material/useMediaQuery';
+import {useTheme} from '@mui/material/styles';
+import { FaEnvelope, FaUser, FaUsers, FaInfoCircle, FaRegEnvelope } from "react-icons/fa";
 import Header from "../components/common/header";
 import Footer from "../components/common/footer";
 import Gallery from "../components/common/gallery";

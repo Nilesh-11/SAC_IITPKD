@@ -1,14 +1,12 @@
 import React, { useState } from "react";
-import {
-  Box,
-  Button,
-  Grid,
-  TextField,
-  Typography,
-  Paper,
-  Alert,
-  CircularProgress,
-} from "@mui/material";
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import Grid from '@mui/material/Grid';
+import TextField from '@mui/material/TextField';
+import Typography from '@mui/material/Typography';
+import Paper from '@mui/material/Paper';
+import Alert from '@mui/material/Alert';
+import CircularProgress from '@mui/material/CircularProgress';
 import { AddStudentApi } from "../../api/admin";
 import { MdPersonAdd } from "react-icons/md";
 const AddStudentForm = () => {

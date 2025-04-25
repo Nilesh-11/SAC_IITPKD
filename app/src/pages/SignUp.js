@@ -1,19 +1,17 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {Api} from "../api/auth";
-import {
-  Box,
-  Typography,
-  TextField,
-  Button,
-  Alert,
-  Tooltip,
-  IconButton,
-  List,
-  ListItem,
-  ListItemText,
-  InputAdornment
-} from "@mui/material";
+import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
+import TextField from '@mui/material/TextField';
+import Button from '@mui/material/Button';
+import Alert from '@mui/material/Alert';
+import Tooltip from '@mui/material/Tooltip';
+import IconButton from '@mui/material/IconButton';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemText from '@mui/material/ListItemText';
+import InputAdornment from '@mui/material/InputAdornment';
 import {FaInfoCircle} from "react-icons/fa";
 
 const Signup = () => {

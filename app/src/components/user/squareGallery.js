@@ -5,10 +5,10 @@ import "swiper/css";
 import "swiper/css/effect-coverflow";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
-import { Typography } from "@mui/material";
+import Typography from '@mui/material/Typography';
 
 const SquareGallery = ({ images, galleryId }) => {
-  if (!images || images.length == 0){
+  if (!images || images.length === 0){
     return <Typography
     sx={{
       fontSize: { xs: '0.9rem', sm: '1rem' },
@@ -47,9 +47,11 @@ const SquareGallery = ({ images, galleryId }) => {
           <SwiperSlide key={`${galleryId}-${index}`} className="w-44 h-44">
             <img
               src={image}
+              loading="lazy"
               alt={`Slide ${index}`}
+              decoding="async"
               className="w-full h-full object-cover rounded-lg shadow-md transition-transform duration-300 hover:scale-105"
-              style={{ border: "4px solid orange" }} // Matches the theme color
+              style={{ border: "4px solid orange", background: "#f0f0f0"}}
             />
           </SwiperSlide>
         ))}

@@ -1,14 +1,10 @@
 import React from "react";
-import {
-  Box,
-  Typography,
-  Card,
-  Stack,
-  Button,
-  Chip,
-} from "@mui/material";
-
-const orange = "rgb(243,130,33)";
+import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
+import Card from '@mui/material/Card';
+import Stack from '@mui/material/Stack';
+import Button from '@mui/material/Button';
+import Chip from '@mui/material/Chip';
 
 const ApprovedMembersList = ({ approvedMembers, onRemove }) => {
   return (

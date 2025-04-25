@@ -1,7 +1,12 @@
 // MeetingList.js
 
 import React from 'react';
-import { Box, Card, Typography, Stack, Button, Chip } from '@mui/material';
+import Box from '@mui/material/Box';
+import Card from '@mui/material/Card';
+import Typography from '@mui/material/Typography';
+import Stack from '@mui/material/Stack';
+import Button from '@mui/material/Button';
+import Chip from '@mui/material/Chip';
 import { FaLink, FaMapMarkerAlt } from "react-icons/fa";
 import dayjs from 'dayjs';
 

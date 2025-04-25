@@ -31,7 +31,6 @@ export const getEventsList = async () => {
       throw new Error(`HTTP error! Status: ${response.status}`);
     }
   } catch (error) {
-    console.error("Error in fetching events list:", error);
     throw error;
   }
 };
@@ -62,7 +61,6 @@ export const AddEventApi = async (data) => {
       throw new Error(`HTTP error! Status: ${response.status}`);
     }
   } catch (error) {
-    console.error("Error in fetching events list:", error);
     throw error;
   }
 };
@@ -93,7 +91,6 @@ export const MyEventsApi = async () => {
       throw new Error(`HTTP error! Status: ${response.status}`);
     }
   } catch (error) {
-    console.error("Error in fetching events list:", error);
     throw error;
   }
 };
@@ -124,7 +121,6 @@ export const UpdateEventApi = async (data) => {
       throw new Error(`HTTP error! Status: ${response.status}`);
     }
   } catch (error) {
-    console.error("Error in fetching events list:", error);
     throw error;
   }
 };
@@ -155,7 +151,6 @@ export const DeleteEventApi = async (data) => {
       throw new Error(`HTTP error! Status: ${response.status}`);
     }
   } catch (error) {
-    console.error("Error in fetching events list:", error);
     throw error;
   }
 };

@@ -1,15 +1,13 @@
 import { useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import {
-  Box,
-  Typography,
-  TextField,
-  Button,
-  Alert,
-  List,
-  ListItem,
-  ListItemText,
-} from "@mui/material";
+import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
+import TextField from '@mui/material/TextField';
+import Button from '@mui/material/Button';
+import Alert from '@mui/material/Alert';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemText from '@mui/material/ListItemText';
 import { ResetPasswordApi } from "../api/auth";
 import { validatePassword } from "../utils/auth";
 

@@ -31,7 +31,6 @@ export const AddStudentApi = async (data) => {
       throw new Error(`HTTP error! Status: ${response.status}`);
     }
   } catch (error) {
-    console.error("Error in AuthApi:", error);
     throw error;
   }
 };
@@ -62,7 +61,6 @@ export const AddCouncilApi = async (data) => {
       throw new Error(`HTTP error! Status: ${response.status}`);
     }
   } catch (error) {
-    console.error("Error in AuthApi:", error);
     throw error;
   }
 };
@@ -93,7 +91,6 @@ export const CouncilListApi = async () => {
       throw new Error(`HTTP error! Status: ${response.status}`);
     }
   } catch (error) {
-    console.error("Error in AuthApi:", error);
     throw error;
   }
 };
@@ -124,7 +121,6 @@ export const UpdateCouncilApi = async (data) => {
       throw new Error(`HTTP error! Status: ${response.status}`);
     }
   } catch (error) {
-    console.error("Error in AuthApi:", error);
     throw error;
   }
 };
@@ -155,7 +151,6 @@ export const DeleteCouncilApi = async (data) => {
       throw new Error(`HTTP error! Status: ${response.status}`);
     }
   } catch (error) {
-    console.error("Error in AuthApi:", error);
     throw error;
   }
 };

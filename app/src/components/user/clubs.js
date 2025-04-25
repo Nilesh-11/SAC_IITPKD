@@ -1,5 +1,7 @@
 import React from "react";
-import { Box, Typography, Card } from "@mui/material";
+import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
+import Card from '@mui/material/Card';
 import { motion } from "framer-motion"; // Importing animation library
 
 const Clubs = ({ my_clubs, other_clubs, handleNavigation }) => {

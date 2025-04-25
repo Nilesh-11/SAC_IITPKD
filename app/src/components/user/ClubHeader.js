@@ -1,14 +1,10 @@
-import {
-  AppBar,
-  Toolbar,
-  Box,
-  useMediaQuery,
-  useTheme,
-  Chip,
-  Typography,
-  createTheme,
-  ThemeProvider,
-} from "@mui/material";
+import AppBar from '@mui/material/AppBar';
+import Toolbar from '@mui/material/Toolbar';
+import Box from '@mui/material/Box';
+import useMediaQuery from '@mui/material/useMediaQuery';
+import Chip from '@mui/material/Chip';
+import Typography from '@mui/material/Typography';
+import { useTheme, createTheme, ThemeProvider } from '@mui/material/styles';
 import { FaUsers as Groups } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 

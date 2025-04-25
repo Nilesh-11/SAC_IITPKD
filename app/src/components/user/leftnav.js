@@ -1,9 +1,13 @@
 import React, { useState } from "react";
-import { Container, Drawer, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Box, Divider } from "@mui/material";
+import Container from '@mui/material/Container';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemButton from '@mui/material/ListItemButton';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import ListItemText from '@mui/material/ListItemText';
+import Box from '@mui/material/Box';
+import Divider from '@mui/material/Divider';
 
-// import { useNavigate } from "react-router-dom"; // For navigation
-
-// LeftNav Component with `handleClick` as a prop
 const LeftNav = ({ menuItems, handleClick }) => {
   
   const [hoveredIndex, setHoveredIndex] = useState(null);

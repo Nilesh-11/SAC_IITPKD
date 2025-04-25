@@ -1,5 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { Box, Typography, Card, CircularProgress } from "@mui/material";
+import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
+import Card from '@mui/material/Card';
+import CircularProgress from '@mui/material/CircularProgress';
 import { motion } from "framer-motion";
 import { ClubsListApi } from "../../api/public";
 

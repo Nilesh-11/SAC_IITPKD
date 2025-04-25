@@ -1,12 +1,23 @@
-import React, { useEffect, useState } from "react";
-import { Container, Grid, Box, Typography, Avatar, CircularProgress } from "@mui/material";
-import Header from "./../components/common/header";
-import CalendarComponent from "./../components/common/calendar";
-import Footer from "./../components/common/footer";
-import Gallery from "./../components/common/gallery";
-import AnnouncementSection from "./../components/common/announcements";
+import React, { Suspense,useEffect, useState } from "react";
+import Skeleton from "@mui/material/Skeleton";
+import Container from "@mui/material/Container";
+import Grid from "@mui/material/Grid";
+import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
+import Avatar from "@mui/material/Avatar";
+import CircularProgress from "@mui/material/CircularProgress";
 import { getAnnouncementsList } from "../api/announcement";
 import { getEventsList } from "../api/events";
+
+const Header = React.lazy(() => import("./../components/common/header"));
+const Footer = React.lazy(() => import("./../components/common/footer"));
+const Gallery = React.lazy(() => import("./../components/common/gallery"));
+const AnnouncementSection = React.lazy(() =>
+  import("./../components/common/announcements")
+);
+const CalendarComponent = React.lazy(() =>
+  import("./../components/common/calendar")
+);
 
 const Home = () => {
   const [announcements, setAnnouncements] = useState([]);
@@ -72,7 +83,7 @@ const Home = () => {
           backgroundColor: "#f5f5f5",
         }}
       >
-        <CircularProgress size={60} thickness={3} color="pink"/>
+        <CircularProgress size={60} thickness={3} color="pink" />
       </Box>
     );
   }
@@ -88,7 +99,9 @@ const Home = () => {
       }}
     >
       <div id="home">
-        <Header />
+        <Suspense fallback={<Skeleton variant="rectangular" height={64} />}>
+          <Header />
+        </Suspense>
         <Container maxWidth="lg" alignItems="flex-end">
           <Grid
             container
@@ -112,11 +125,19 @@ const Home = () => {
               justifyContent="space-between"
             >
               <Grid item xs={6} md={6}>
-                <AnnouncementSection announcements={announcements} />
+                <Suspense
+                  fallback={<Skeleton variant="rectangular" height={300} />}
+                >
+                  <AnnouncementSection announcements={announcements} />
+                </Suspense>
               </Grid>
-              <Grid item xs={6} md={6}>
-                <CalendarComponent events={events} />
-              </Grid>
+              <Suspense
+                fallback={<Skeleton variant="rectangular" height={300} />}
+              >
+                <Grid item xs={6} md={6}>
+                  <CalendarComponent events={events} />
+                </Grid>
+              </Suspense>
             </Grid>
             <Grid item id="about-us" xs={12} spacing={4}>
               <Box mt={4}>
@@ -148,7 +169,11 @@ const Home = () => {
                 </Typography>
               </Box>
               <Box>
-                <Gallery images={about_images} galleryId="firstGallery" />
+                <Suspense
+                  fallback={<Skeleton variant="rectangular" height={200} />}
+                >
+                  <Gallery images={about_images} galleryId="firstGallery" />
+                </Suspense>
               </Box>
             </Grid>
             <Grid item id="councils" xs={12}>
@@ -180,7 +205,11 @@ const Home = () => {
                   meaningful contributions to both the college and society.
                 </Typography>
               </Box>
-              <Gallery images={council_images} galleryId="secondGallery" />
+              <Suspense
+                fallback={<Skeleton variant="rectangular" height={200} />}
+              >
+                <Gallery images={council_images} galleryId="secondGallery" />
+              </Suspense>
             </Grid>
           </Grid>
           <Grid item id="office-of-dean" xs={12} mt={5}>
@@ -228,6 +257,7 @@ const Home = () => {
                         alt={person.name}
                         src={person.image}
                         sx={{ width: 120, height: 120, mb: 2 }}
+                        imgProps={{ loading: "lazy" }}
                       />
                       <Typography variant="h6" fontWeight="bold">
                         {person.name}

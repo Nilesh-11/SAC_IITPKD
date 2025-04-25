@@ -2,7 +2,6 @@ import BACKEND_URL from './../utils/config'
 
 const handleAPIError = () => {
   localStorage.removeItem("token");
-  console.log("redirecting");
   window.location.href = "/login";
 };
 
@@ -28,7 +27,6 @@ export const Api = async (path, { data }) => {
       throw new Error(`HTTP error! Status: ${response.status}`);
     }
   } catch (error) {
-    console.error("Error in AuthApi:", error);
     throw error;
   }
 };
@@ -49,7 +47,6 @@ export const verifyToken = async () => {
     }
     return { valid: true };
   } catch (error) {
-    console.error("Token verification failed:", error);
     return { valid: false, reason: "NetworkError" };
   }
 };
@@ -78,11 +75,9 @@ export const ForgotPasswordApi = async ({email}) => {
         }
       }
     } else {
-      console.log(response);
       throw new Error(`HTTP error! Status: ${response.status}`);
     }
   } catch (error) {
-    console.error("Error in fetching events list:", error);
     throw error;
   }
 };
@@ -111,11 +106,9 @@ export const ResetPasswordApi = async ({new_password, token}) => {
         }
       }
     } else {
-      console.log(response);
       throw new Error(`HTTP error! Status: ${response.status}`);
     }
   } catch (error) {
-    console.error("Error in fetching events list:", error);
     throw error;
   }
 };
@@ -145,11 +138,9 @@ export const getUsername = async () => {
         }
       }
     } else {
-      console.log(response);
       throw new Error(`HTTP error! Status: ${response.status}`);
     }
   } catch (error) {
-    console.error("Error in fetching events list:", error);
     throw error;
   }
 };

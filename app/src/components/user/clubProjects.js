@@ -1,12 +1,10 @@
 import React from "react";
-import {
-  Box,
-  Typography,
-  Button,
-  Card,
-  CardContent,
-  Grid,
-} from "@mui/material";
+import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
+import Button from '@mui/material/Button';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import Grid from '@mui/material/Grid';
 import { motion } from "framer-motion";
 import { formatToIST } from "../../utils/parser";
 
@@ -15,7 +13,7 @@ const ClubProjects = ({ projects }) => {
     (a, b) => new Date(b.dateCreated) - new Date(a.dateCreated)
   );
 
-  if (!projects || projects.length == 0){
+  if (!projects || projects.length === 0){
     return <Typography>No Projects found</Typography>
   }
 

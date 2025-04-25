@@ -31,7 +31,6 @@ export const getAnnouncementsList = async () => {
       throw new Error(`HTTP error! Status: ${response.status}`);
     }
   } catch (error) {
-    console.error("Error in AuthApi:", error);
     throw error;
   }
 };
@@ -62,7 +61,6 @@ export const AddAnnouncementApi = async (data) => {
       throw new Error(`HTTP error! Status: ${response.status}`);
     }
   } catch (error) {
-    console.error("Error in AuthApi:", error);
     throw error;
   }
 };
@@ -93,7 +91,6 @@ export const MyAnnouncementListApi = async () => {
       throw new Error(`HTTP error! Status: ${response.status}`);
     }
   } catch (error) {
-    console.error("Error in AuthApi:", error);
     throw error;
   }
 };
@@ -124,7 +121,6 @@ export const UpdateAnnouncementApi = async (data) => {
       throw new Error(`HTTP error! Status: ${response.status}`);
     }
   } catch (error) {
-    console.error("Error in AuthApi:", error);
     throw error;
   }
 };
@@ -155,7 +151,6 @@ export const DeleteAnnouncementApi = async (data) => {
       throw new Error(`HTTP error! Status: ${response.status}`);
     }
   } catch (error) {
-    console.error("Error in AuthApi:", error);
     throw error;
   }
 };

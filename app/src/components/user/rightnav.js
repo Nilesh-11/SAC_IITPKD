@@ -1,17 +1,11 @@
 import React from "react";
-import {
-  Box,
-  Typography,
-  Avatar,
-  Paper,
-  Divider,
-  useMediaQuery,
-  useTheme,
-} from "@mui/material";
+import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
+import Avatar from '@mui/material/Avatar';
+import Paper from '@mui/material/Paper';
+import Divider from '@mui/material/Divider';
 
-const RightNavbar = ({ username, userLogo, liveEvents, userrole }) => {
-  const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+const RightNavbar = ({ username, liveEvents, userrole }) => {
 
   return (
     <Box

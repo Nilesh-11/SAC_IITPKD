@@ -1,28 +1,24 @@
 import { useState } from "react";
 import { useAuth } from "../contexts/AuthContext";
-import { useNavigate } from "react-router-dom";
 import { ForgotPasswordApi, Api } from "../api/auth";
-import {
-  Box,
-  Typography,
-  TextField,
-  Button,
-  Alert,
-  MenuItem,
-  Select,
-  InputLabel,
-  FormControl,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
-} from "@mui/material";
+import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
+import TextField from '@mui/material/TextField';
+import Button from '@mui/material/Button';
+import Alert from '@mui/material/Alert';
+import MenuItem from '@mui/material/MenuItem';
+import Select from '@mui/material/Select';
+import InputLabel from '@mui/material/InputLabel';
+import FormControl from '@mui/material/FormControl';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogTitle from '@mui/material/DialogTitle';
 import { FaSignInAlt } from "react-icons/fa"; // Login Icon from react-icons
 import { FaUserAlt } from "react-icons/fa";  // Person Icon from react-icons
 
 const LoginDashboard = () => {
   const { loginUser } = useAuth();
-  const navigate = useNavigate();
 
   const [form, setForm] = useState({
     email: "",

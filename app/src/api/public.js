@@ -29,11 +29,9 @@ export const StatusApi = async () => {
         }
       }
     } else {
-      console.log(response);
       throw new Error(`HTTP error! Status: ${response.status}`);
     }
   } catch (error) {
-    console.error("Error in fetching events list:", error);
     throw error;
   }
 };
@@ -62,11 +60,9 @@ export const ClubsListApi = async () => {
         }
       }
     } else {
-      console.log(response);
       throw new Error(`HTTP error! Status: ${response.status}`);
     }
   } catch (error) {
-    console.error("Error in fetching events list:", error);
     throw error;
   }
 };

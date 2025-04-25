@@ -1,15 +1,13 @@
 import React from "react";
-import {
-  Container,
-  Typography,
-  Grid,
-  Card,
-  CardContent,
-  CardMedia,
-  Box,
-  Link,
-  IconButton,
-} from "@mui/material";
+import Container from '@mui/material/Container';
+import Typography from '@mui/material/Typography';
+import Grid from '@mui/material/Grid';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import CardMedia from '@mui/material/CardMedia';
+import Box from '@mui/material/Box';
+import Link from '@mui/material/Link';
+import IconButton from '@mui/material/IconButton';
 import { FaGithub, FaLinkedin } from "react-icons/fa";
 import Header from "../components/common/header";
 

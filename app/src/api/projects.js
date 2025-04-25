@@ -31,7 +31,6 @@ export const getProjectsList = async () => {
       throw new Error(`HTTP error! Status: ${response.status}`);
     }
   } catch (error) {
-    console.error("Error in AuthApi:", error);
     throw error;
   }
 };
@@ -62,7 +61,6 @@ export const AddProjectApi = async (data) => {
       throw new Error(`HTTP error! Status: ${response.status}`);
     }
   } catch (error) {
-    console.error("Error in AuthApi:", error);
     throw error;
   }
 };
@@ -93,7 +91,6 @@ export const DeleteProjectApi = async (data) => {
       throw new Error(`HTTP error! Status: ${response.status}`);
     }
   } catch (error) {
-    console.error("Error in AuthApi:", error);
     throw error;
   }
 };
@@ -124,7 +121,6 @@ export const UpdateProjectApi = async (data) => {
       throw new Error(`HTTP error! Status: ${response.status}`);
     }
   } catch (error) {
-    console.error("Error in AuthApi:", error);
     throw error;
   }
 };
@@ -155,7 +151,6 @@ export const OwnProjectsApi = async () => {
       throw new Error(`HTTP error! Status: ${response.status}`);
     }
   } catch (error) {
-    console.error("Error in AuthApi:", error);
     throw error;
   }
 };
@@ -186,7 +181,6 @@ export const ProjectInfoApi = async (data) => {
       throw new Error(`HTTP error! Status: ${response.status}`);
     }
   } catch (error) {
-    console.error("Error in AuthApi:", error);
     throw error;
   }
 };
@@ -217,7 +211,6 @@ export const ApplyProjectApi = async (data) => {
       throw new Error(`HTTP error! Status: ${response.status}`);
     }
   } catch (error) {
-    console.error("Error in AuthApi:", error);
     throw error;
   }
 };
@@ -249,7 +242,6 @@ export const MyProjectListApi = async () => {
       throw new Error(`HTTP error! Status: ${response.status}`);
     }
   } catch (error) {
-    console.error("Error in AuthApi:", error);
     throw error;
   }
 };
@@ -280,7 +272,6 @@ export const AddProjectMeetingApi = async (data) => {
       throw new Error(`HTTP error! Status: ${response.status}`);
     }
   } catch (error) {
-    console.error("Error in AuthApi:", error);
     throw error;
   }
 };
@@ -311,7 +302,6 @@ export const DeleteMeetingApi = async (data) => {
       throw new Error(`HTTP error! Status: ${response.status}`);
     }
   } catch (error) {
-    console.error("Error in AuthApi:", error);
     throw error;
   }
 };
@@ -342,7 +332,6 @@ export const UpdateMeetingApi = async (data) => {
       throw new Error(`HTTP error! Status: ${response.status}`);
     }
   } catch (error) {
-    console.error("Error in AuthApi:", error);
     throw error;
   }
 };
@@ -373,7 +362,6 @@ export const ShortlistMemberApi = async (data) => {
       throw new Error(`HTTP error! Status: ${response.status}`);
     }
   } catch (error) {
-    console.error("Error in AuthApi:", error);
     throw error;
   }
 };
@@ -404,7 +392,6 @@ export const RemoveMemberApi = async (data) => {
       throw new Error(`HTTP error! Status: ${response.status}`);
     }
   } catch (error) {
-    console.error("Error in AuthApi:", error);
     throw error;
   }
 };

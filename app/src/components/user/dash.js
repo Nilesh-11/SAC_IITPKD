@@ -1,18 +1,16 @@
 import React from "react";
-import {
-  Box,
-  Typography,
-  Button,
-  Card,
-  Grid,
-  Divider,
-  useMediaQuery,
-  useTheme,
-} from "@mui/material";
+import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
+import Button from '@mui/material/Button';
+import Card from '@mui/material/Card';
+import Grid from '@mui/material/Grid';
+import Divider from '@mui/material/Divider';
+import useMediaQuery from '@mui/material/useMediaQuery';
+import {useTheme} from '@mui/material/styles';
 import { FaUniversity } from "react-icons/fa";
-
 import SquareGallery from "./squareGallery";
 import timeAgo from "../../utils/parser";
+
 const Dashboard = ({
   announcements = [],
   status = [],

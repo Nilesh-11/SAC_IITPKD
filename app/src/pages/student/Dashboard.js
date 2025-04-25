@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
+import { Box, CircularProgress } from "@mui/material";
 import Header from "./Header";
 import Dashboard from "../../components/user/dash";
 import ProjectList from "../../components/user/projects";
@@ -8,7 +9,6 @@ import EventCalendar from "../../components/user/bigcalendar";
 import {getAnnouncementsList} from "../../api/announcement";
 import {getEventsList} from "../../api/events";
 import {ClubsListApi, StatusApi} from "../../api/public";
-import { Box, CircularProgress } from "@mui/material";
 import AddProjectForm from "../../components/user/AddProjectForm";
 import ManageProject from "../../components/user/ManageProject";
 import UpdateProjectForm from "../../components/user/UpdateProjectForm";

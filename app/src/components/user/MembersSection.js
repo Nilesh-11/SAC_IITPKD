@@ -1,18 +1,16 @@
 import React, { useEffect, useState } from "react";
-import {
-  Box,
-  CircularProgress,
-  Typography,
-  Paper,
-  Alert,
-  Grid,
-  Chip,
-  MenuItem,
-  Select,
-  FormControl,
-  InputLabel,
-  Fade,
-} from "@mui/material";
+import Box from '@mui/material/Box';
+import CircularProgress from '@mui/material/CircularProgress';
+import Typography from '@mui/material/Typography';
+import Paper from '@mui/material/Paper';
+import Alert from '@mui/material/Alert';
+import Grid from '@mui/material/Grid';
+import Chip from '@mui/material/Chip';
+import MenuItem from '@mui/material/MenuItem';
+import Select from '@mui/material/Select';
+import FormControl from '@mui/material/FormControl';
+import InputLabel from '@mui/material/InputLabel';
+import Fade from '@mui/material/Fade';
 import { FaUser } from "react-icons/fa";
 
 import { MembersListApi } from "../../api/club";
@@ -26,7 +24,6 @@ const MembersSection = () => {
   const [sortOption, setSortOption] = useState("joined");
 
   const orange = "rgb(243,130,33)";
-  const darkOrange = "rgb(220,110,25)";
 
   useEffect(() => {
     const fetchMembers = async () => {

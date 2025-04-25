@@ -2,7 +2,11 @@ import React, { useState } from "react";
 import dayjs from "dayjs";
 import isSameOrBefore from "dayjs/plugin/isSameOrBefore";
 import isSameOrAfter from "dayjs/plugin/isSameOrAfter";
-import { Box, Typography, Tooltip, Paper, Button } from "@mui/material";
+import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
+import Tooltip from '@mui/material/Tooltip';
+import Paper from '@mui/material/Paper';
+import Button from '@mui/material/Button';
 import { FaChevronRight, FaChevronLeft } from "react-icons/fa";
 
 // Extend dayjs with plugins

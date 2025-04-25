@@ -29,11 +29,9 @@ export const TechnicalInfo = async () => {
         }
       }
     } else {
-      console.log(response);
       throw new Error(`HTTP error! Status: ${response.status}`);
     }
   } catch (error) {
-    console.error("Error in fetching events list:", error);
     throw error;
   }
 };
@@ -63,11 +61,9 @@ export const AcademicInfo = async () => {
         }
       }
     } else {
-      console.log(response);
       throw new Error(`HTTP error! Status: ${response.status}`);
     }
   } catch (error) {
-    console.error("Error in fetching events list:", error);
     throw error;
   }
 };
@@ -97,11 +93,9 @@ export const CulturalInfo = async () => {
         }
       }
     } else {
-      console.log(response);
       throw new Error(`HTTP error! Status: ${response.status}`);
     }
   } catch (error) {
-    console.error("Error in fetching events list:", error);
     throw error;
   }
 };
@@ -130,11 +124,9 @@ export const HostelInfo = async () => {
         }
       }
     } else {
-      console.log(response);
       throw new Error(`HTTP error! Status: ${response.status}`);
     }
   } catch (error) {
-    console.error("Error in fetching events list:", error);
     throw error;
   }
 };
@@ -163,11 +155,9 @@ export const SportsInfo = async () => {
         }
       }
     } else {
-      console.log(response);
       throw new Error(`HTTP error! Status: ${response.status}`);
     }
   } catch (error) {
-    console.error("Error in fetching events list:", error);
     throw error;
   }
 };
@@ -196,11 +186,9 @@ export const ResearchInfo = async () => {
         }
       }
     } else {
-      console.log(response);
       throw new Error(`HTTP error! Status: ${response.status}`);
     }
   } catch (error) {
-    console.error("Error in fetching events list:", error);
     throw error;
   }
 };
@@ -229,11 +217,9 @@ export const PostgraduateInfo = async () => {
         }
       }
     } else {
-      console.log(response);
       throw new Error(`HTTP error! Status: ${response.status}`);
     }
   } catch (error) {
-    console.error("Error in fetching events list:", error);
     throw error;
   }
 };
@@ -263,11 +249,9 @@ export const AddClubApi = async (data) => {
         }
       }
     } else {
-      console.log(response);
       throw new Error(`HTTP error! Status: ${response.status}`);
     }
   } catch (error) {
-    console.error("Error in adding event list:", error);
     throw error;
   }
 };
@@ -297,11 +281,9 @@ export const ClubListApi = async () => {
         }
       }
     } else {
-      console.log(response);
       throw new Error(`HTTP error! Status: ${response.status}`);
     }
   } catch (error) {
-    console.error("Error in adding event list:", error);
     throw error;
   }
 };
@@ -331,11 +313,9 @@ export const UpdateClubApi = async (data) => {
         }
       }
     } else {
-      console.log(response);
       throw new Error(`HTTP error! Status: ${response.status}`);
     }
   } catch (error) {
-    console.error("Error in adding event list:", error);
     throw error;
   }
 };
@@ -365,11 +345,9 @@ export const DeleteClubApi = async (data) => {
         }
       }
     } else {
-      console.log(response);
       throw new Error(`HTTP error! Status: ${response.status}`);
     }
   } catch (error) {
-    console.error("Error in adding event list:", error);
     throw error;
   }
 };
