@@ -52,7 +52,7 @@ export const verifyToken = async () => {
 };
 
 export const ForgotPasswordApi = async ({email}) => {
-  const url = `${BACKEND_URL}` + "/api/auth/forgot-password";
+  const url = `${BACKEND_URL}/api/auth/forgot-password`;
   try {
     const response = await fetch(url, {
       method: "POST",
@@ -63,7 +63,7 @@ export const ForgotPasswordApi = async ({email}) => {
     });
     const responseData = await response.json();
     if (response.ok) {
-      if (responseData?.content?.type == "ok"){
+      if (responseData?.content?.type === "ok"){
         return responseData.content;
       }
       else{
@@ -83,7 +83,7 @@ export const ForgotPasswordApi = async ({email}) => {
 };
 
 export const ResetPasswordApi = async ({new_password, token}) => {
-  const url = `${BACKEND_URL}` + "/api/auth/reset-password";
+  const url = `${BACKEND_URL}/api/auth/reset-password`;
   try {
     const response = await fetch(url, {
       method: "POST",
@@ -94,7 +94,7 @@ export const ResetPasswordApi = async ({new_password, token}) => {
     });
     const responseData = await response.json();
     if (response.ok) {
-      if (responseData?.content?.type == "ok"){
+      if (responseData?.content?.type === "ok"){
         return responseData.content;
       }
       else{
@@ -114,7 +114,7 @@ export const ResetPasswordApi = async ({new_password, token}) => {
 };
 
 export const getUsername = async () => {
-  const url = `${BACKEND_URL}` + "/api/user/username";
+  const url = `${BACKEND_URL}/api/user/username`;
   try {
     const response = await fetch(url, {
       method: "POST",

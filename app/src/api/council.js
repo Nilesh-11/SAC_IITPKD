@@ -1,12 +1,7 @@
 import BACKEND_URL from "../utils/config";
 
-const handleAPIError = () => {
-  localStorage.removeItem("token");
-  window.location.href = "/login";
-};
-
 export const TechnicalInfo = async () => {
-  const url = `${BACKEND_URL}` + "/api/public/technical";
+  const url = `${BACKEND_URL}/api/public/technical`;
   try {
     const response = await fetch(url, {
       method: "POST",
@@ -17,7 +12,7 @@ export const TechnicalInfo = async () => {
     });
     const responseData = await response.json();
     if (response.ok) {
-      if (responseData?.content?.type == "ok"){
+      if (responseData?.content?.type === "ok"){
         return responseData.content;
       }
       else{
@@ -38,7 +33,7 @@ export const TechnicalInfo = async () => {
 
 
 export const AcademicInfo = async () => {
-  const url = `${BACKEND_URL}` + "/api/public/academic";
+  const url = `${BACKEND_URL}/api/public/academic`;
   try {
     const response = await fetch(url, {
       method: "POST",
@@ -49,7 +44,7 @@ export const AcademicInfo = async () => {
     });
     const responseData = await response.json();
     if (response.ok) {
-      if (responseData?.content?.type == "ok"){
+      if (responseData?.content?.type === "ok"){
         return responseData.content;
       }
       else{
@@ -70,7 +65,7 @@ export const AcademicInfo = async () => {
 
 
 export const CulturalInfo = async () => {
-  const url = `${BACKEND_URL}` + "/api/public/cultural";
+  const url = `${BACKEND_URL}/api/public/cultural`;
   try {
     const response = await fetch(url, {
       method: "POST",
@@ -81,7 +76,7 @@ export const CulturalInfo = async () => {
     });
     const responseData = await response.json();
     if (response.ok) {
-      if (responseData?.content?.type == "ok"){
+      if (responseData?.content?.type === "ok"){
         return responseData.content;
       }
       else{
@@ -101,7 +96,7 @@ export const CulturalInfo = async () => {
 };
 
 export const HostelInfo = async () => {
-  const url = `${BACKEND_URL}` + "/api/public/hostel";
+  const url = `${BACKEND_URL}/api/public/hostel`;
   try {
     const response = await fetch(url, {
       method: "POST",
@@ -112,7 +107,7 @@ export const HostelInfo = async () => {
     });
     const responseData = await response.json();
     if (response.ok) {
-      if (responseData?.content?.type == "ok"){
+      if (responseData?.content?.type === "ok"){
         return responseData.content;
       }
       else{
@@ -132,7 +127,7 @@ export const HostelInfo = async () => {
 };
 
 export const SportsInfo = async () => {
-  const url = `${BACKEND_URL}` + "/api/public/sports";
+  const url = `${BACKEND_URL}/api/public/sports`;
   try {
     const response = await fetch(url, {
       method: "POST",
@@ -143,7 +138,7 @@ export const SportsInfo = async () => {
     });
     const responseData = await response.json();
     if (response.ok) {
-      if (responseData?.content?.type == "ok"){
+      if (responseData?.content?.type === "ok"){
         return responseData.content;
       }
       else{
@@ -163,7 +158,7 @@ export const SportsInfo = async () => {
 };
 
 export const ResearchInfo = async () => {
-  const url = `${BACKEND_URL}` + "/api/public/research";
+  const url = `${BACKEND_URL}/api/public/research`;
   try {
     const response = await fetch(url, {
       method: "POST",
@@ -174,7 +169,7 @@ export const ResearchInfo = async () => {
     });
     const responseData = await response.json();
     if (response.ok) {
-      if (responseData?.content?.type == "ok"){
+      if (responseData?.content?.type === "ok"){
         return responseData.content;
       }
       else{
@@ -194,7 +189,7 @@ export const ResearchInfo = async () => {
 };
 
 export const PostgraduateInfo = async () => {
-  const url = `${BACKEND_URL}` + "/api/public/postgraduate";
+  const url = `${BACKEND_URL}/api/public/postgraduate`;
   try {
     const response = await fetch(url, {
       method: "POST",
@@ -205,7 +200,7 @@ export const PostgraduateInfo = async () => {
     });
     const responseData = await response.json();
     if (response.ok) {
-      if (responseData?.content?.type == "ok"){
+      if (responseData?.content?.type === "ok"){
         return responseData.content;
       }
       else{
@@ -225,7 +220,7 @@ export const PostgraduateInfo = async () => {
 };
 
 export const AddClubApi = async (data) => {
-  const url = `${BACKEND_URL}` + "/api/user/council/club/add";
+  const url = `${BACKEND_URL}/api/user/council/club/add`;
   try {
     const response = await fetch(url, {
       method: "POST",
@@ -237,7 +232,7 @@ export const AddClubApi = async (data) => {
     });
     const responseData = await response.json();
     if (response.ok) {
-      if (responseData?.content?.type == "ok"){
+      if (responseData?.content?.type === "ok"){
         return responseData.content;
       }
       else{
@@ -257,7 +252,7 @@ export const AddClubApi = async (data) => {
 };
 
 export const ClubListApi = async () => {
-  const url = `${BACKEND_URL}` + "/api/user/council/club/list";
+  const url = `${BACKEND_URL}/api/user/council/club/list`;
   try {
     const response = await fetch(url, {
       method: "POST",
@@ -269,7 +264,7 @@ export const ClubListApi = async () => {
     });
     const responseData = await response.json();
     if (response.ok) {
-      if (responseData?.content?.type == "ok"){
+      if (responseData?.content?.type === "ok"){
         return responseData.content;
       }
       else{
@@ -289,7 +284,7 @@ export const ClubListApi = async () => {
 };
 
 export const UpdateClubApi = async (data) => {
-  const url = `${BACKEND_URL}` + "/api/user/council/club/update";
+  const url = `${BACKEND_URL}/api/user/council/club/update`;
   try {
     const response = await fetch(url, {
       method: "POST",
@@ -301,7 +296,7 @@ export const UpdateClubApi = async (data) => {
     });
     const responseData = await response.json();
     if (response.ok) {
-      if (responseData?.content?.type == "ok"){
+      if (responseData?.content?.type === "ok"){
         return responseData.content;
       }
       else{
@@ -321,7 +316,7 @@ export const UpdateClubApi = async (data) => {
 };
 
 export const DeleteClubApi = async (data) => {
-  const url = `${BACKEND_URL}` + "/api/user/council/club/delete";
+  const url = `${BACKEND_URL}/api/user/council/club/delete`;
   try {
     const response = await fetch(url, {
       method: "POST",
@@ -333,7 +328,7 @@ export const DeleteClubApi = async (data) => {
     });
     const responseData = await response.json();
     if (response.ok) {
-      if (responseData?.content?.type == "ok"){
+      if (responseData?.content?.type === "ok"){
         return responseData.content;
       }
       else{

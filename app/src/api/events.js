@@ -6,7 +6,7 @@ const handleAPIError = () => {
 };
 
 export const getEventsList = async () => {
-  const url = `${BACKEND_URL}` + "/api/public/events/list";
+  const url = `${BACKEND_URL}/api/public/events/list`;
   try {
     const response = await fetch(url, {
       method: "POST",
@@ -36,7 +36,7 @@ export const getEventsList = async () => {
 };
 
 export const AddEventApi = async (data) => {
-  const url = `${BACKEND_URL}` + "/api/events/add";
+  const url = `${BACKEND_URL}/api/events/add`;
   try {
     const response = await fetch(url, {
       method: "POST",
@@ -66,7 +66,7 @@ export const AddEventApi = async (data) => {
 };
 
 export const MyEventsApi = async () => {
-  const url = `${BACKEND_URL}` + "/api/events/my";
+  const url = `${BACKEND_URL}/api/events/my`;
   try {
     const response = await fetch(url, {
       method: "POST",
@@ -96,7 +96,7 @@ export const MyEventsApi = async () => {
 };
 
 export const UpdateEventApi = async (data) => {
-  const url = `${BACKEND_URL}` + "/api/events/update";
+  const url = `${BACKEND_URL}/api/events/update`;
   try {
     const response = await fetch(url, {
       method: "POST",
@@ -126,7 +126,7 @@ export const UpdateEventApi = async (data) => {
 };
 
 export const DeleteEventApi = async (data) => {
-  const url = `${BACKEND_URL}` + "/api/events/delete";
+  const url = `${BACKEND_URL}/api/events/delete`;
   try {
     const response = await fetch(url, {
       method: "POST",

@@ -6,7 +6,7 @@ const handleAPIError = () => {
 };
 
 export const getProjectsList = async () => {
-  const url = `${BACKEND_URL}` + "/api/projects/list";
+  const url = `${BACKEND_URL}/api/projects/list`;
   try {
     const response = await fetch(url, {
       method: "POST",
@@ -36,7 +36,7 @@ export const getProjectsList = async () => {
 };
 
 export const AddProjectApi = async (data) => {
-  const url = `${BACKEND_URL}` + "/api/projects/add";
+  const url = `${BACKEND_URL}/api/projects/add`;
   try {
     const response = await fetch(url, {
       method: "POST",
@@ -66,7 +66,7 @@ export const AddProjectApi = async (data) => {
 };
 
 export const DeleteProjectApi = async (data) => {
-  const url = `${BACKEND_URL}` + "/api/projects/delete";
+  const url = `${BACKEND_URL}/api/projects/delete`;
   try {
     const response = await fetch(url, {
       method: "POST",
@@ -96,7 +96,7 @@ export const DeleteProjectApi = async (data) => {
 };
 
 export const UpdateProjectApi = async (data) => {
-  const url = `${BACKEND_URL}` + "/api/projects/update";
+  const url = `${BACKEND_URL}/api/projects/update`;
   try {
     const response = await fetch(url, {
       method: "POST",
@@ -126,7 +126,7 @@ export const UpdateProjectApi = async (data) => {
 };
 
 export const OwnProjectsApi = async () => {
-  const url = `${BACKEND_URL}` + "/api/projects/own";
+  const url = `${BACKEND_URL}/api/projects/own`;
   try {
     const response = await fetch(url, {
       method: "POST",
@@ -156,7 +156,7 @@ export const OwnProjectsApi = async () => {
 };
 
 export const ProjectInfoApi = async (data) => {
-  const url = `${BACKEND_URL}` + "/api/projects/info";
+  const url = `${BACKEND_URL}/api/projects/info`;
   try {
     const response = await fetch(url, {
       method: "POST",
@@ -186,7 +186,7 @@ export const ProjectInfoApi = async (data) => {
 };
 
 export const ApplyProjectApi = async (data) => {
-  const url = `${BACKEND_URL}` + "/api/projects/member/apply";
+  const url = `${BACKEND_URL}/api/projects/member/apply`;
   try {
     const response = await fetch(url, {
       method: "POST",
@@ -217,7 +217,7 @@ export const ApplyProjectApi = async (data) => {
 
 
 export const MyProjectListApi = async () => {
-  const url = `${BACKEND_URL}` + "/api/projects/my";
+  const url = `${BACKEND_URL}/api/projects/my`;
   try {
     const response = await fetch(url, {
       method: "POST",
@@ -247,7 +247,7 @@ export const MyProjectListApi = async () => {
 };
 
 export const AddProjectMeetingApi = async (data) => {
-  const url = `${BACKEND_URL}` + "/api/projects/meeting/add";
+  const url = `${BACKEND_URL}/api/projects/meeting/add`;
   try {
     const response = await fetch(url, {
       method: "POST",
@@ -277,7 +277,7 @@ export const AddProjectMeetingApi = async (data) => {
 };
 
 export const DeleteMeetingApi = async (data) => {
-  const url = `${BACKEND_URL}` + "/api/projects/meeting/delete";
+  const url = `${BACKEND_URL}/api/projects/meeting/delete`;
   try {
     const response = await fetch(url, {
       method: "POST",
@@ -307,7 +307,7 @@ export const DeleteMeetingApi = async (data) => {
 };
 
 export const UpdateMeetingApi = async (data) => {
-  const url = `${BACKEND_URL}` + "/api/projects/meeting/update";
+  const url = `${BACKEND_URL}/api/projects/meeting/update`;
   try {
     const response = await fetch(url, {
       method: "POST",
@@ -337,7 +337,7 @@ export const UpdateMeetingApi = async (data) => {
 };
 
 export const ShortlistMemberApi = async (data) => {
-  const url = `${BACKEND_URL}` + "/api/projects/shortlist";
+  const url = `${BACKEND_URL}/api/projects/shortlist`;
   try {
     const response = await fetch(url, {
       method: "POST",
@@ -367,7 +367,7 @@ export const ShortlistMemberApi = async (data) => {
 };
 
 export const RemoveMemberApi = async (data) => {
-  const url = `${BACKEND_URL}` + "/api/projects/member/remove";
+  const url = `${BACKEND_URL}/api/projects/member/remove`;
   try {
     const response = await fetch(url, {
       method: "POST",

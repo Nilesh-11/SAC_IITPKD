@@ -6,7 +6,7 @@ const handleAPIError = () => {
 };
 
 export const AddStudentApi = async (data) => {
-  const url = `${BACKEND_URL}` + "/api/user/admin/student/add";
+  const url = `${BACKEND_URL}/api/user/admin/student/add`;
   try {
     const response = await fetch(url, {
       method: "POST",
@@ -36,7 +36,7 @@ export const AddStudentApi = async (data) => {
 };
 
 export const AddCouncilApi = async (data) => {
-  const url = `${BACKEND_URL}` + "/api/user/admin/council/add";
+  const url = `${BACKEND_URL}/api/user/admin/council/add`;
   try {
     const response = await fetch(url, {
       method: "POST",
@@ -66,7 +66,7 @@ export const AddCouncilApi = async (data) => {
 };
 
 export const CouncilListApi = async () => {
-  const url = `${BACKEND_URL}` + "/api/user/admin/council/list";
+  const url = `${BACKEND_URL}/api/user/admin/council/list`;
   try {
     const response = await fetch(url, {
       method: "POST",
@@ -96,7 +96,7 @@ export const CouncilListApi = async () => {
 };
 
 export const UpdateCouncilApi = async (data) => {
-  const url = `${BACKEND_URL}` + "/api/user/admin/council/update";
+  const url = `${BACKEND_URL}/api/user/admin/council/update`;
   try {
     const response = await fetch(url, {
       method: "POST",
@@ -126,7 +126,7 @@ export const UpdateCouncilApi = async (data) => {
 };
 
 export const DeleteCouncilApi = async (data) => {
-  const url = `${BACKEND_URL}` + "/api/user/admin/council/delete";
+  const url = `${BACKEND_URL}/api/user/admin/council/delete`;
   try {
     const response = await fetch(url, {
       method: "POST",

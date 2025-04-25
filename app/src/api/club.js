@@ -6,7 +6,7 @@ const handleAPIError = () => {
 };
 
 export const JoinClub = async ({ club_id }) => {
-  const url = `${BACKEND_URL}` + "/api/user/student/club/join";
+  const url = `${BACKEND_URL}/api/user/student/club/join`;
   try {
     const response = await fetch(url, {
       method: "POST",
@@ -26,7 +26,7 @@ export const JoinClub = async ({ club_id }) => {
       return;
     }
     if (response.ok) {
-      if (responseData?.content?.type == "ok"){
+      if (responseData?.content?.type === "ok"){
         return responseData.content;
       }
       else{
@@ -46,7 +46,7 @@ export const JoinClub = async ({ club_id }) => {
 };
 
 export const getClubInfo = async ({ club_id }) => {
-  const url = `${BACKEND_URL}` + "/api/user/student/club/info";
+  const url = `${BACKEND_URL}/api/user/student/club/info`;
   try {
     const response = await fetch(url, {
       method: "POST",
@@ -66,7 +66,7 @@ export const getClubInfo = async ({ club_id }) => {
       return;
     }
     if (response.ok) {
-      if (responseData?.content?.type == "ok"){
+      if (responseData?.content?.type === "ok"){
         return responseData.content;
       }
       else{
@@ -87,7 +87,7 @@ export const getClubInfo = async ({ club_id }) => {
 
 
 export const DeleteRoleApi = async (data) => {
-  const url = `${BACKEND_URL}` + "/api/user/club/role/delete";
+  const url = `${BACKEND_URL}/api/user/club/role/delete`;
   try {
     const response = await fetch(url, {
       method: "POST",
@@ -107,7 +107,7 @@ export const DeleteRoleApi = async (data) => {
       return;
     }
     if (response.ok) {
-      if (responseData?.content?.type == "ok"){
+      if (responseData?.content?.type === "ok"){
         return responseData.content;
       }
       else{
@@ -128,7 +128,7 @@ export const DeleteRoleApi = async (data) => {
 
 
 export const AddRoleApi = async (data) => {
-  const url = `${BACKEND_URL}` + "/api/user/club/role/add";
+  const url = `${BACKEND_URL}/api/user/club/role/add`;
   try {
     const response = await fetch(url, {
       method: "POST",
@@ -148,7 +148,7 @@ export const AddRoleApi = async (data) => {
       return;
     }
     if (response.ok) {
-      if (responseData?.content?.type == "ok"){
+      if (responseData?.content?.type === "ok"){
         return responseData.content;
       }
       else{
@@ -169,7 +169,7 @@ export const AddRoleApi = async (data) => {
 
 
 export const RolesListApi = async () => {
-  const url = `${BACKEND_URL}` + "/api/user/club/role/list";
+  const url = `${BACKEND_URL}/api/user/club/role/list`;
   try {
     const response = await fetch(url, {
       method: "POST",
@@ -189,7 +189,7 @@ export const RolesListApi = async () => {
       return;
     }
     if (response.ok) {
-      if (responseData?.content?.type == "ok"){
+      if (responseData?.content?.type === "ok"){
         return responseData.content;
       }
       else{
@@ -209,7 +209,7 @@ export const RolesListApi = async () => {
 };
 
 export const UpdateRoleApi = async (data) => {
-  const url = `${BACKEND_URL}` + "/api/user/club/role/update";
+  const url = `${BACKEND_URL}/api/user/club/role/update`;
   try {
     const response = await fetch(url, {
       method: "POST",
@@ -229,7 +229,7 @@ export const UpdateRoleApi = async (data) => {
       return;
     }
     if (response.ok) {
-      if (responseData?.content?.type == "ok"){
+      if (responseData?.content?.type === "ok"){
         return responseData.content;
       }
       else{
@@ -249,7 +249,7 @@ export const UpdateRoleApi = async (data) => {
 };
 
 export const MembersListApi = async () => {
-  const url = `${BACKEND_URL}` + "/api/user/club/members/list";
+  const url = `${BACKEND_URL}/api/user/club/members/list`;
   try {
     const response = await fetch(url, {
       method: "POST",
@@ -269,7 +269,7 @@ export const MembersListApi = async () => {
       return;
     }
     if (response.ok) {
-      if (responseData?.content?.type == "ok"){
+      if (responseData?.content?.type === "ok"){
         return responseData.content;
       }
       else{
@@ -289,7 +289,7 @@ export const MembersListApi = async () => {
 };
 
 export const UpdateMembershipApi = async (data) => {
-  const url = `${BACKEND_URL}` + "/api/user/club/membership/update";
+  const url = `${BACKEND_URL}/api/user/club/membership/update`;
   try {
     const response = await fetch(url, {
       method: "POST",
@@ -309,7 +309,7 @@ export const UpdateMembershipApi = async (data) => {
       return;
     }
     if (response.ok) {
-      if (responseData?.content?.type == "ok"){
+      if (responseData?.content?.type === "ok"){
         return responseData.content;
       }
       else{
@@ -329,7 +329,7 @@ export const UpdateMembershipApi = async (data) => {
 };
 
 export const MemberInfoApi = async (data) => {
-  const url = `${BACKEND_URL}` + "/api/user/club/member/info";
+  const url = `${BACKEND_URL}/api/user/club/member/info`;
   try {
     const response = await fetch(url, {
       method: "POST",
@@ -349,7 +349,7 @@ export const MemberInfoApi = async (data) => {
       return;
     }
     if (response.ok) {
-      if (responseData?.content?.type == "ok"){
+      if (responseData?.content?.type === "ok"){
         return responseData.content;
       }
       else{
@@ -369,7 +369,7 @@ export const MemberInfoApi = async (data) => {
 };
 
 export const CoreTeamApi = async (data) => {
-  const url = `${BACKEND_URL}` + "/api/user/student/club/coreteam";
+  const url = `${BACKEND_URL}/api/user/student/club/coreteam`;
   try {
     const response = await fetch(url, {
       method: "POST",
@@ -389,7 +389,7 @@ export const CoreTeamApi = async (data) => {
       return;
     }
     if (response.ok) {
-      if (responseData?.content?.type == "ok"){
+      if (responseData?.content?.type === "ok"){
         return responseData.content;
       }
       else{

@@ -6,7 +6,7 @@ const handleAPIError = () => {
 };
 
 export const getAnnouncementsList = async () => {
-  const url = `${BACKEND_URL}` + "/api/public/announcements/list";
+  const url = `${BACKEND_URL}/api/public/announcements/list`;
   try {
     const response = await fetch(url, {
       method: "POST",
@@ -36,7 +36,7 @@ export const getAnnouncementsList = async () => {
 };
 
 export const AddAnnouncementApi = async (data) => {
-  const url = `${BACKEND_URL}` + "/api/user/announcement/add";
+  const url = `${BACKEND_URL}/api/user/announcement/add`;
   try {
     const response = await fetch(url, {
       method: "POST",
@@ -66,7 +66,7 @@ export const AddAnnouncementApi = async (data) => {
 };
 
 export const MyAnnouncementListApi = async () => {
-  const url = `${BACKEND_URL}` + "/api/user/announcements/my";
+  const url = `${BACKEND_URL}/api/user/announcements/my`;
   try {
     const response = await fetch(url, {
       method: "POST",
@@ -96,7 +96,7 @@ export const MyAnnouncementListApi = async () => {
 };
 
 export const UpdateAnnouncementApi = async (data) => {
-  const url = `${BACKEND_URL}` + "/api/user/announcement/update";
+  const url = `${BACKEND_URL}/api/user/announcement/update`;
   try {
     const response = await fetch(url, {
       method: "POST",
@@ -105,7 +105,7 @@ export const UpdateAnnouncementApi = async (data) => {
         Authorization: `Bearer ${localStorage.getItem("token") || ""}`,
       },
       body: JSON.stringify(data),
-    });
+    }); 
     const responseData = await response.json();
     if (
       responseData?.content?.type === "error" &&
@@ -126,7 +126,7 @@ export const UpdateAnnouncementApi = async (data) => {
 };
 
 export const DeleteAnnouncementApi = async (data) => {
-  const url = `${BACKEND_URL}` + "/api/user/announcement/delete";
+  const url = `${BACKEND_URL}/api/user/announcement/delete`;
   try {
     const response = await fetch(url, {
       method: "POST",

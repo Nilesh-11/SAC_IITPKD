@@ -1,12 +1,7 @@
 import BACKEND_URL from './../utils/config'
 
-const handleAPIError = () => {
-  localStorage.removeItem("token");
-  window.location.href = "/login";
-};
-
 export const StatusApi = async () => {
-  const url = `${BACKEND_URL}` + "/api/public/status";
+  const url = `${BACKEND_URL}/api/public/status`;
   try {
     const response = await fetch(url, {
       method: "POST",
@@ -37,7 +32,7 @@ export const StatusApi = async () => {
 };
 
 export const ClubsListApi = async () => {
-  const url = `${BACKEND_URL}` + "/api/public/clubs/list";
+  const url = `${BACKEND_URL}/api/public/clubs/list`;
   try {
     const response = await fetch(url, {
       method: "POST",
