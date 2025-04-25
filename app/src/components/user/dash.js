@@ -1,25 +1,67 @@
-import React from "react";
-import Box from '@mui/material/Box';
-import Typography from '@mui/material/Typography';
-import Button from '@mui/material/Button';
-import Card from '@mui/material/Card';
-import Grid from '@mui/material/Grid';
-import Divider from '@mui/material/Divider';
-import useMediaQuery from '@mui/material/useMediaQuery';
-import {useTheme} from '@mui/material/styles';
+import React, { useEffect, useState } from "react";
+import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
+import Button from "@mui/material/Button";
+import Card from "@mui/material/Card";
+import Grid from "@mui/material/Grid";
+import Divider from "@mui/material/Divider";
+import useMediaQuery from "@mui/material/useMediaQuery";
+import { useTheme } from "@mui/material/styles";
 import { FaUniversity } from "react-icons/fa";
 import SquareGallery from "./squareGallery";
 import timeAgo from "../../utils/parser";
+import { ClubsListApi, StatusApi } from "../../api/public";
+import { getAnnouncementsList } from "../../api/announcement";
+import { CircularProgress } from "@mui/material";
+import { useNavigate } from "react-router-dom";
+import { ClubListApi } from "../../api/council";
 
 const Dashboard = ({
-  announcements = [],
-  status = [],
-  myClubs = [],
-  handleAllAnnouncementClick,
-  handleAllClubLink,
+  role = "student",
 }) => {
+  const navigate = useNavigate();
   const theme = useTheme();
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
+  const [announcements, setAnnouncements] = useState([]);
+  const [status, setStatus] = useState("");
+  const [myClubs, setMyClubs] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  const handleAllAnnouncementClick = () => {
+    navigate(`/${role}/dashboard?currSection=announcements`);
+  };
+  const handleAllClubLink = () => {
+    navigate(`/${role}/dashboard?currSection=clubs`);
+  };
+
+  useEffect(() => {
+    const fetchEvents = async () => {
+      try {
+        const [annData, statData, clubData] = await Promise.all([
+          getAnnouncementsList(),
+          StatusApi(),
+          ClubsListApi()
+        ]);
+        setMyClubs(clubData.clubs.map(item => `/clubs/${item.name}/opaque_logo_square.png`));
+        setAnnouncements(annData);
+        setStatus(statData);
+      } catch (err) {
+        console.error("Failed to fetch events", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchEvents();
+  }, []);
+
+  if (loading) {
+    return (
+      <Box textAlign="center" mt={10}>
+        <h2>Loading Announcements...</h2>
+        <CircularProgress />
+      </Box>
+    );
+  }
 
   return (
     <Box sx={{ p: { xs: 2, sm: 3, md: 4 } }}>
@@ -36,7 +78,12 @@ const Dashboard = ({
 
       {/* Announcements Section */}
       <Box mt={3}>
-        <Box display="flex" justifyContent="space-between" alignItems="center" mb={1}>
+        <Box
+          display="flex"
+          justifyContent="space-between"
+          alignItems="center"
+          mb={1}
+        >
           <Typography
             variant="h6"
             fontWeight={600}
@@ -65,53 +112,58 @@ const Dashboard = ({
           </Button>
         </Box>
         {announcements.length > 0 ? (
-        <Card elevation={2} sx={{ borderRadius: 2 }}>
-          {announcements.map((announcement, index) => (
-            <React.Fragment key={index}>
-              <Box
-                display="flex"
-                alignItems="center"
-                px={{ xs: 2, sm: 3 }}
-                py={2}
-                sx={{
-                  bgcolor: "#fff",
-                  transition: "0.3s",
-                  "&:hover": { bgcolor: "#f9f9f9", transform: "scale(1.02)" },
-                }}
-              >
-                <img
-                  src={`/roles/${announcement.author_role}_circular.png`}
-                  alt="logo"
-                  style={{
-                    width: 40,
-                    height: 40,
-                    borderRadius: "50%",
-                    marginRight: 12,
-                    flexShrink: 0,
+          <Card elevation={2} sx={{ borderRadius: 2 }}>
+            {announcements.map((announcement, index) => (
+              <React.Fragment key={index}>
+                <Box
+                  display="flex"
+                  alignItems="center"
+                  px={{ xs: 2, sm: 3 }}
+                  py={2}
+                  sx={{
+                    bgcolor: "#fff",
+                    transition: "0.3s",
+                    "&:hover": { bgcolor: "#f9f9f9", transform: "scale(1.02)" },
                   }}
-                />
-                <Box flexGrow={1} minWidth={0}>
+                >
+                  <img
+                    src={`/roles/${announcement.author_role}_circular.png`}
+                    alt="logo"
+                    style={{
+                      width: 40,
+                      height: 40,
+                      borderRadius: "50%",
+                      marginRight: 12,
+                      flexShrink: 0,
+                    }}
+                  />
+                  <Box flexGrow={1} minWidth={0}>
+                    <Typography
+                      fontWeight={500}
+                      fontSize={14}
+                      textAlign="left"
+                      noWrap={isSmallScreen}
+                    >
+                      {announcement.title}
+                    </Typography>
+                  </Box>
                   <Typography
-                    fontWeight={500}
-                    fontSize={14}
-                    textAlign="left"
-                    noWrap={isSmallScreen}
+                    fontSize={12}
+                    color="text.secondary"
+                    sx={{ ml: 1 }}
                   >
-                    {announcement.title}
+                    {timeAgo(announcement.created_at)}
                   </Typography>
                 </Box>
-                <Typography fontSize={12} color="text.secondary" sx={{ ml: 1 }}>
-                  {timeAgo(announcement.created_at)}
-                </Typography>
-              </Box>
-              {index !== announcements.length - 1 && <Divider />}
-            </React.Fragment>
-          ))}
-        </Card>): (
-  <Typography variant="body2" color="text.secondary" mt={1}>
-    No announcements at the moment.
-  </Typography>
-)}
+                {index !== announcements.length - 1 && <Divider />}
+              </React.Fragment>
+            ))}
+          </Card>
+        ) : (
+          <Typography variant="body2" color="text.secondary" mt={1}>
+            No announcements at the moment.
+          </Typography>
+        )}
       </Box>
 
       {/* Status Section */}
@@ -124,44 +176,42 @@ const Dashboard = ({
         Status
       </Typography>
       {status.length > 0 ? (
-      <Card
-        elevation={2}
-        sx={{
-          borderRadius: 2,
-          p: { xs: 2, sm: 3 },
-          mt: 1,
-          bgcolor: "#fafafa",
-        }}
-      >
-        <Grid
-          container
-          spacing={isSmallScreen ? 2 : 0}
-          alignItems="center"
-          justifyContent="space-between"
+        <Card
+          elevation={2}
+          sx={{
+            borderRadius: 2,
+            p: { xs: 2, sm: 3 },
+            mt: 1,
+            bgcolor: "#fafafa",
+          }}
         >
-          {status.map((item, index) => (
-            <Grid item xs={12} sm={6} md textAlign="center" key={index}>
-              <Box
-                display="flex"
-                flexDirection="column"
-                alignItems="center"
-                sx={{
-                  transition: "0.3s",
-                  "&:hover": { transform: "scale(1.05)" },
-                  py: isSmallScreen ? 1 : 0,
-                }}
-              >
-                <FaUniversity
-                  sx={{ fontSize: 50, color: "orange", mb: 1 }}
-                />
-                <Typography fontSize={14} fontWeight={500}>
-                  <strong>{item.count}</strong> {item.title}
-                </Typography>
-              </Box>
-            </Grid>
-          ))}
-        </Grid>
-      </Card>
+          <Grid
+            container
+            spacing={isSmallScreen ? 2 : 0}
+            alignItems="center"
+            justifyContent="space-between"
+          >
+            {status.map((item, index) => (
+              <Grid item xs={12} sm={6} md textAlign="center" key={index}>
+                <Box
+                  display="flex"
+                  flexDirection="column"
+                  alignItems="center"
+                  sx={{
+                    transition: "0.3s",
+                    "&:hover": { transform: "scale(1.05)" },
+                    py: isSmallScreen ? 1 : 0,
+                  }}
+                >
+                  <FaUniversity sx={{ fontSize: 50, color: "orange", mb: 1 }} />
+                  <Typography fontSize={14} fontWeight={500}>
+                    <strong>{item.count}</strong> {item.title}
+                  </Typography>
+                </Box>
+              </Grid>
+            ))}
+          </Grid>
+        </Card>
       ) : (
         <Typography variant="body2" color="text.secondary" mt={1}>
           Status information not available.
@@ -170,13 +220,18 @@ const Dashboard = ({
 
       {/* My Clubs Section */}
       <Box mt={3}>
-        <Box display="flex" justifyContent="space-between" alignItems="center" mb={1}>
+        <Box
+          display="flex"
+          justifyContent="space-between"
+          alignItems="center"
+          mb={1}
+        >
           <Typography
             variant="h6"
             fontWeight={600}
             sx={{ fontFamily: "Poppins, sans-serif" }}
           >
-            My Clubs
+            Clubs
           </Typography>
           <Button
             variant="contained"

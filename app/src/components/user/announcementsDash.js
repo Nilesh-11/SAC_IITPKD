@@ -1,13 +1,14 @@
-import React from "react";
-import Card from '@mui/material/Card';
-import CardContent from '@mui/material/CardContent';
-import CardMedia from '@mui/material/CardMedia';
-import Typography from '@mui/material/Typography';
-import Box from '@mui/material/Box';
-import { FaBell } from "react-icons/fa"; // Placeholder icon
+import React, { useEffect, useState } from "react";
+import Card from "@mui/material/Card";
+import CardContent from "@mui/material/CardContent";
+import CardMedia from "@mui/material/CardMedia";
+import Typography from "@mui/material/Typography";
+import Box from "@mui/material/Box";
+import { FaBell } from "react-icons/fa";
 import { keyframes } from "@mui/system";
+import { getAnnouncementsList } from "../../api/announcement";
+import { CircularProgress } from "@mui/material";
 
-// Fade-in animation for cards
 const fadeIn = keyframes`
   from {
     opacity: 0;
@@ -19,15 +20,45 @@ const fadeIn = keyframes`
   }
 `;
 
-const AnnouncementsDash = ({ announcements }) => {
+const AnnouncementsDash = () => {
+  const [announcements, setAnnouncements] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchAllData = async () => {
+      try {
+        const [annData] = await Promise.all([getAnnouncementsList()]);
+        setAnnouncements(annData);
+      } catch (err) {
+        console.error("Failed to fetch events", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchAllData();
+  }, []);
+
+  if (loading) {
+    return (
+      <Box textAlign="center" mt={10}>
+        <h2>Loading Announcements...</h2>
+        <CircularProgress />
+      </Box>
+    );
+  }
+
   return (
     <Box sx={{ maxWidth: 800, mx: "auto", textAlign: "center", p: 2 }}>
-      <Box >
+      <Box>
         <Typography
           variant="h5"
           fontWeight="bold"
           gutterBottom
-          sx={{ mb: 4, fontFamily: "Poppins, sans-serif", color: "rgba(255, 154, 65, 0.96)",}} // Increased space below heading
+          sx={{
+            mb: 4,
+            fontFamily: "Poppins, sans-serif",
+            color: "rgba(255, 154, 65, 0.96)",
+          }} // Increased space below heading
         >
           ANNOUNCEMENTS
         </Typography>
@@ -70,10 +101,18 @@ const AnnouncementsDash = ({ announcements }) => {
               }}
             >
               <Box sx={{ textAlign: "left" }}>
-                <Typography variant="caption" fontWeight="bold" sx={{fontFamily: "Poppins, sans-serif"}}>
+                <Typography
+                  variant="caption"
+                  fontWeight="bold"
+                  sx={{ fontFamily: "Poppins, sans-serif" }}
+                >
                   {announcement.author}
                 </Typography>
-                <Typography variant="subtitle1" fontWeight="bold" sx={{fontFamily: "Poppins, sans-serif" }}>
+                <Typography
+                  variant="subtitle1"
+                  fontWeight="bold"
+                  sx={{ fontFamily: "Poppins, sans-serif" }}
+                >
                   {announcement.title}
                 </Typography>
               </Box>
@@ -81,7 +120,14 @@ const AnnouncementsDash = ({ announcements }) => {
             </Box>
 
             {/* Responsive Image with Reduced Size */}
-            <Box sx={{ width: "80%", mx: "auto", borderRadius: 1, overflow: "hidden" }}>
+            <Box
+              sx={{
+                width: "80%",
+                mx: "auto",
+                borderRadius: 1,
+                overflow: "hidden",
+              }}
+            >
               <CardMedia
                 component="img"
                 image={`/roles/${announcement.author_role}_circular.png`}

@@ -18,7 +18,7 @@ import { motion } from "framer-motion";
 import { formatToIST } from "./../../utils/parser";
 import { getProjectsList } from "../../api/projects";
 
-const ProjectList = ( {handleAddProject} ) => {
+const ProjectList = ( {role} ) => {
   const navigate = useNavigate();
   const [projects, setProjects] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -57,6 +57,10 @@ const ProjectList = ( {handleAddProject} ) => {
 
   const handleNavigation = (projectId) => {
     navigate(`/project/info?project_id=${projectId}`); // Navigate to the project info page
+  };
+
+  const handleAddProject = () => {
+    navigate(`/${role}/dashboard?currSection=addproject`); // Navigate to the project info page
   };
 
   if (loading) {

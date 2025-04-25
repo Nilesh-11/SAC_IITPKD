@@ -2,30 +2,28 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    flex-wrap: wrap; /* Ensures responsiveness */
+    flex-wrap: wrap;
     background: linear-gradient(to top, #1a1a1a, #333333, #4a4a4a, #888888, #ffffff);
     color: white;
     padding: 20px 50px;
     font-family: "Arial", sans-serif;
   }
   
-  /* Left Section */
   .footer-left {
     display: flex;
     align-items: center;
-    flex-wrap: wrap; /* Wrap content on smaller screens */
+    flex-wrap: wrap;
   }
   
   .footer-logo {
-    width: 80px; /* Adjust based on actual logo */
+    width: 80px;
     margin-right: 15px;
   }
   
-  /* Footer Text Styling */
   .sac-title {
     margin: 0;
     font-size: 20px;
-    color: rgb(244, 200, 175);
+    color: rgb(244,157,81);
   }
   
   .footer-line {
@@ -51,7 +49,6 @@
     color: #bbb;
   }
   
-  /* Right Section */
   .footer-right {
     text-align: right;
     flex-basis: 40%;

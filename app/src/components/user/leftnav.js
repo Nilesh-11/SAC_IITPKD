@@ -7,10 +7,15 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import Box from '@mui/material/Box';
 import Divider from '@mui/material/Divider';
+import { useNavigate } from "react-router-dom";
 
-const LeftNav = ({ menuItems, handleClick }) => {
-  
+const LeftNav = ({ menuItems, role }) => {
+  const navigate = useNavigate();
   const [hoveredIndex, setHoveredIndex] = useState(null);
+
+  const handleClick = (dash) => {
+    navigate(`/${role}/dashboard?currSection=${dash}`)
+  }
 
   return (
     <div>

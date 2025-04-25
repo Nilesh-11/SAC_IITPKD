@@ -22,6 +22,7 @@ import Footer from "../components/common/footer";
 import Gallery from "../components/common/gallery";
 import { PostgraduateInfo } from "../api/council";
 import { motion } from "framer-motion";
+import LeadershipSection from "../components/user/LeadershipSection";
 
 const Postgraduate = () => {
   const theme = useTheme();
@@ -65,85 +66,27 @@ const Postgraduate = () => {
         sx={{ flex: 1, py: 4, px: { xs: 2, sm: 3 }, width: "100%", overflowX: "hidden" }}
       >
         <Grid container spacing={3}>
-          {loading && (
-            <Grid item xs={12}>
-              <Box display="flex" justifyContent="center" mt={4}>
+          {/* Leadership Section with Loading/Error States */}
+          <Grid item xs={12}>
+            {loading ? (
+              <Box display="flex" justifyContent="center">
                 <CircularProgress />
               </Box>
-            </Grid>
-          )}
+            ) : error ? (
+              <Alert severity="error" sx={{ mb: 3 }}>
+                {error}
+              </Alert>
+            ) : (
+              council?.secretary && (
+                <LeadershipSection 
+                  council={council} 
+                  councilTitle={council.council_title} 
+                />
+              )
+            )}
+          </Grid>
 
-          {error && (
-            <Grid item xs={12}>
-              <Alert severity="error" sx={{ mb: 3 }}>{error}</Alert>
-            </Grid>
-          )}
-
-          {!loading &&  (
-            <>
-              {council && council.secretary && (
-                <Grid item xs={12}>
-                  <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4 }}>
-                    <Paper elevation={3} sx={{ p: { xs: 2, sm: 3 }, borderRadius: 2 }}>
-                      <Grid container spacing={2}>
-                        <Grid item xs={12} sm={4} md={3}>
-                          <Box display="flex" justifyContent={{ xs: "center", sm: "flex-start" }}>
-                            <Avatar
-                              alt={council.secretary.full_name}
-                              src={`/student/${council.secretary.email}/photo.webp`}
-                              sx={{ width: { xs: 96, sm: 128 }, height: { xs: 96, sm: 128 }, boxShadow: 2 }}
-                            />
-                          </Box>
-                        </Grid>
-                        <Grid item xs={12} sm={8} md={9}>
-                          <Box sx={{ display: "flex", flexDirection: "column", alignItems: "flex-start" }}>
-                            <Typography variant="h5" sx={{ fontSize: { xs: "1.3rem", sm: "1.5rem" }, mb: 1.5, display: "flex", alignItems: "center", gap: 1 }}>
-                              <FaInfoCircle size={isMobile ? 18 : 22} />
-                              {council.council_title}
-                            </Typography>
-
-                            <Box sx={{ "& > *:not(:last-child)": { mb: 1 }, fontSize: { xs: "0.9rem", sm: "1rem" } }}>
-                              <Box display="flex" alignItems="center" gap={1}>
-                                <FaUserAlt size={isMobile ? 18 : 22} />
-                                <strong>Secretary:</strong>
-                                <span>{council.secretary.full_name}</span>
-                              </Box>
-
-                              <Box display="flex" alignItems="center" gap={1} flexWrap="wrap">
-                                <FaEnvelope size={isMobile ? 18 : 22} />
-                                <strong>Email:</strong>
-                                <span style={{ wordBreak: "break-all" }}>{council.secretary.email}</span>
-                              </Box>
-
-                              {council.deputies?.length > 0 && (
-                                <Box mt={1.5}>
-                                  <Typography variant="subtitle1" sx={{ fontSize: { xs: "1rem", sm: "1.1rem" }, display: "flex", alignItems: "center", gap: 1, mb: 1 }}>
-                                    <FaUsers size={isMobile ? 18 : 22} />
-                                    Deputy Secretaries
-                                  </Typography>
-                                  {council.deputies.map((deputy, index) => (
-                                    <Box key={index} sx={{ pl: 2, mb: 1 }}>
-                                      <div><strong>{deputy.full_name}</strong></div>
-                                      <div style={{ wordBreak: "break-all" }}>{deputy.email}</div>
-                                    </Box>
-                                  ))}
-                                </Box>
-                              )}
-
-                              <Box display="flex" alignItems="center" gap={1} flexWrap="wrap" mt={1.5}>
-                                <FaRegEnvelope size={isMobile ? 18 : 22} />
-                                <strong>Council Email:</strong>
-                                <span style={{ wordBreak: "break-all" }}>{council.council_email}</span>
-                              </Box>
-                            </Box>
-                          </Box>
-                        </Grid>
-                      </Grid>
-                    </Paper>
-                  </motion.div>
-                </Grid>
-              )}
-
+          
               <Grid item xs={12}>
                 <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.2 }}>
                   <Box sx={{ p: { xs: 1, sm: 2 }, backgroundColor: theme.palette.background.paper, borderRadius: 2 }}>
@@ -181,8 +124,6 @@ const Postgraduate = () => {
                   </Box>
                 </motion.div>
               </Grid>
-            </>
-          )}
         </Grid>
       </Container>
 

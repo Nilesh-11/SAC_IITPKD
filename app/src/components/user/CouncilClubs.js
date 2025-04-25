@@ -1,14 +1,20 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Card from '@mui/material/Card';
 import CircularProgress from '@mui/material/CircularProgress';
 import { motion } from "framer-motion";
 import { ClubsListApi } from "../../api/public";
+import { useNavigate } from "react-router-dom";
 
-const CouncilClubs = ({ handleNavigation, adminEmail }) => {
+const CouncilClubs = () => {
+  const navigate = useNavigate();
   const [councilMap, setCouncilMap] = useState({});
   const [loading, setLoading] = useState(true);
+  
+  const handleNavigation = useCallback((link) => {
+      navigate(link);
+    }, [navigate]);
 
   useEffect(() => {
     const fetchClubs = async () => {
@@ -36,7 +42,7 @@ const CouncilClubs = ({ handleNavigation, adminEmail }) => {
     };
 
     fetchClubs();
-  }, [adminEmail]);
+  }, []);
 
   if (loading) {
     return (

@@ -6,7 +6,7 @@ const Footer = () => {
   return (
     <footer className="footer">
       <div className="footer-left">
-        <img src="/logo192.png" alt="Student Affairs Council Logo" className="footer-logo" />
+        <img src="/logo/iitpkdlogosmall.png" alt="Student Affairs Council Logo" className="footer-logo" />
         <div className="footer-text">
           <h2 className="sac-title">Student Affairs Council</h2>
           <div className="footer-line"></div>

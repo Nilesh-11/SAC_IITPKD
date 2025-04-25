@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import "./bigcalendar.css";
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -19,6 +19,8 @@ import dayjs from "dayjs";
 import isSameOrAfter from "dayjs/plugin/isSameOrAfter";
 import isSameOrBefore from "dayjs/plugin/isSameOrBefore";
 import customParseFormat from "dayjs/plugin/customParseFormat";
+import { getEventsList } from "../../api/events";
+import CircularProgress from '@mui/material/CircularProgress';
 
 dayjs.extend(isSameOrAfter);
 dayjs.extend(isSameOrBefore);
@@ -38,10 +40,26 @@ const COUNCIL_COLORS = {
 const HOURS = Array.from({ length: 17 }, (_, i) => `${i + 7}:00`);
 const START_HOUR = 7;
 
-const EventCalendar = ({ events = [] }) => {
+const EventCalendar = () => {
   const [startDate, setStartDate] = useState(dayjs());
   const [endDate, setEndDate] = useState(null);
   const [selectedTypes, setSelectedTypes] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [events, setEvents] = useState([]);
+
+  useEffect(() => {
+    const fetchEvents = async () => {
+      try {
+        const data = await getEventsList();
+        setEvents(data);
+      } catch (err) {
+        console.error("Failed to fetch events", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchEvents();
+  }, []);
 
   const normalizedEvents = useMemo(() => {
     return events.map((event) => {
@@ -97,6 +115,15 @@ const EventCalendar = ({ events = [] }) => {
     setEndDate(null);
     setSelectedTypes([]);
   };
+
+  if (loading) {
+    return (
+      <Box textAlign="center" mt={10}>
+        <h2>Loading Calendar...</h2>
+        <CircularProgress />
+      </Box>
+    );
+  }
 
   return (
     <Box sx={{ padding: 2, px: { xs: 2, sm: 5, md: 10 }, py: 3 }}>

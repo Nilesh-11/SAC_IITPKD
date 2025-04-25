@@ -1,33 +1,31 @@
 import { useState } from "react";
-import {
-  AppBar,
-  Toolbar,
-  IconButton,
-  Box,
-  Avatar,
-  Drawer,
-  useMediaQuery,
-  useTheme,
-} from "@mui/material";
-// Import React Icons
-import { FaBars } from "react-icons/fa"; // For the menu icon
-import { FaUserCircle } from "react-icons/fa"; // For the user avatar icon
+import AppBar from "@mui/material/AppBar";
+import Toolbar from "@mui/material/Toolbar";
+import IconButton from "@mui/material/IconButton";
+import Box from "@mui/material/Box";
+import Drawer from "@mui/material/Drawer";
+
+import { FaBars } from "react-icons/fa";
+import { FaUserCircle } from "react-icons/fa";
 
 import LeftNav from "../../components/user/leftnav";
 import RightNavbar from "../../components/user/rightnav";
 
-const Header = ({ menuItems, handleMenuNavigation, recentActivity, liveEvents, username, userrole }) => {
+const Header = ({
+  menuItems,
+  userrole,
+}) => {
   const [isRightDrawerOpen, setIsRightDrawerOpen] = useState(false);
   const [isLeftDrawerOpen, setIsLeftDrawerOpen] = useState(false);
 
-  const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
-
   return (
     <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="fixed" elevation={3} sx={{ bgcolor: "#fff", color: "black" }}>
+      <AppBar
+        position="fixed"
+        elevation={3}
+        sx={{ bgcolor: "#fff", color: "black" }}
+      >
         <Toolbar sx={{ justifyContent: "space-between" }}>
-          {/* Left Menu Button */}
           <IconButton
             edge="start"
             onClick={() => setIsLeftDrawerOpen(true)}
@@ -36,7 +34,6 @@ const Header = ({ menuItems, handleMenuNavigation, recentActivity, liveEvents, u
             <FaBars size={24} />
           </IconButton>
 
-          {/* Centered Logo */}
           <Box
             component="img"
             src="/sac/saclogo_horizontal.png"
@@ -50,7 +47,6 @@ const Header = ({ menuItems, handleMenuNavigation, recentActivity, liveEvents, u
             }}
           />
 
-          {/* Right Avatar */}
           {!isRightDrawerOpen && (
             <IconButton
               edge="end"
@@ -66,7 +62,6 @@ const Header = ({ menuItems, handleMenuNavigation, recentActivity, liveEvents, u
         </Toolbar>
       </AppBar>
 
-      {/* Left Drawer */}
       <Drawer
         anchor="left"
         open={isLeftDrawerOpen}
@@ -83,10 +78,9 @@ const Header = ({ menuItems, handleMenuNavigation, recentActivity, liveEvents, u
           },
         }}
       >
-        <LeftNav menuItems={menuItems} handleClick={handleMenuNavigation} />
+        <LeftNav menuItems={menuItems} role={userrole} />
       </Drawer>
 
-      {/* Right Drawer */}
       <Drawer
         anchor="right"
         open={isRightDrawerOpen}
@@ -103,15 +97,10 @@ const Header = ({ menuItems, handleMenuNavigation, recentActivity, liveEvents, u
         }}
       >
         <RightNavbar
-          username={username}
-          userrole={userrole}
-          liveEvents={liveEvents}
-          activity={recentActivity}
           onClose={() => setIsRightDrawerOpen(false)}
         />
       </Drawer>
 
-      {/* Spacer for fixed AppBar */}
       <Toolbar />
     </Box>
   );

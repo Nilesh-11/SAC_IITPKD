@@ -20,11 +20,11 @@ export const AuthProvider = ({ children }) => {
     localStorage.setItem("token", token);
     setAuth({ user, token, loading: false });
 
-    if (user.role === "student") navigate("/student/dashboard");
-    else if (user.role === "admin") navigate("/admin/dashboard");
-    else if (user.role === "club") navigate("/club/dashboard");
-    else if (user.role === "council") navigate("/council/dashboard");
-    else if (user.role === "guest") navigate("/guest/dashboard");
+    if (user.role === "student") navigate("/student/dashboard?currSection=dashboard");
+    else if (user.role === "admin") navigate("/admin/dashboard?currSection=dashboard");
+    else if (user.role === "club") navigate("/club/dashboard?currSection=dashboard");
+    else if (user.role === "council") navigate("/council/dashboard?currSection=dashboard");
+    else if (user.role === "guest") navigate("/guest/dashboard?currSection=dashboard");
     else navigate("/");
   };
 

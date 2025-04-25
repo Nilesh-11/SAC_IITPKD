@@ -16,6 +16,7 @@ import Footer from "../components/common/footer";
 import Gallery from "../components/common/gallery";
 import { ResearchInfo } from "../api/council";
 import { motion } from "framer-motion";
+import LeadershipSection from "../components/user/LeadershipSection";
 
 const Research = () => {
   const theme = useTheme();
@@ -59,91 +60,40 @@ const Research = () => {
         sx={{ flex: 1, py: 4, px: { xs: 2, sm: 3 }, width: "100%", overflowX: "hidden" }}
       >
         <Grid container spacing={3}>
-          {loading && (
-            <Grid item xs={12}>
-              <Box display="flex" justifyContent="center" mt={4}>
+          {/* Leadership Section with Loading/Error States */}
+          <Grid item xs={12}>
+            {loading ? (
+              <Box display="flex" justifyContent="center">
                 <CircularProgress />
               </Box>
-            </Grid>
-          )}
-
-          {error && (
-            <Grid item xs={12}>
+            ) : error ? (
               <Alert severity="error" sx={{ mb: 3 }}>
                 {error}
               </Alert>
-            </Grid>
-          )}
+            ) : (
+              council?.secretary && (
+                <LeadershipSection 
+                  council={council} 
+                  councilTitle={council.council_title} 
+                />
+              )
+            )}
+          </Grid>
 
-          {!loading && (
-            <>
-              {council && council.secretary && (
-                <Grid item xs={12}>
-                  <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.4 }}
-                  >
-                    <Paper elevation={3} sx={{ p: { xs: 2, sm: 3 }, borderRadius: 2 }}>
-                      <Grid container spacing={2}>
-                        <Grid item xs={12} sm={4} md={3}>
-                          <Box display="flex" justifyContent={{ xs: "center", sm: "flex-start" }}>
-                            <Avatar
-                              alt={council.secretary.full_name}
-                              src={`/student/${council.secretary.email}/photo.webp`}
-                              sx={{ width: { xs: 96, sm: 128 }, height: { xs: 96, sm: 128 }, boxShadow: 2 }}
-                            />
-                          </Box>
-                        </Grid>
-
-                        <Grid item xs={12} sm={8} md={9}>
-                          <Typography variant="h5" sx={{ mb: 1.5, display: "flex", alignItems: "center", gap: 1 }}>
-                            <MdInfo size={isMobile ? 20 : 24} />
-                            {council.council_title}
-                          </Typography>
-
-                          <Box sx={{ "& > *:not(:last-child)": { mb: 1 } }}>
-                            <Box display="flex" alignItems="center" gap={1}>
-                              <MdPerson size={isMobile ? 20 : 24} />
-                              <strong>Secretary:</strong> {council.secretary.full_name}
-                            </Box>
-                            <Box display="flex" alignItems="center" gap={1} flexWrap="wrap">
-                              <MdEmail size={isMobile ? 20 : 24} />
-                              <strong>Email:</strong> <span style={{ wordBreak: "break-all" }}>{council.secretary.email}</span>
-                            </Box>
-
-                            {council.deputies?.length > 0 && (
-                              <Box mt={1.5}>
-                                <Typography variant="subtitle1" sx={{ mb: 1, display: "flex", alignItems: "center", gap: 1 }}>
-                                  <MdGroup size={isMobile ? 20 : 24} />
-                                  Deputy Secretaries
-                                </Typography>
-                                {council.deputies.map((deputy, index) => (
-                                  <Box key={index} sx={{ pl: 2, mb: 1 }}>
-                                    <div><strong>{deputy.full_name}</strong></div>
-                                    <div style={{ wordBreak: "break-all" }}>{deputy.email}</div>
-                                  </Box>
-                                ))}
-                              </Box>
-                            )}
-
-                            <Box display="flex" alignItems="center" gap={1} flexWrap="wrap" mt={1.5}>
-                              <MdAlternateEmail size={isMobile ? 20 : 24} />
-                              <strong>Council Email:</strong> <span style={{ wordBreak: "break-all" }}>{council.council_email}</span>
-                            </Box>
-                          </Box>
-                        </Grid>
-                      </Grid>
-                    </Paper>
-                  </motion.div>
-                </Grid>
-              )}
-
+          
               {/* Description Section */}
               <Grid item xs={12}>
                 <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.2 }}>
                   <Box sx={{ p: { xs: 1, sm: 2 }, backgroundColor: theme.palette.background.paper, borderRadius: 2 }}>
-                    <Typography variant="h5" sx={{ mb: 2 }}>
+                  <Typography
+                  variant="h5"
+                  component="h2"
+                  sx={{
+                    fontSize: { xs: "1.25rem", sm: "1.4rem" },
+                    mb: 2,
+                    fontFamily: "Poppins, sans-serif",
+                  }}
+                >
                       About Research Affairs Council
                     </Typography>
                     <Divider sx={{ mb: 2 }} />
@@ -171,7 +121,15 @@ const Research = () => {
               <Grid item xs={12}>
                 <motion.div initial={{ opacity: 0, scale: 0.98 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: 0.3 }}>
                   <Box sx={{ p: { xs: 1, sm: 2 }, borderRadius: 2, backgroundColor: theme.palette.background.paper }}>
-                    <Typography variant="h5" sx={{ mb: 2 }}>
+                  <Typography
+                  variant="h5"
+                  component="h2"
+                  sx={{
+                    fontSize: { xs: "1.25rem", sm: "1.4rem" },
+                    mb: 2,
+                    fontFamily: "Poppins, sans-serif",
+                  }}
+                >
                       Research Life at IITPKD
                     </Typography>
                     <Divider sx={{ mb: 2 }} />
@@ -184,8 +142,6 @@ const Research = () => {
                   </Box>
                 </motion.div>
               </Grid>
-            </>
-          )}
         </Grid>
       </Container>
 
