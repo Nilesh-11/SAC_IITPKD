@@ -17,7 +17,7 @@ import Research from "./../pages/Research";
 import Sports from "./../pages/Sports";
 import ResetPassword from "../pages/ResetPassword";
 import CouncilDashboard from "../pages/council/Dashboard";
-import ProjectInfo from "./../components/user/ProjectInfo";
+import ProjectInfo from "../components/user/projectinfo";
 import ClubInfo from "./../components/user/clubinfo";
 import GuestDashboard from "./../pages/guest/Dashboard";
 import ClubCoreTeam from "./../components/user/ClubCoreTeam";
