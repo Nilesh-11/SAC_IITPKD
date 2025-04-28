@@ -218,7 +218,6 @@ const Dashboard = ({
         </Typography>
       )}
 
-      {/* My Clubs Section */}
       <Box mt={3}>
         <Box
           display="flex"
@@ -238,6 +237,7 @@ const Dashboard = ({
             color="warning"
             size="small"
             onClick={handleAllClubLink}
+            disabled={role === "guest"}
             sx={{
               borderRadius: "20px",
               fontWeight: 600,

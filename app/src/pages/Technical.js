@@ -169,7 +169,6 @@ const Technical = () => {
             </motion.div>
           </Grid>
 
-          {/* Gallery Section - Always Visible */}
           <Grid item xs={12}>
             <motion.div
               initial={{ opacity: 0, scale: 0.98 }}
@@ -213,4 +212,4 @@ const Technical = () => {
   );
 };
 
-export default React.memo(Technical);
+export default Technical;

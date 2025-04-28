@@ -1,45 +1,31 @@
-import { useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useEffect, useState, lazy, Suspense } from "react";
+import { useSearchParams } from "react-router-dom";
+import Box from '@mui/material/Box';
+import CircularProgress from '@mui/material/CircularProgress';
 import Header from "../student/Header";
-import Dashboard from "../../components/user/dash";
-import {getAnnouncementsList} from "../../api/announcement";
-import {getEventsList} from "../../api/events";
-import AddClubForm from "../../components/user/AddClubForm";
-import UpdateClubForm from "../../components/user/UpdateClubForm";
-import AddAnnouncementForm from "../../components/user/AddAnnouncmentForm";
-import UpdateAnnouncementForm from "../../components/user/UpdateAnnouncementForm";
-import UpdateEventForm from "../../components/user/UpdateEventForm";
-import AddEventForm from "../../components/user/AddEvent";
-import { ClubsListApi, StatusApi } from "../../api/public";
 import { getUsername } from "../../api/auth";
-import { CircularProgress } from "@mui/material";
+
+const Dashboard = lazy(() => import("../../components/user/dash"));
+const AddClubForm = lazy(() => import("../../components/user/AddClubForm"));
+const UpdateClubForm = lazy(() => import("../../components/user/UpdateClubForm"));
+const AddAnnouncementForm = lazy(() => import("../../components/user/AddAnnouncmentForm"));
+const UpdateAnnouncementForm = lazy(() => import("../../components/user/UpdateAnnouncementForm"));
+const UpdateEventForm = lazy(() => import("../../components/user/UpdateEventForm"));
+const AddEventForm = lazy(() => import("../../components/user/AddEvent"));
 
 const CouncilDashboard = () => {
-  const [events, setEvents] = useState([]);
-  const [announcements, setAnnouncements] = useState([]);
-  const [status, setStatus] = useState("");
-  const [allClubs, setAllClubs] = useState([]);
-  const [currSection, setCurrentSection] = useState("dashboard");
-  const [username, setUsername] = useState("");
+  const [searchParams] = useSearchParams();
+  const currSection = searchParams.get("currSection") || "dashboard";
   const [userrole, setRole] = useState("");
   const [loading, setLoading] = useState(true);
-  
+
   useEffect(() => {
     const fetchAllData = async () => {
       try {
-        const [annData, eventData, clubData, userData, statData] = await Promise.all([
-          getAnnouncementsList(),
-          getEventsList(),
-          ClubsListApi(),
+        const [userData] = await Promise.all([
           getUsername(),
-          StatusApi(),
         ]);
-        setEvents(eventData);
-        setAllClubs(clubData.clubs.map(item => `/clubs/${item.name}/opaque_logo_square.png`));
-        setAnnouncements(annData);
-        setUsername(userData.name);
         setRole(userData.user_type);
-        setStatus(statData);
       } catch (err) {
         console.error("Error loading dashboard data", err);
       } finally {
@@ -48,10 +34,6 @@ const CouncilDashboard = () => {
     };
     fetchAllData();
   }, []);
-
-  const handleMenuNavigation = (link) => {
-    setCurrentSection(link);
-  };
 
   const menuItems = [
     { name: "Dashboard", icon: "📊", link: "dashboard" },
@@ -62,66 +44,48 @@ const CouncilDashboard = () => {
     { name: "Add Event", icon: "📅", link: "addevent" },
     { name: "Update Event", icon: "🖋️", link: "updateevent" },
   ];
-  
+
   if (loading) {
     return (
-      <div style={{ textAlign: "center", marginTop: "100px" }}>
+      <Box textAlign="center" mt={10}>
         <h2>Loading Dashboard...</h2>
         <CircularProgress />
-      </div>
+      </Box>
     );
   }
-  
+
+  const sectionComponents = {
+    dashboard: (
+      <Dashboard
+        role={userrole}
+      />
+    ),
+    addclub: <AddClubForm />,
+    updateclub: <UpdateClubForm />,
+    addannouncement: <AddAnnouncementForm />,
+    updateannouncement: <UpdateAnnouncementForm />,
+    addevent: <AddEventForm />,
+    updateevent: <UpdateEventForm />
+  };
+
   return (
-    <div>
+    <Box
+      sx={{
+        backgroundImage: `linear-gradient(rgba(255,255,255,0.1), rgba(255,255,255,0.2)), url('/bg1.webp')`,
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        minHeight: "100vh",
+      }}
+    >
       <Header
-        handleMenuNavigation={handleMenuNavigation}
-        liveEvents={events}
         menuItems={menuItems}
-        username={username}
         userrole={userrole}
-      ></Header>
+      />
 
-      {currSection === "dashboard" && (
-        <Dashboard
-          announcements={announcements}
-          status={status}
-          myClubs={allClubs}
-          handleAllAnnouncementClick={() => {
-            setCurrentSection("dashboard");
-          }}
-          handleAllClubLink={() => {
-            setCurrentSection("dashboard");
-          }}
-        >
-          {" "}
-        </Dashboard>
-      )}
-
-      {currSection === "addannouncement" && (
-        <AddAnnouncementForm></AddAnnouncementForm>
-      )}
-
-      {currSection === "updateannouncement" && (
-        <UpdateAnnouncementForm></UpdateAnnouncementForm>
-      )}
-
-      {currSection === "updateevent" && (
-        <UpdateEventForm></UpdateEventForm>
-      )}
-
-      {currSection === "addevent" && (
-        <AddEventForm></AddEventForm>
-      )}
-
-      {currSection === "addclub" && (
-        <AddClubForm></AddClubForm>
-      )}
-
-      {currSection === "updateclub" && (
-        <UpdateClubForm></UpdateClubForm>
-      )}
-    </div>
+      <Suspense fallback={<Box textAlign="center" mt={5}><CircularProgress /></Box>}>
+        {sectionComponents[currSection]}
+      </Suspense>
+    </Box>
   );
 };
 

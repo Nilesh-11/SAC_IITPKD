@@ -1,19 +1,31 @@
-import React, { useEffect, useState } from "react";
-import Container from '@mui/material/Container';
-import Grid from '@mui/material/Grid';
-import Box from '@mui/material/Box';
-import Typography from '@mui/material/Typography';
-import CircularProgress from '@mui/material/CircularProgress';
-import Alert from '@mui/material/Alert';
-import Divider from '@mui/material/Divider';
-import { useTheme } from '@mui/material/styles';
-import Header from "../components/common/header";
-import Footer from "../components/common/footer";
-import Gallery from "../components/common/gallery";
-import { CulturalInfo } from "../api/council";
+import React, {
+  useEffect,
+  useState,
+  Suspense,
+  lazy,
+  useCallback,
+  useMemo,
+} from "react";
+import Container from "@mui/material/Container";
+import Grid from "@mui/material/Grid";
+import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
+import CircularProgress from "@mui/material/CircularProgress";
+import Alert from "@mui/material/Alert";
+import Skeleton from "@mui/material/Skeleton";
+import Divider from "@mui/material/Divider";
+import { useTheme } from "@mui/material/styles";
+import useMediaQuery from "@mui/material/useMediaQuery";
 import { motion } from "framer-motion";
-import LeadershipSection from "../components/user/LeadershipSection";
-import useMediaQuery from '@mui/material/useMediaQuery';
+import { CulturalInfo } from "../api/council";
+
+// Lazy load components
+const Header = lazy(() => import("../components/common/header"));
+const Footer = lazy(() => import("../components/common/footer"));
+const Gallery = lazy(() => import("../components/common/gallery"));
+const LeadershipSection = lazy(() =>
+  import("../components/user/LeadershipSection")
+);
 
 const Cultural = () => {
   const theme = useTheme();
@@ -22,40 +34,48 @@ const Cultural = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  useEffect(() => {
-    const fetchCouncilData = async () => {
-      try {
-        const res = await CulturalInfo();
-        res.type === "error"
-          ? setError(res.details || "Failed to load council data")
-          : setCouncil(res.council);
-      } catch (err) {
-        setError("Network error - please try again later");
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchCouncilData();
+  const fetchCouncilData = useCallback(async () => {
+    try {
+      const res = await CulturalInfo();
+      res.type === "error"
+        ? setError(res.details || "Failed to load council data")
+        : setCouncil(res.council);
+    } catch {
+      setError("Network error - please try again later");
+    } finally {
+      setLoading(false);
+    }
   }, []);
 
-  const galleryImages = [
-    "/council/cultural/photo1.webp",
-    "/council/cultural/photo2.webp",
-    "/council/cultural/photo3.webp",
-    "/council/cultural/photo4.webp",
-  ];
+  useEffect(() => {
+    fetchCouncilData();
+  }, [fetchCouncilData]);
+
+  const galleryImages = useMemo(
+    () => [
+      "/council/cultural/photo1.webp",
+      "/council/cultural/photo2.webp",
+      "/council/cultural/photo3.webp",
+      "/council/cultural/photo4.webp",
+    ],
+    []
+  );
 
   return (
-    <Box sx={{ 
-      minHeight: "100vh", 
-      display: "flex", 
-      flexDirection: "column", 
-      backgroundImage: "url('/bg1.webp')",
-      backgroundSize: "cover",
-      backgroundPosition: "center",
-      backgroundRepeat: "no-repeat", 
-    }}>
-      <Header />
+    <Box
+      sx={{
+        minHeight: "100vh",
+        display: "flex",
+        flexDirection: "column",
+        backgroundImage: "url('/bg1.webp')",
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        backgroundRepeat: "no-repeat",
+      }}
+    >
+      <Suspense fallback={<Skeleton variant="rectangular" height={64} />}>
+        <Header />
+      </Suspense>
 
       <Container
         component="main"
@@ -80,16 +100,19 @@ const Cultural = () => {
                 {error}
               </Alert>
             ) : (
-              council?.secretary && (
-                <LeadershipSection 
-                  council={council} 
-                  councilTitle={council.council_title} 
-                />
-              )
+              <Suspense
+                fallback={<Skeleton variant="rectangular" height={200} />}
+              >
+                {council?.secretary && (
+                  <LeadershipSection
+                    council={council}
+                    councilTitle={council.council_title}
+                  />
+                )}
+              </Suspense>
             )}
           </Grid>
 
-          {/* About the Council Section - Always Visible */}
           <Grid item xs={12}>
             <motion.div
               initial={{ opacity: 0 }}
@@ -162,21 +185,25 @@ const Cultural = () => {
                   Cultural Highlights
                 </Typography>
                 <Divider sx={{ mb: 2 }} />
-                <Gallery
-                  images={galleryImages}
-                  galleryId="culturalGallery"
-                  columns={isMobile ? 1 : 3}
-                  imageStyle={{ borderRadius: 8 }}
-                />
+                <Suspense fallback={<Skeleton variant="rectangular" height={300} />}>
+                  <Gallery
+                    images={galleryImages}
+                    galleryId="culturalGallery"
+                    columns={isMobile ? 1 : 3}
+                    imageStyle={{ borderRadius: 8 }}
+                  />
+                </Suspense>
               </Box>
             </motion.div>
           </Grid>
         </Grid>
       </Container>
 
-      <Footer />
+      <Suspense fallback={<Skeleton variant="rectangular" height={64} />}>
+        <Footer />
+      </Suspense>
     </Box>
   );
 };
 
-export default Cultural;
+export default React.memo(Cultural);

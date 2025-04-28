@@ -10,6 +10,7 @@ import { FaUserCircle } from "react-icons/fa";
 
 import LeftNav from "../../components/user/leftnav";
 import RightNavbar from "../../components/user/rightnav";
+import { useNavigate } from "react-router-dom";
 
 const Header = ({
   menuItems,
@@ -17,6 +18,11 @@ const Header = ({
 }) => {
   const [isRightDrawerOpen, setIsRightDrawerOpen] = useState(false);
   const [isLeftDrawerOpen, setIsLeftDrawerOpen] = useState(false);
+  const navigate = useNavigate();
+
+  const handleimagenavigation = () =>{
+    navigate("/");
+  }
 
   return (
     <Box sx={{ flexGrow: 1 }}>
@@ -36,6 +42,7 @@ const Header = ({
 
           <Box
             component="img"
+            onClick={handleimagenavigation}
             src="/sac/saclogo_horizontal.png"
             alt="Logo"
             sx={{

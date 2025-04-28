@@ -1,3 +1,3 @@
-const BACKEND_URL="http://localhost:8000"
+const BACKEND_URL="http://128.199.22.186:8000"
 
 export default BACKEND_URL;

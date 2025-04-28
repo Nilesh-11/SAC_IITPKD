@@ -1,49 +1,16 @@
-import { useEffect, useState } from "react";
+import { lazy, Suspense } from "react";
+import { useSearchParams } from "react-router-dom";
+import Box from '@mui/material/Box';
+import CircularProgress from '@mui/material/CircularProgress';
 import Header from "../student/Header";
-import Dashboard from "../../components/user/dash";
-import AnnouncementsDash from "../../components/user/announcementsDash";
-import EventCalendar from "../../components/user/bigcalendar";
-import {getAnnouncementsList} from "../../api/announcement";
-import {getEventsList} from "../../api/events";
-import {ClubsListApi, StatusApi} from "../../api/public";
-import { CircularProgress } from "@mui/material";
+
+const Dashboard = lazy(() => import("../../components/user/dash"));
+const AnnouncementsDash = lazy(() => import("../../components/user/announcementsDash"));
+const EventCalendar = lazy(() => import("../../components/user/bigcalendar"));
 
 const GuestDashboard = () => {
-  const [events, setEvents] = useState([]);
-  const [announcements, setAnnouncements] = useState([]);
-  const [currSection, setCurrentSection] = useState("dashboard");
-  const [status, setStatus] = useState("");
-  const [allClubs, setAllClubs] = useState([]);
-  const username = useState("Guest");
-  const userrole = useState("guest");
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const fetchAllData = async () => {
-      try {
-        const [annData, eventData, clubData, statData] = await Promise.all([
-          getAnnouncementsList(),
-          getEventsList(),
-          ClubsListApi(),
-          StatusApi(),
-        ]);
-        setAllClubs(clubData.clubs.map(item => `/clubs/${item.name}/opaque_logo_square.png`));
-        setAnnouncements(annData);
-        setEvents(eventData);
-        setStatus(statData);
-      } catch (err) {
-        console.error("Error loading dashboard data", err);
-      } finally {
-        setLoading(false);
-      }
-    };
-    
-    fetchAllData();
-  }, []);
-  
-  const handleMenuNavigation = (link) => {
-    setCurrentSection(link);
-  };
+  const [searchParams] = useSearchParams();
+  const currSection = searchParams.get("currSection") || "dashboard";
 
   const menuItems = [
     { name: "Dashboard", icon: "📊", link: "dashboard" },
@@ -51,48 +18,32 @@ const GuestDashboard = () => {
     { name: "Calendar", icon: "🗓️", link: "calendar" },
   ];
 
-  if (loading) {
-    return (
-      <div style={{ textAlign: "center", marginTop: "100px" }}>
-        <h2>Loading Dashboard...</h2>
-        <CircularProgress />
-      </div>
-    );
-  }
-  
+  const sectionComponents = {
+    dashboard: (
+      <Dashboard role="guest"/>
+    ),
+    announcements: <AnnouncementsDash />,
+    calendar: <EventCalendar />
+  };
+
   return (
-    <div>
+    <Box
+      sx={{
+        backgroundImage: `linear-gradient(rgba(255,255,255,0.1), rgba(255,255,255,0.2)), url('/bg1.webp')`,
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        minHeight: "100vh",
+      }}
+    >
       <Header
-        handleMenuNavigation={handleMenuNavigation}
-        liveEvents={events}
         menuItems={menuItems}
-        username={username}
-        userrole={userrole}
-      ></Header>
-      {currSection === "dashboard" && (
-        <Dashboard
-          announcements={announcements}
-          status={status}
-          myClubs={allClubs}
-          handleAllAnnouncementClick={() => {
-            setCurrentSection("dashboard");
-          }}
-          handleAllClubLink={() => {
-            setCurrentSection("dashboard");
-          }}
-        >
-          {" "}
-        </Dashboard>
-      )}
+        userrole="guest"
+      />
 
-      {currSection === "announcements" && (
-        <AnnouncementsDash announcements={announcements}></AnnouncementsDash>
-      )}
-
-      {currSection === "calendar" && (
-          <EventCalendar events={events} />
-      )}
-    </div>
+      <Suspense fallback={<Box textAlign="center" mt={5}><CircularProgress /></Box>}>
+        {sectionComponents[currSection]}
+      </Suspense>
+    </Box>
   );
 };
 

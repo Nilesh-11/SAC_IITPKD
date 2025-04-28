@@ -166,19 +166,11 @@ const Home = () => {
                     pursuits.
                   </Typography>
                 </Box>
-                <Box
-                  sx={{
-                    width: "100%",
-                    height: { xs: 200, sm: 300, md: 400 }, // Set appropriate heights
-                    position: "relative",
-                  }}
-                >
                   <Suspense
                     fallback={<Skeleton variant="rectangular" height={200} />}
                   >
                     <Gallery images={about_images} galleryId="firstGallery" />
                   </Suspense>
-                </Box>
               </Grid>
               <Grid item id="councils" xs={12}>
                 <Box mt={4}>

@@ -1,59 +1,76 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, lazy, Suspense } from "react";
+import { useSearchParams } from "react-router-dom";
+import Box from '@mui/material/Box';
+import CircularProgress from '@mui/material/CircularProgress';
 import Header from "./../student/Header";
-import {getEventsList} from "./../../api/events";
-import AddCouncilForm from "./../../components/user/AddCouncilForm";
-import UpdateCouncilForm from "./../../components/user/UpdateCouncilForm";
-import AddStudentForm from "./../../components/user/AddStudentForm";
-import { Box } from "@mui/material";
+import { getEventsList } from "./../../api/events";
+import { getUsername } from "../../api/auth";
+
+// Lazy load components
+const AddCouncilForm = lazy(() => import("./../../components/user/AddCouncilForm"));
+const UpdateCouncilForm = lazy(() => import("./../../components/user/UpdateCouncilForm"));
+const AddStudentForm = lazy(() => import("./../../components/user/AddStudentForm"));
 
 const AdminDashboard = () => {
-  const [events, setEvents] = useState([]);
-  const [currSection, setCurrentSection] = useState("addcouncil");
+  const [searchParams] = useSearchParams();
+  const currSection = searchParams.get("currSection");
+  const [userrole, setRole] = useState("");
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchEvents = async () => {
-      const data = await getEventsList();
-      setEvents(data);
+    const fetchAllData = async () => {
+      try {
+        const [userData] = await Promise.all([
+          getUsername(),
+        ]);
+        setRole(userData.user_type);
+      } catch (err) {
+        console.error("Error loading dashboard data", err);
+      } finally {
+        setLoading(false);
+      }
     };
-
-    fetchEvents();
+    fetchAllData();
   }, []);
 
-  const handleMenuNavigation = (link) => {
-    setCurrentSection(link);
+  const menuItems = [
+    { name: "Add Council", icon: "🆕", link: "addcouncil" },
+    { name: "Update Council", icon: "🛠️", link: "updatecouncil" },
+    { name: "Add Student", icon: "🎓", link: "addstudent" },
+  ];
+
+  if (loading) {
+    return (
+      <Box textAlign="center" mt={10}>
+        <h2>Loading Dashboard...</h2>
+        <CircularProgress />
+      </Box>
+    );
+  }
+
+  const sectionComponents = {
+    addcouncil: <AddCouncilForm />,
+    updatecouncil: <UpdateCouncilForm />,
+    addstudent: <AddStudentForm />,
   };
 
-  const menuItems = [
-    { name: "Add Council", icon: "🆕", link: "addcouncil" },     // Represents "add" or "new"
-    { name: "Update Council", icon: "🛠️", link: "updatecouncil" }, // Represents "update/edit"
-    { name: "Add Student", icon: "🎓", link: "addstudent" },      // Represents "student"
-  ];
-   
-  
   return (
     <Box
-    sx={{backgroundImage: `linear-gradient(rgba(255,255,255,0.1), rgba(255,255,255,0.2)), url('/bg1.webp')`,
-      backgroundSize: "cover",
-      backgroundPosition: "center",}}
+      sx={{
+        backgroundImage: `linear-gradient(rgba(255,255,255,0.1), rgba(255,255,255,0.2)), url('/bg1.webp')`,
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        minHeight: "100vh",
+      }}
     >
       <Header
-        handleMenuNavigation={handleMenuNavigation}
-        liveEvents={events}
         menuItems={menuItems}
-      ></Header>
+        userrole={userrole}
+      />
 
-      {currSection === "addcouncil" && (
-        <AddCouncilForm />
-      )}
-
-      {currSection === "updatecouncil" && (
-        <UpdateCouncilForm />
-      )}
-
-      {currSection === "addstudent" && (
-        <AddStudentForm />
-      )}
-
+      <Suspense fallback={<Box textAlign="center" mt={5}><CircularProgress /></Box>}>
+        {sectionComponents[currSection] || <AddCouncilForm />}
+      </Suspense>
     </Box>
   );
 };

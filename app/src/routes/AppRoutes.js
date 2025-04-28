@@ -1,65 +1,78 @@
-import { lazy, Suspense } from "react";
+import { lazy, Suspense, useMemo } from "react";
 import { Routes, Route } from "react-router-dom";
 import ProtectedRoute from "./../components/ProtectedRoute";
 
-const Home = lazy(() => import("./../pages/Home"));
-const Login = lazy(() => import("./../pages/Login"));
-const StudentDashboard = lazy(() => import("./../pages/student/Dashboard"));
-const AdminDashboard = lazy(() => import("./../pages/admin/Dashboard"));
-const ClubDashboard = lazy(() => import("./../pages/club/Dashboard"));
-const NotFound = lazy(() => import("./../pages/NotFound"));
-const Signup = lazy(() => import("./../pages/SignUp"));
-const Technical = lazy(() => import("./../pages/Technical"));
-const Academic = lazy(() => import("./../pages/Academic"));
-const Developers = lazy(() => import("./../pages/Developers"));
-const Culturals = lazy(() => import("./../pages/Culturals"));
-const Postgraduate = lazy(() => import("./../pages/PostGraduate"));
-const Hostel = lazy(() => import("./../pages/Hostel"));
-const Research = lazy(() => import("./../pages/Research"));
-const Sports = lazy(() => import("./../pages/Sports"));
-const ResetPassword = lazy(() => import("./../pages/ResetPassword"));
-const CouncilDashboard = lazy(() => import("./../pages/council/Dashboard"));
-const ProjectInfo = lazy(() => import("./../components/user/projectinfo"));
-const ClubInfo = lazy(() => import("./../components/user/clubinfo"));
-const GuestDashboard = lazy(() => import("./../pages/guest/Dashboard"));
-const ClubCoreTeam = lazy(() => import("./../components/user/ClubCoreTeam"));
+const lazyImport = (path) => {
+  const Component = lazy(() => import(`./../${path}`));
+  return <Component />;
+};
 
-const AppRoutes = () => (
-  <Suspense fallback={<div>Loading...</div>}>
-    <Routes>
-      <Route path="/" element={<Home />} />
-      <Route path="/login" element={<Login />} />
-      <Route path="/reset-password" element={<ResetPassword />} />
-      <Route path="/technical" element={<Technical />} />
-      <Route path="/academics" element={<Academic />} />
-      <Route path="/cultural" element={<Culturals />} />
-      <Route path="/post-graduate" element={<Postgraduate />} />
-      <Route path="/hostel" element={<Hostel />} />
-      <Route path="/research" element={<Research />} />
-      <Route path="/sports" element={<Sports />} />
-      <Route path="/signup" element={<Signup />} />
-      <Route path="/developers" element={<Developers />} />
-      <Route path="/guest/dashboard" element={<GuestDashboard />} />
+const publicRoutes = [
+  { path: "/", component: "pages/Home" },
+  { path: "/login", component: "pages/Login" },
+  { path: "/reset-password", component: "pages/ResetPassword" },
+  { path: "/technical", component: "pages/Technical" },
+  { path: "/academics", component: "pages/Academic" },
+  { path: "/cultural", component: "pages/Culturals" },
+  { path: "/post-graduate", component: "pages/PostGraduate" },
+  { path: "/hostel", component: "pages/Hostel" },
+  { path: "/research", component: "pages/Research" },
+  { path: "/sports", component: "pages/Sports" },
+  { path: "/signup", component: "pages/SignUp" },
+  { path: "/developers", component: "pages/Developers" },
+  { path: "/guest/dashboard", component: "pages/guest/Dashboard" },
+];
 
-      <Route element={<ProtectedRoute allowedRoles={["student"]} />}>
-        <Route path="/student/dashboard" element={<StudentDashboard />} />
-        <Route path="/project/info" element={<ProjectInfo />} />
-        <Route path="/club/info" element={<ClubInfo />} />
-        <Route path="/club/coreteam" element={<ClubCoreTeam />} />
-      </Route>
-      <Route element={<ProtectedRoute allowedRoles={["admin"]} />}>
-        <Route path="/admin/dashboard" element={<AdminDashboard />} />
-      </Route>
-      <Route element={<ProtectedRoute allowedRoles={["club"]} />}>
-        <Route path="/club/dashboard" element={<ClubDashboard />} />
-      </Route>
-      <Route element={<ProtectedRoute allowedRoles={["council"]} />}>
-        <Route path="/council/dashboard" element={<CouncilDashboard />} />
-      </Route>
+const protectedRoutes = [
+  { 
+    roles: ["student"], 
+    routes: [
+      { path: "/student/dashboard", component: "pages/student/Dashboard" },
+      { path: "/project/info", component: "components/user/projectinfo" },
+      { path: "/club/info", component: "components/user/clubinfo" },
+      { path: "/club/coreteam", component: "components/user/ClubCoreTeam" },
+    ]
+  },
+  { 
+    roles: ["admin"], 
+    routes: [
+      { path: "/admin/dashboard", component: "pages/admin/Dashboard" },
+    ]
+  },
+  { 
+    roles: ["club"], 
+    routes: [
+      { path: "/club/dashboard", component: "pages/club/Dashboard" },
+    ]
+  },
+  { 
+    roles: ["council"], 
+    routes: [
+      { path: "/council/dashboard", component: "pages/council/Dashboard" },
+    ]
+  },
+];
 
-      <Route path="*" element={<NotFound />} />
-    </Routes>
-  </Suspense>
-);
+const AppRoutes = () => {
+  const routeElements = useMemo(() => [
+    ...publicRoutes.map(({ path, component }) => (
+      <Route key={path} path={path} element={lazyImport(component)} />
+    )),
+    ...protectedRoutes.map(({ roles, routes }) => (
+      <Route key={roles.join()} element={<ProtectedRoute allowedRoles={roles} />}>
+        {routes.map(({ path, component }) => (
+          <Route key={path} path={path} element={lazyImport(component)} />
+        ))}
+      </Route>
+    )),
+    <Route key="*" path="*" element={lazyImport("pages/NotFound")} />
+  ], []);
+
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <Routes>{routeElements}</Routes>
+    </Suspense>
+  );
+};
 
 export default AppRoutes;
