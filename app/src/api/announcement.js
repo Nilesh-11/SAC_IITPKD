@@ -16,7 +16,9 @@ export const getAnnouncementsList = async () => {
       },
       body: JSON.stringify({}),
     });
+    console.log(response);
     const responseData = await response.json();
+    console.log(responseData);
     if (
       responseData?.content?.type === "error" &&
       (responseData.content.details === "JWTExpired" ||
