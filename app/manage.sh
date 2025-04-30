@@ -4,7 +4,7 @@
 
 set -e
 
-APP_DIR="Frontend"
+APP_DIR="app"
 DEV_PORT=3000
 PROD_PORT=5000
 NODE_VERSION="22"
@@ -45,7 +45,6 @@ install_serve() {
 
 dev_install() {
     echo -e "${YELLOW}Installing development dependencies...${NC}"
-    cd "$APP_DIR" || exit
     npm install
     cd ..
     echo -e "${GREEN}Development dependencies installed!${NC}"
@@ -53,7 +52,6 @@ dev_install() {
 
 prod_install() {
     echo -e "${YELLOW}Installing production dependencies...${NC}"
-    cd "$APP_DIR" || exit
     npm install --production
     cd ..
     echo -e "${GREEN}Production dependencies installed!${NC}"
@@ -61,7 +59,6 @@ prod_install() {
 
 build_app() {
     echo -e "${YELLOW}Building React app...${NC}"
-    cd "$APP_DIR" || exit
     npm run build
     cd ..
     echo -e "${GREEN}React app built successfully!${NC}"
@@ -69,7 +66,6 @@ build_app() {
 
 dev_start() {
     echo -e "${YELLOW}Starting development server with pm2...${NC}"
-    cd "$APP_DIR" || exit
     echo -e "${GREEN}Development server running on: http://localhost:$DEV_PORT${NC}"
     pm2 start "npm start" --name "react-dev-server"
     echo -e "${GREEN}Server started with pm2!${NC}"
@@ -79,7 +75,6 @@ dev_start() {
 
 prod_serve() {
     echo -e "${YELLOW}Serving production build with pm2...${NC}"
-    cd "$APP_DIR" || exit
     echo -e "${GREEN}Production app running on: http://localhost:$PROD_PORT${NC}"
     pm2 start "serve -s build -l $PROD_PORT" --name "react-prod-server"
     echo -e "${GREEN}Server started with pm2!${NC}"
