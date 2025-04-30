@@ -78,19 +78,37 @@ create_databases() {
     read -p "Enter PostgreSQL username: " pg_user
     read -s -p "Enter PostgreSQL password: " pg_password
     echo
-    
-    sudo -u postgres psql -c "DO \$\$ BEGIN CREATE ROLE $pg_user WITH LOGIN PASSWORD '$pg_password' CREATEDB; EXCEPTION WHEN duplicate_object THEN RAISE NOTICE 'User already exists'; END \$\$;"
+
+    sudo -u postgres psql -c "DO \$\$ 
+    BEGIN 
+        IF NOT EXISTS (SELECT FROM pg_roles WHERE rolname = '$pg_user') THEN 
+            CREATE ROLE $pg_user WITH LOGIN PASSWORD '$pg_password' CREATEDB;
+        ELSE 
+            RAISE NOTICE 'User already exists'; 
+        END IF; 
+    END 
+    \$\$;"
+
     sudo -u postgres psql -c "ALTER USER $pg_user CREATEDB;"
 
     for db in "${DATABASES[@]}"; do
         echo -e "${YELLOW}Creating database: $db${NC}"
-        sudo -u postgres psql -c "CREATE DATABASE $db OWNER $pg_user;"
+        sudo -u postgres psql -c "DO \$\$ 
+        BEGIN 
+            IF NOT EXISTS (SELECT FROM pg_database WHERE datname = '$db') THEN 
+                CREATE DATABASE $db OWNER $pg_user;
+            ELSE 
+                RAISE NOTICE 'Database \"$db\" already exists'; 
+            END IF; 
+        END 
+        \$\$;"
     done
 
     update_env_file "$pg_user" "$pg_password"
 
     echo -e "${GREEN}Databases created successfully!${NC}"
 }
+
 
 update_env_file() {
     local pg_user=$1
