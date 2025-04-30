@@ -60,7 +60,7 @@ const Header = () => {
     >
       <Toolbar>
         <Box sx={{ flexGrow: 1, display: 'flex', alignItems: 'center' }}>
-          <img src="/sac/saclogo_horizontal.png" alt="Logo" height={isSmallScreen ? 30 : 40} />
+          <img src="/sac/saclogo_horizontal.webp" alt="Logo" height={isSmallScreen ? 30 : 40} />
         </Box>
 
         {isSmallScreen ? (

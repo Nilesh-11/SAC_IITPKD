@@ -1,16 +1,15 @@
 import time
 from starlette.middleware.base import BaseHTTPMiddleware
-from fastapi import Request, HTTPException
+from fastapi import Request
 from src.config.config import logger
-from sqlalchemy.orm import Session
 from fastapi.responses import JSONResponse
-from database.connection import SessionUsers
+from src.database.connection import SessionUsers
 
 class LoggingMiddleware(BaseHTTPMiddleware):
     async def dispatch(self, request: Request, call_next):
         request_method = request.method
         path = request.url.path
-        allowed_methods = ["GET", "POST", "PUT", "DELETE"]
+        allowed_methods = ["POST"]
         if request_method not in allowed_methods:
             return JSONResponse(content={'type': "error", 'details': "Method Not Allowed"}, status_code=405)
         start_time = time.time()

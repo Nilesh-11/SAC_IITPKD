@@ -18,15 +18,15 @@ export const AddStudentApi = async (data) => {
     });
     const responseData = await response.json();
     if (
-      responseData?.content?.type === "error" &&
-      (responseData.content.details === "JWTExpired" ||
-        responseData.content.details === "JWTInvalid")
+      responseData?.type === "error" &&
+      (responseData.details === "JWTExpired" ||
+        responseData.details === "JWTInvalid")
     ) {
       handleAPIError();
       return;
     }
     if (response.ok) {
-      return responseData.content;
+      return responseData;
     } else {
       throw new Error(`HTTP error! Status: ${response.status}`);
     }
@@ -48,15 +48,15 @@ export const AddCouncilApi = async (data) => {
     });
     const responseData = await response.json();
     if (
-      responseData?.content?.type === "error" &&
-      (responseData.content.details === "JWTExpired" ||
-        responseData.content.details === "JWTInvalid")
+      responseData?.type === "error" &&
+      (responseData.details === "JWTExpired" ||
+        responseData.details === "JWTInvalid")
     ) {
       handleAPIError();
       return;
     }
     if (response.ok) {
-      return responseData.content;
+      return responseData;
     } else {
       throw new Error(`HTTP error! Status: ${response.status}`);
     }
@@ -78,15 +78,15 @@ export const CouncilListApi = async () => {
     });
     const responseData = await response.json();
     if (
-      responseData?.content?.type === "error" &&
-      (responseData.content.details === "JWTExpired" ||
-        responseData.content.details === "JWTInvalid")
+      responseData?.type === "error" &&
+      (responseData.details === "JWTExpired" ||
+        responseData.details === "JWTInvalid")
     ) {
       handleAPIError();
       return;
     }
     if (response.ok) {
-      return responseData.content;
+      return responseData;
     } else {
       throw new Error(`HTTP error! Status: ${response.status}`);
     }
@@ -108,15 +108,15 @@ export const UpdateCouncilApi = async (data) => {
     });
     const responseData = await response.json();
     if (
-      responseData?.content?.type === "error" &&
-      (responseData.content.details === "JWTExpired" ||
-        responseData.content.details === "JWTInvalid")
+      responseData?.type === "error" &&
+      (responseData.details === "JWTExpired" ||
+        responseData.details === "JWTInvalid")
     ) {
       handleAPIError();
       return;
     }
     if (response.ok) {
-      return responseData.content;
+      return responseData;
     } else {
       throw new Error(`HTTP error! Status: ${response.status}`);
     }
@@ -138,15 +138,15 @@ export const DeleteCouncilApi = async (data) => {
     });
     const responseData = await response.json();
     if (
-      responseData?.content?.type === "error" &&
-      (responseData.content.details === "JWTExpired" ||
-        responseData.content.details === "JWTInvalid")
+      responseData?.type === "error" &&
+      (responseData.details === "JWTExpired" ||
+        responseData.details === "JWTInvalid")
     ) {
       handleAPIError();
       return;
     }
     if (response.ok) {
-      return responseData.content;
+      return responseData;
     } else {
       throw new Error(`HTTP error! Status: ${response.status}`);
     }

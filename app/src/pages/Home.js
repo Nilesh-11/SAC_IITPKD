@@ -54,6 +54,7 @@ const Home = () => {
     "/council/photo6.webp",
     "/council/photo13.webp",
     "/council/photo12.webp",
+    "/council/photo15.webp",
   ];
 
   const deanOfficePeople = [
@@ -146,7 +147,11 @@ const Home = () => {
                   </Typography>
                   <Typography
                     sx={{
-                      fontSize: { xs: "0.8rem", sm: "0.9rem", md: "1rem" },
+                      fontSize: { xs: "0.9rem", sm: "1rem" },
+                      lineHeight: 1.7,
+                      textAlign: "justify",
+                      hyphens: "auto",
+                      whiteSpace: "pre-wrap",
                     }}
                   >
                     The Technical Council of IIT Palakkad is a dynamic group
@@ -166,11 +171,11 @@ const Home = () => {
                     pursuits.
                   </Typography>
                 </Box>
-                  <Suspense
-                    fallback={<Skeleton variant="rectangular" height={200} />}
-                  >
-                    <Gallery images={about_images} galleryId="firstGallery" />
-                  </Suspense>
+                <Suspense
+                  fallback={<Skeleton variant="rectangular" height={200} />}
+                >
+                  <Gallery images={about_images} galleryId="firstGallery" />
+                </Suspense>
               </Grid>
               <Grid item id="councils" xs={12}>
                 <Box mt={4}>
@@ -184,7 +189,11 @@ const Home = () => {
                   </Typography>
                   <Typography
                     sx={{
-                      fontSize: { xs: "0.8rem", sm: "0.9rem", md: "1rem" },
+                      fontSize: { xs: "0.9rem", sm: "1rem" },
+                      lineHeight: 1.7,
+                      textAlign: "justify",
+                      hyphens: "auto",
+                      whiteSpace: "pre-wrap",
                     }}
                   >
                     The councils at IIT Palakkad play a pivotal role in

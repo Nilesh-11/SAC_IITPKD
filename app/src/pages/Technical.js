@@ -52,7 +52,9 @@ const Technical = () => {
   }, [fetchCouncilData]);
 
   const galleryImages = useMemo(
-    () => ["/council/technical/photo1.webp", "/council/technical/photo2.webp"],
+    () => ["/council/technical/photo1.webp",
+          "/council/technical/photo2.webp", 
+          "/council/technical/photo4.webp"],
     []
   );
 

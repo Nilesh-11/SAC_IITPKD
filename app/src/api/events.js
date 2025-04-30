@@ -18,15 +18,15 @@ export const getEventsList = async () => {
     });
     const responseData = await response.json();
     if (
-      responseData?.content?.type === "error" &&
-      (responseData.content.details === "JWTExpired" ||
-        responseData.content.details === "JWTInvalid")
+      responseData?.type === "error" &&
+      (responseData.details === "JWTExpired" ||
+        responseData.details === "JWTInvalid")
     ) {
       handleAPIError();
       return;
     }
     if (response.ok) {
-      return responseData.content.events;
+      return responseData.events;
     } else {
       throw new Error(`HTTP error! Status: ${response.status}`);
     }
@@ -48,15 +48,15 @@ export const AddEventApi = async (data) => {
     });
     const responseData = await response.json();
     if (
-      responseData?.content?.type === "error" &&
-      (responseData.content.details === "JWTExpired" ||
-        responseData.content.details === "JWTInvalid")
+      responseData?.type === "error" &&
+      (responseData.details === "JWTExpired" ||
+        responseData.details === "JWTInvalid")
     ) {
       handleAPIError();
       return;
     }
     if (response.ok) {
-      return responseData.content;
+      return responseData;
     } else {
       throw new Error(`HTTP error! Status: ${response.status}`);
     }
@@ -78,15 +78,15 @@ export const MyEventsApi = async () => {
     });
     const responseData = await response.json();
     if (
-      responseData?.content?.type === "error" &&
-      (responseData.content.details === "JWTExpired" ||
-        responseData.content.details === "JWTInvalid")
+      responseData?.type === "error" &&
+      (responseData.details === "JWTExpired" ||
+        responseData.details === "JWTInvalid")
     ) {
       handleAPIError();
       return;
     }
     if (response.ok) {
-      return responseData.content;
+      return responseData;
     } else {
       throw new Error(`HTTP error! Status: ${response.status}`);
     }
@@ -108,15 +108,15 @@ export const UpdateEventApi = async (data) => {
     });
     const responseData = await response.json();
     if (
-      responseData?.content?.type === "error" &&
-      (responseData.content.details === "JWTExpired" ||
-        responseData.content.details === "JWTInvalid")
+      responseData?.type === "error" &&
+      (responseData.details === "JWTExpired" ||
+        responseData.details === "JWTInvalid")
     ) {
       handleAPIError();
       return;
     }
     if (response.ok) {
-      return responseData.content;
+      return responseData;
     } else {
       throw new Error(`HTTP error! Status: ${response.status}`);
     }
@@ -138,15 +138,15 @@ export const DeleteEventApi = async (data) => {
     });
     const responseData = await response.json();
     if (
-      responseData?.content?.type === "error" &&
-      (responseData.content.details === "JWTExpired" ||
-        responseData.content.details === "JWTInvalid")
+      responseData?.type === "error" &&
+      (responseData.details === "JWTExpired" ||
+        responseData.details === "JWTInvalid")
     ) {
       handleAPIError();
       return;
     }
     if (response.ok) {
-      return responseData.content;
+      return responseData;
     } else {
       throw new Error(`HTTP error! Status: ${response.status}`);
     }

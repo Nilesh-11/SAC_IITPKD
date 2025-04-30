@@ -166,7 +166,7 @@ const UpdateAnnouncementForm = () => {
                   name: "priority",
                   label: "Priority",
                   select: true,
-                  options: ["low", "medium", "high"],
+                  options: ["low", "normal", "high"],
                 },
                 {
                   name: "expires_at",

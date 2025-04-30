@@ -19,7 +19,6 @@ import useMediaQuery from "@mui/material/useMediaQuery";
 import { motion } from "framer-motion";
 import { HostelInfo } from "../api/council";
 
-// Lazy load components
 const Header = lazy(() => import("../components/common/header"));
 const Footer = lazy(() => import("../components/common/footer"));
 const Gallery = lazy(() => import("../components/common/gallery"));
@@ -56,6 +55,7 @@ const Hostel = () => {
       "/council/hostel/photo1.webp",
       "/council/hostel/photo2.webp",
       "/council/hostel/photo3.webp",
+      "/council/hostel/photo4.webp",
     ],
     []
   );
@@ -88,7 +88,6 @@ const Hostel = () => {
         }}
       >
         <Grid container spacing={3}>
-          {/* Leadership Section with Loading/Error States */}
           <Grid item xs={12}>
             {loading ? (
               <Box display="flex" justifyContent="center">
@@ -112,7 +111,6 @@ const Hostel = () => {
             )}
           </Grid>
 
-          {/* About the Council Section - Always Visible */}
           <Grid item xs={12}>
             <motion.div
               initial={{ opacity: 0 }}
@@ -147,21 +145,45 @@ const Hostel = () => {
                     whiteSpace: "pre-wrap",
                   }}
                 >
-                  We, at IIT Palakkad, firmly believe that a good, nurturing environment leads to the better productivity of all the students concerned.
-                  Which is why, the Hostel Affairs Council, headed by the Hostel Affairs Secretary, is dedicated to make the environment of all the hostels conducive to better productivity and innovation.
-
-                  <br /><br />
-                  Currently, we are located across two different campuses viz the Ahalia Campus and the Nila Campus, with three hostels spread across each campus, taking the total count to 6 hostels.
-
-                  <br /><br />
-                  Each of the hostels has a hostel wing-wise representative to better present the problems faced by the students of the particular hostel regarding the hostel and the mess to the Hostel Council, hence making it easier for students to report their problems as well.
-                  In order to make the system more fluidic, who overlooks all the issues that may be faced by the students and helps the Hostel Affairs Secretary to understand them better.
+                  At IIT Palakkad, we firmly believe that a supportive and
+                  nurturing environment is fundamental to enhancing the
+                  productivity and well-being of our students. In pursuit of
+                  this vision, the Hostel Affairs Council, under the leadership
+                  of the Hostel Affairs Secretary, is committed to fostering a
+                  hostel environment that promotes academic excellence,
+                  innovation, and holistic development.
+                  <br />
+                  <br />
+                  The Institute currently operates across two campuses: the{" "}
+                  <strong>Nila Campus</strong> and the{" "}
+                  <strong>Sahyadri Campus</strong>.
+                  <br />• The <strong>Nila Campus</strong> houses two hostels:{" "}
+                  <strong>Tilang</strong> (subdivided into{" "}
+                  <strong>Tilang A</strong> and <strong>Tilang B</strong>) and{" "}
+                  <strong>Brindavani</strong>.
+                  <br />• The <strong>Sahyadri Campus</strong> accommodates two
+                  hostels: <strong>Saveri</strong> and <strong>Malhar</strong>.
+                  <br />
+                  <br />
+                  To ensure effective communication and swift resolution of
+                  student concerns, each hostel has designated wing-wise
+                  representatives. These representatives act as the primary
+                  liaison between the students and the Hostel Affairs Council,
+                  facilitating the reporting and addressing of issues related to
+                  hostel facilities and mess services. Furthermore, a dedicated
+                  coordinator supervises hostel affairs across both campuses,
+                  assisting the Hostel Affairs Secretary in identifying and
+                  addressing student needs promptly and efficiently.
+                  <br />
+                  <br />
+                  Through these measures, we strive to create a residential
+                  environment that empowers students to achieve their fullest
+                  potential.
                 </Typography>
               </Box>
             </motion.div>
           </Grid>
 
-          {/* Gallery Section - Always Visible */}
           <Grid item xs={12}>
             <motion.div
               initial={{ opacity: 0, scale: 0.98 }}
@@ -187,7 +209,9 @@ const Hostel = () => {
                   Hostel Life at IITPKD
                 </Typography>
                 <Divider sx={{ mb: 2 }} />
-                <Suspense fallback={<Skeleton variant="rectangular" height={300} />}>
+                <Suspense
+                  fallback={<Skeleton variant="rectangular" height={300} />}
+                >
                   <Gallery
                     images={galleryImages}
                     galleryId="hostelGallery"

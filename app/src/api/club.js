@@ -18,20 +18,20 @@ export const JoinClub = async ({ club_id }) => {
     });
     const responseData = await response.json();
     if (
-      responseData?.content?.type === "error" &&
-      (responseData.content.details === "JWTExpired" ||
-        responseData.content.details === "JWTInvalid")
+      responseData?.type === "error" &&
+      (responseData.details === "JWTExpired" ||
+        responseData.details === "JWTInvalid")
     ) {
       handleAPIError();
       return;
     }
     if (response.ok) {
-      if (responseData?.content?.type === "ok"){
-        return responseData.content;
+      if (responseData?.type === "ok"){
+        return responseData;
       }
       else{
-        if (responseData?.content?.type){
-          return responseData?.content
+        if (responseData?.type){
+          return responseData;
         }
         else{
           return {'type': "error", 'details': "An error occurred"};
@@ -58,20 +58,20 @@ export const getClubInfo = async ({ club_id }) => {
     }); 
     const responseData = await response.json();
     if (
-      responseData?.content?.type === "error" &&
-      (responseData.content.details === "JWTExpired" ||
-        responseData.content.details === "JWTInvalid")
+      responseData?.type === "error" &&
+      (responseData.details === "JWTExpired" ||
+        responseData.details === "JWTInvalid")
     ) {
       handleAPIError();
       return;
     }
     if (response.ok) {
-      if (responseData?.content?.type === "ok"){
-        return responseData.content;
+      if (responseData?.type === "ok"){
+        return responseData;
       }
       else{
-        if (responseData?.content?.type){
-          return responseData?.content
+        if (responseData?.type){
+          return responseData;
         }
         else{
           return {'type': "error", 'details': "An error occurred"};
@@ -99,20 +99,20 @@ export const DeleteRoleApi = async (data) => {
     }); 
     const responseData = await response.json();
     if (
-      responseData?.content?.type === "error" &&
-      (responseData.content.details === "JWTExpired" ||
-        responseData.content.details === "JWTInvalid")
+      responseData?.type === "error" &&
+      (responseData.details === "JWTExpired" ||
+        responseData.details === "JWTInvalid")
     ) {
       handleAPIError();
       return;
     }
     if (response.ok) {
-      if (responseData?.content?.type === "ok"){
-        return responseData.content;
+      if (responseData?.type === "ok"){
+        return responseData;
       }
       else{
-        if (responseData?.content?.type){
-          return responseData?.content
+        if (responseData?.type){
+          return responseData;
         }
         else{
           return {'type': "error", 'details': "An error occurred"};
@@ -140,20 +140,20 @@ export const AddRoleApi = async (data) => {
     }); 
     const responseData = await response.json();
     if (
-      responseData?.content?.type === "error" &&
-      (responseData.content.details === "JWTExpired" ||
-        responseData.content.details === "JWTInvalid")
+      responseData?.type === "error" &&
+      (responseData.details === "JWTExpired" ||
+        responseData.details === "JWTInvalid")
     ) {
       handleAPIError();
       return;
     }
     if (response.ok) {
-      if (responseData?.content?.type === "ok"){
-        return responseData.content;
+      if (responseData?.type === "ok"){
+        return responseData;
       }
       else{
-        if (responseData?.content?.type){
-          return responseData?.content
+        if (responseData?.type){
+          return responseData;
         }
         else{
           return {'type': "error", 'details': "An error occurred"};
@@ -181,20 +181,20 @@ export const RolesListApi = async () => {
     }); 
     const responseData = await response.json();
     if (
-      responseData?.content?.type === "error" &&
-      (responseData.content.details === "JWTExpired" ||
-        responseData.content.details === "JWTInvalid")
+      responseData?.type === "error" &&
+      (responseData.details === "JWTExpired" ||
+        responseData.details === "JWTInvalid")
     ) {
       handleAPIError();
       return;
     }
     if (response.ok) {
-      if (responseData?.content?.type === "ok"){
-        return responseData.content;
+      if (responseData?.type === "ok"){
+        return responseData;
       }
       else{
-        if (responseData?.content?.type){
-          return responseData?.content
+        if (responseData?.type){
+          return responseData;
         }
         else{
           return {'type': "error", 'details': "An error occurred"};
@@ -221,20 +221,20 @@ export const UpdateRoleApi = async (data) => {
     }); 
     const responseData = await response.json();
     if (
-      responseData?.content?.type === "error" &&
-      (responseData.content.details === "JWTExpired" ||
-        responseData.content.details === "JWTInvalid")
+      responseData?.type === "error" &&
+      (responseData.details === "JWTExpired" ||
+        responseData.details === "JWTInvalid")
     ) {
       handleAPIError();
       return;
     }
     if (response.ok) {
-      if (responseData?.content?.type === "ok"){
-        return responseData.content;
+      if (responseData?.type === "ok"){
+        return responseData;
       }
       else{
-        if (responseData?.content?.type){
-          return responseData?.content
+        if (responseData?.type){
+          return responseData;
         }
         else{
           return {'type': "error", 'details': "An error occurred"};
@@ -249,7 +249,7 @@ export const UpdateRoleApi = async (data) => {
 };
 
 export const MembersListApi = async () => {
-  const url = `${BACKEND_URL}/api/user/club/members/list`;
+  const url = `${BACKEND_URL}/api/user/club/members/lists`;
   try {
     const response = await fetch(url, {
       method: "POST",
@@ -261,20 +261,20 @@ export const MembersListApi = async () => {
     }); 
     const responseData = await response.json();
     if (
-      responseData?.content?.type === "error" &&
-      (responseData.content.details === "JWTExpired" ||
-        responseData.content.details === "JWTInvalid")
+      responseData?.type === "error" &&
+      (responseData.details === "JWTExpired" ||
+        responseData.details === "JWTInvalid")
     ) {
       handleAPIError();
       return;
     }
     if (response.ok) {
-      if (responseData?.content?.type === "ok"){
-        return responseData.content;
+      if (responseData?.type === "ok"){
+        return responseData;
       }
       else{
-        if (responseData?.content?.type){
-          return responseData?.content
+        if (responseData?.type){
+          return responseData;
         }
         else{
           return {'type': "error", 'details': "An error occurred"};
@@ -301,20 +301,20 @@ export const UpdateMembershipApi = async (data) => {
     }); 
     const responseData = await response.json();
     if (
-      responseData?.content?.type === "error" &&
-      (responseData.content.details === "JWTExpired" ||
-        responseData.content.details === "JWTInvalid")
+      responseData?.type === "error" &&
+      (responseData.details === "JWTExpired" ||
+        responseData.details === "JWTInvalid")
     ) {
       handleAPIError();
       return;
     }
     if (response.ok) {
-      if (responseData?.content?.type === "ok"){
-        return responseData.content;
+      if (responseData?.type === "ok"){
+        return responseData;
       }
       else{
-        if (responseData?.content?.type){
-          return responseData?.content
+        if (responseData?.type){
+          return responseData;
         }
         else{
           return {'type': "error", 'details': "An error occurred"};
@@ -341,20 +341,20 @@ export const MemberInfoApi = async (data) => {
     }); 
     const responseData = await response.json();
     if (
-      responseData?.content?.type === "error" &&
-      (responseData.content.details === "JWTExpired" ||
-        responseData.content.details === "JWTInvalid")
+      responseData?.type === "error" &&
+      (responseData.details === "JWTExpired" ||
+        responseData.details === "JWTInvalid")
     ) {
       handleAPIError();
       return;
     }
     if (response.ok) {
-      if (responseData?.content?.type === "ok"){
-        return responseData.content;
+      if (responseData?.type === "ok"){
+        return responseData;
       }
       else{
-        if (responseData?.content?.type){
-          return responseData?.content
+        if (responseData?.type){
+          return responseData;
         }
         else{
           return {'type': "error", 'details': "An error occurred"};
@@ -381,20 +381,20 @@ export const CoreTeamApi = async (data) => {
     });
     const responseData = await response.json();
     if (
-      responseData?.content?.type === "error" &&
-      (responseData.content.details === "JWTExpired" ||
-        responseData.content.details === "JWTInvalid")
+      responseData?.type === "error" &&
+      (responseData.details === "JWTExpired" ||
+        responseData.details === "JWTInvalid")
     ) {
       handleAPIError();
       return;
     }
     if (response.ok) {
-      if (responseData?.content?.type === "ok"){
-        return responseData.content;
+      if (responseData?.type === "ok"){
+        return responseData;
       }
       else{
-        if (responseData?.content?.type){
-          return responseData?.content
+        if (responseData?.type){
+          return responseData;
         }
         else{
           return {'type': "error", 'details': "An error occurred"};

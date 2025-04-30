@@ -6,6 +6,7 @@ from src.utils.mail import send_meeting_reminder_mail, send_new_meeting_mail
 from fastapi.responses import RedirectResponse
 from src.utils.verify import verify_user
 from fastapi import APIRouter, Depends
+from fastapi.responses import JSONResponse
 from sqlalchemy.orm import Session, subqueryload
 from sqlalchemy import exists
 import datetime
@@ -28,12 +29,16 @@ def add_project(data: AddProjectRequest, db: Session = Depends(get_projects_db),
 
     try:
         coordinator_role = verify_user(request_by, db_user)
-        if not coordinator_role:
-            return {'content': {'type': "error", 'details': "Unauthorized"}}
-        if coordinator_role not in [UserRole.student.value, UserRole.club.value]:
-            return {'content': {'type': "error", 'details': "User cannot add new projects"}}
+        if not coordinator_role or coordinator_role not in [UserRole.student.value, UserRole.club.value]:
+            return JSONResponse(
+                content={"type": "error", "details": "Unauthorized to create projects"},
+                status_code=403
+            )
         if data.start_date > data.end_date:
-            return {'content': {'type': "error", 'details': "Start date must be before or equal to end date"}}
+            return JSONResponse(
+                content={"type": "error", "details": "Start date must be before end date"},
+                status_code=400
+            )
         new_project = Project(
             coordinator=request_by,
             coordinator_role=coordinator_role,
@@ -71,10 +76,25 @@ def add_project(data: AddProjectRequest, db: Session = Depends(get_projects_db),
             )
             db.add(participant)
             db.commit()
-        return {'content':{'type': "ok", 'id': new_project.id, 'details': "New project added"}}
+        return JSONResponse(
+            content={
+                "type": "ok",
+                "id": new_project.id,
+                "details": "Project created successfully",
+                "project": {
+                    "title": new_project.title,
+                    "coordinator": new_project.coordinator
+                }
+            },
+            status_code=201
+        )
     except Exception as e:
-        print("ERROR in add event:", e)
-        return {'content':{'type': "error", 'details':"An error occurred"}}
+        db.rollback()
+        print("Error adding project:", e)
+        return JSONResponse(
+            content={"type": "error", "details": "Failed to create project"},
+            status_code=500
+        )
 
 @router.post("/info")
 def project_info(data: ProjectInfoRequest, db: Session = Depends(get_projects_db), db_user: Session = Depends(get_users_db)):
@@ -86,19 +106,22 @@ def project_info(data: ProjectInfoRequest, db: Session = Depends(get_projects_db
         ).filter(Project.id == data.project_id).first()
 
         if not project:
-            return {'content': {'type': 'error', 'details': 'Project not found'}}
+            return JSONResponse(
+                content={"type": "error", "details": "Project not found"},
+                status_code=404
+            )
 
-        coordinator_info = db_user.query(Student).filter(Student.email == project.coordinator).first()
+        coordinator_info = db_user.query(Student).filter(Student.email == project.coordinator).first() or \
+                     db_user.query(Club).filter(Club.email == project.coordinator).first()
         if not coordinator_info:
-            coordinator_info = db_user.query(Club).filter(Club.email == project.coordinator).first()
-        if not coordinator_info:
-            return {'content': {'type': "error", 'details': "Coordinator not found"}}
-
+            return JSONResponse(
+                content={"type": "error", "details": "Coordinator not found"},
+                status_code=404
+            )
         user_role = None
         is_member = False
         is_coordinator = project.coordinator == data.request_by
         already_applied = False
-        
         if is_coordinator:
             user_role = project.coordinator_role
             is_member = True
@@ -160,15 +183,20 @@ def project_info(data: ProjectInfoRequest, db: Session = Depends(get_projects_db
             } for m in project.meetings]
         }
 
-        return {'content': {
-            'type': 'ok',
-            'details': 'Project details retrieved',
-            'data': response_data
-        }}
+        return JSONResponse(
+            content={
+                "type": "ok",
+                "details": "Project details retrieved",
+                "data": response_data
+            }
+        )
 
     except Exception as e:
-        print(f"ERROR retrieving project info: {e}")
-        return {'content': {'type': 'error', 'details': 'Failed to retrieve project information'}}
+        print("Error getting project info:", e)
+        return JSONResponse(
+            content={"type": "error", "details": "Failed to retrieve project information"},
+            status_code=500
+        )
 
 @router.post("/shortlist")
 def decide_participant(data: ShortlistRequest, db: Session = Depends(get_projects_db)):
@@ -181,20 +209,38 @@ def decide_participant(data: ShortlistRequest, db: Session = Depends(get_project
     try:
         existing_project = db.query(Project).filter(Project.id == proj_id).first()
         if not existing_project:
-            return {'content': {'type': "error", 'details': "project not found"}}
+            return JSONResponse(
+                content={"type": "error", "details": "Project not found"},
+                status_code=404
+            )
         if existing_project.coordinator != request_by:
-            return {'content': {'type': "error", 'details': "Unauthorized User"}}
+            return JSONResponse(
+                content={"type": "error", "details": "Unauthorized"},
+                status_code=403
+            )
         if existing_project.current_members_count == existing_project.max_members_count:
-            return {'content': {'type': "error", 'details': "Members limit reached"}}
+            return JSONResponse(
+                content={"type": "error", "details": "Project member limit reached"},
+                status_code=400
+            )
         existing_member = db.query(UnverifiedParticipant).filter(UnverifiedParticipant.id == id, UnverifiedParticipant.project_id == proj_id).first()
         if not existing_member:
-            return {'content': {'type': "error", 'details': "member has not applied for the project"}}
+            return JSONResponse(
+                content={"type": "error", "details": "Application not found"},
+                status_code=404
+            )
         if is_approved:
             if not role:
-                return {'content': {'type': "error", 'details': "no role specified"}}
+                return JSONResponse(
+                    content={"type": "error", "details": "Role must be specified for approval"},
+                    status_code=400
+                )
             already_approved = db.query(ApprovedParticipant).filter(ApprovedParticipant.email == existing_member.email, ApprovedParticipant.project_id == existing_member.project_id).first()
             if already_approved:
-                return {'content': {'type': "error", 'details': "User already approved"}}
+                return JSONResponse(
+                    content={"type": "error", "details": "Participant already approved"},
+                    status_code=400
+                )
             member = ApprovedParticipant(
                 project_id = existing_member.project_id,
                 email = existing_member.email,
@@ -207,21 +253,39 @@ def decide_participant(data: ShortlistRequest, db: Session = Depends(get_project
             existing_project.current_members_count += 1
         db.delete(existing_member)
         db.commit()
-        return {'content':{'type': "ok"}}
+        return JSONResponse(
+            content={
+                "type": "ok",
+                "details": "Application processed successfully"
+            }
+        )
     except Exception as e:
-        print("ERROR in projects list:", e)
-        return {'content':{'type': "error", 'details':"An error occurred"}}
+        db.rollback()
+        print("Error processing application:", e)
+        return JSONResponse(
+            content={"type": "error", "details": "Failed to process application"},
+            status_code=500
+        )
 
 @router.post("/update")
 def update_event(data: UpdateProjectRequest, db: Session = Depends(get_projects_db)):
     try:
         existing_project = db.query(Project).filter(Project.id == data.id).first()
         if not existing_project:
-            return {'content': {'type': 'error', 'details': 'Project not found'}}
+            return JSONResponse(
+                content={"type": "error", "details": "Project not found"},
+                status_code=404
+            )
         if existing_project.coordinator != data.request_by:
-            return {'content': {'type': 'error', 'details': 'Unauthorized coordinator'}}
+            return JSONResponse(
+                content={"type": "error", "details": "Unauthorized"},
+                status_code=403
+            )
         if data.start_date > data.end_date:
-            return {'content': {'type': "error", 'details': "Start date must be before or equal to end date"}}
+            return JSONResponse(
+                content={"type": "error", "details": "Start date must be before end date"},
+                status_code=400
+            )
 
         old_roles = set(existing_project.member_roles or [])
         new_roles = set(data.member_roles or [])
@@ -276,19 +340,31 @@ def update_event(data: UpdateProjectRequest, db: Session = Depends(get_projects_
         existing_project.current_members_count = current_members
 
         if existing_project.current_members_count > existing_project.max_members_count:
-            db.rollback()
-            return {
-                'content': {
-                    'type': 'error',
-                    'details': f'Current members ({current_members}) exceed new max limit ({data.max_members_count})'
+            return JSONResponse(
+                content={
+                    "type": "error",
+                    "details": f"Cannot reduce capacity below current members ({current_members})"
+                },
+                status_code=400
+            )
+        db.commit()
+        return JSONResponse(
+            content={
+                "type": "ok",
+                "details": "Project updated successfully",
+                "project": {
+                    "id": existing_project.id,
+                    "title": existing_project.title
                 }
             }
-        db.commit()
-        return {'content': {'type': "ok", 'project': existing_project}}
+        )
     except Exception as e:
         db.rollback()
-        print(f"ERROR updating project: {e}")
-        return {'content': {'type': "error", 'details': "Failed to update project"}}
+        print("Error updating project:", e)
+        return JSONResponse(
+            content={"type": "error", "details": "Failed to update project"},
+            status_code=500
+        )
 
 @router.post("/delete")
 def delete_event(data: DeleteProjectRequest, db: Session = Depends(get_projects_db)):
@@ -297,15 +373,30 @@ def delete_event(data: DeleteProjectRequest, db: Session = Depends(get_projects_
     try:
         existing_project = db.query(Project).filter(Project.id == id).first()
         if not existing_project:
-            return {'content':{'type': 'error', 'details': 'Project not found'}}
+            return JSONResponse(
+                content={"type": "error", "details": "Project not found"},
+                status_code=404
+            )
         if existing_project.coordinator != request_by:
-            return {'content':{'type': 'error', 'details': 'Unauthorized user'}}
+            return JSONResponse(
+                content={"type": "error", "details": "Unauthorized"},
+                status_code=403
+            )
         db.delete(existing_project)
         db.commit()
-        return {'content':{'type': "ok", 'details': "Projects successfully removed"}}
+        return JSONResponse(
+            content={
+                "type": "ok",
+                "details": "Project deleted successfully"
+            }
+        )
     except Exception as e:
-        print("ERROR in an updating project:", e)
-        return {'content':{'type': "error", 'details':"An error occurred"}}
+        db.rollback()
+        print("Error deleting project:", e)
+        return JSONResponse(
+            content={"type": "error", "details": "Failed to delete project"},
+            status_code=500
+        )
 
 @router.post("/own")
 def my_projects(data: OwnProjectsRequest, db: Session = Depends(get_projects_db)):
@@ -335,23 +426,19 @@ def my_projects(data: OwnProjectsRequest, db: Session = Depends(get_projects_db)
                 "member_roles": project.member_roles,
                 "max_members_count": project.max_members_count
             })
-
-        return {
-            'content': {
-                'type': 'ok',
-                'details': f"Found {len(formatted_projects)} owned projects",
-                'projects': formatted_projects
+        return JSONResponse(
+            content={
+                "type": "ok",
+                "details": f"Found {len(formatted_projects)} owned projects",
+                "projects": formatted_projects
             }
-        }
-
+        )
     except Exception as e:
-        print(f"ERROR retrieving owned projects: {e}")
-        return {
-            'content': {
-                'type': 'error',
-                'details': 'Failed to retrieve project details'
-            }
-        }
+        print("Error getting owned projects:", e)
+        return JSONResponse(
+            content={"type": "error", "details": "Failed to retrieve projects"},
+            status_code=500
+        )
 
 @router.post("/my")
 def my_projects(data: MyProjectsRequest, db: Session = Depends(get_projects_db), db_user: Session = Depends(get_users_db)):
@@ -430,23 +517,21 @@ def my_projects(data: MyProjectsRequest, db: Session = Depends(get_projects_db),
                     ]
                 }
                 formatted_projects.append(project_details)
-
-        return {
-            'content': {
-                'type': 'ok',
-                'details': f"Found {len(formatted_projects)} projects",
-                'projects': formatted_projects
+        
+        return JSONResponse(
+            content={
+                "type": "ok",
+                "details": f"Found {len(formatted_projects)} related projects",
+                "projects": formatted_projects
             }
-        }
+        )
 
     except Exception as e:
-        print(f"ERROR retrieving user projects: {e}")
-        return {
-            'content': {
-                'type': 'error',
-                'details': 'Failed to retrieve projects'
-            }
-        }
+        print("Error getting user projects:", e)
+        return JSONResponse(
+            content={"type": "error", "details": "Failed to retrieve projects"},
+            status_code=500
+        )
 
 @router.post("/list")
 def get_projects(data: GetProjectsRequest, db: Session = Depends(get_projects_db)):
@@ -476,20 +561,19 @@ def get_projects(data: GetProjectsRequest, db: Session = Depends(get_projects_db
             }
             formatted_projects.append(project_data)
 
-        return {
-            'content': {
-                'type': "ok",
-                'projects': formatted_projects
+        return JSONResponse(
+            content={
+                "type": "ok",
+                "details": f"Found {len(formatted_projects)} active projects",
+                "projects": formatted_projects
             }
-        }
+        )
     except Exception as e:
-        print("ERROR in projects list:", e)
-        return {
-            'content': {
-                'type': "error",
-                'details': "Failed to retrieve projects"
-            }
-        }
+        print("Error listing projects:", e)
+        return JSONResponse(
+            content={"type": "error", "details": "Failed to retrieve projects"},
+            status_code=500
+        )
 
 @router.post("/member/apply")
 def apply_project(data: ApplyProjectRequest, 
@@ -498,7 +582,17 @@ def apply_project(data: ApplyProjectRequest,
     try:
         project = db.query(Project).filter(Project.id == data.project_id).first()
         if not project:
-            return {'content': {'type': 'error', 'details': 'Project not found'}}
+            return JSONResponse(
+                content={"type": "error", "details": "Project not found"},
+                status_code=404
+            )
+        
+        student = db_user.query(Student).filter(Student.email == data.request_by).first()
+        if not student:
+            return JSONResponse(
+                content={"type": "error", "details": "Only students can apply"},
+                status_code=403
+            )
 
         existing_applicant = db.query(UnverifiedParticipant).filter(
             UnverifiedParticipant.email == data.request_by,
@@ -506,7 +600,10 @@ def apply_project(data: ApplyProjectRequest,
         ).first()
 
         if existing_applicant:
-            return {'content': {'type': 'error', 'details': 'Application already submitted'}}
+            return JSONResponse(
+                content={"type": "error", "details": "Application already submitted"},
+                status_code=400
+            )
 
         approved_member = db.query(ApprovedParticipant).filter(
             ApprovedParticipant.email == data.request_by,
@@ -514,17 +611,16 @@ def apply_project(data: ApplyProjectRequest,
         ).first()
 
         if approved_member:
-            return {'content': {'type': 'error', 'details': 'Already a project member'}}
+            return JSONResponse(
+                content={"type": "error", "details": "Already a project member"},
+                status_code=400
+            )
 
         if not set(data.roles).issubset(set(project.member_roles)):
-            return {'content': {'type': 'error', 'details': 'Contains invalid roles'}}
-
-        student = db_user.query(Student).filter(
-            Student.email == data.request_by
-        ).first()
-        
-        if not student:
-            return {'content': {'type': 'error', 'details': 'Only students can apply'}}
+            return JSONResponse(
+                content={"type": "error", "details": "Invalid roles specified"},
+                status_code=400
+            )
 
         new_application = UnverifiedParticipant(
             project_id=data.project_id,
@@ -535,12 +631,20 @@ def apply_project(data: ApplyProjectRequest,
         )
         db.add(new_application)
         db.commit()
-        return {'content': {'type': 'ok', 'details': 'Application submitted successfully'}}
+        return JSONResponse(
+            content={
+                "type": "ok",
+                "details": "Application submitted successfully"
+            }
+        )
 
     except Exception as e:
         db.rollback()
-        print(f"ERROR applying to project: {e}")
-        return {'content': {'type': 'error', 'details': 'Application failed'}}
+        print("Error applying to project:", e)
+        return JSONResponse(
+            content={"type": "error", "details": "Failed to submit application"},
+            status_code=500
+        )
 
 @router.post("/member/update")
 def apply_project(data: UpdateApplicationRequest, db: Session = Depends(get_projects_db), db_user: Session = Depends(get_users_db)):
@@ -551,25 +655,45 @@ def apply_project(data: UpdateApplicationRequest, db: Session = Depends(get_proj
     try:
         existing_project = db.query(Project).filter(Project.id == id).first()
         if not existing_project:
-            return {'content': {'type': 'error', 'details': 'Project not found'}}
+            return JSONResponse(
+                content={"type": "error", "details": "Project not found"},
+                status_code=404
+            )
         existing_unverified_member = db.query(UnverifiedParticipant).filter(UnverifiedParticipant.email == request_by, UnverifiedParticipant.project_id == id).first()
         if not existing_unverified_member:
-            return {'content': {'type': 'error', 'details': 'User application not found'}}
-        else:
-            member_info = db_user.query(Student).filter(Student.email == request_by).first()
-            if not member_info:
-                return {'content': {'type': 'error', 'details': 'Member has to be a student'}}
-            for role in roles:
-                if role not in existing_project.member_roles:
-                    return {'content': {'type': 'error', 'details': 'Invalid roles'}}
-            existing_unverified_member.phone_number=member_info.phone_number
-            existing_unverified_member.roles_applied=roles
-            existing_unverified_member.skills=skills
+            return JSONResponse(
+                content={"type": "error", "details": "Application not found"},
+                status_code=404
+            )
+        member_info = db_user.query(Student).filter(Student.email == request_by).first()
+        if not member_info:
+            return JSONResponse(
+                content={"type": "error", "details": "Student not found"},
+                status_code=404
+            )
+        for role in roles:
+            if role not in existing_project.member_roles:
+                return JSONResponse(
+                    content={"type": "error", "details": "Invalid roles specified"},
+                    status_code=400
+                )
+        existing_unverified_member.phone_number=member_info.phone_number
+        existing_unverified_member.roles_applied=roles
+        existing_unverified_member.skills=skills
         db.commit()
-        return {'content': {'type': "ok", 'details': "Application updated"}}
+        return JSONResponse(
+            content={
+                "type": "ok",
+                "details": "Application updated successfully"
+            }
+        )
     except Exception as e:
-        print("ERROR in applying to project:", e)
-        return {'content': {'type': "error", 'details': "An error occurred"}}
+        db.rollback()
+        print("Error updating application:", e)
+        return JSONResponse(
+            content={"type": "error", "details": "Failed to update application"},
+            status_code=500
+        )
 
 @router.post("/member/withdraw")
 def withdraw_application(data: WithdrawApplicationRequest, db: Session = Depends(get_projects_db)):
@@ -578,22 +702,47 @@ def withdraw_application(data: WithdrawApplicationRequest, db: Session = Depends
     try:
         existing_project = db.query(Project).filter(Project.id == id).first()
         if not existing_project:
-            return {'content': {'type': 'error', 'details': 'Project not found'}}
+            return JSONResponse(
+                content={"type": "error", "details": "Project not found"},
+                status_code=404
+            )
         existing_unverified_member = db.query(UnverifiedParticipant).filter(UnverifiedParticipant.email == request_by, UnverifiedParticipant.project_id == id).first()
-        print(existing_unverified_member)
-        if not existing_unverified_member:
-            existing_approved_member = db.query(ApprovedParticipant).filter(ApprovedParticipant.email == request_by, ApprovedParticipant.project_id == id).first()
-            if not existing_approved_member:
-                return {'content': {'type': 'error', 'details': 'User application not found'}}
-            db.delete(existing_approved_member)
-            db.commit()
-        else:
+        if existing_unverified_member:
             db.delete(existing_unverified_member)
             db.commit()
-        return {'content': {'type': "ok", 'details': "Application withdrawed"}}
+            return JSONResponse(
+                content={
+                    "type": "ok",
+                    "details": "Application withdrawn successfully"
+                }
+            )
+        existing_approved_member = db.query(ApprovedParticipant).filter(ApprovedParticipant.email == request_by, ApprovedParticipant.project_id == id).first()
+        if existing_approved_member:
+            if existing_project.coordinator == data.request_by:
+                return JSONResponse(
+                    content={"type": "error", "details": "Coordinators cannot withdraw"},
+                    status_code=403
+                )
+            existing_project.current_members_count -= 1
+            db.delete(existing_approved_member)
+            db.commit()
+            return JSONResponse(
+                content={
+                    "type": "ok",
+                    "details": "Membership withdrawn successfully"
+                }
+            )
+        return JSONResponse(
+            content={"type": "error", "details": "No application or membership found"},
+            status_code=404
+        )
     except Exception as e:
-        print("ERROR in applying to project:", e)
-        return {'content': {'type': "error", 'details': "An error occurred"}}
+        db.rollback()
+        print("Error withdrawing application:", e)
+        return JSONResponse(
+            content={"type": "error", "details": "Failed to withdraw"},
+            status_code=500
+        )
 
 @router.post("/member/remove")
 def remove_application(data: RemoveApplicationRequest, db: Session = Depends(get_projects_db)):
@@ -603,25 +752,47 @@ def remove_application(data: RemoveApplicationRequest, db: Session = Depends(get
     try:
         existing_project = db.query(Project).filter(Project.id == id).first()
         if not existing_project:
-            return {'content': {'type': 'error', 'details': 'Project not found'}}
+            return JSONResponse(
+                content={"type": "error", "details": "Project not found"},
+                status_code=404
+            )
         if existing_project.coordinator != request_by:
-            return {'content': {'type': 'error', 'details': 'Unauthorized user'}}
+            return JSONResponse(
+                content={"type": "error", "details": "Unauthorized"},
+                status_code=403
+            )
         if existing_project.coordinator == member:
-            return {'content': {'type': 'error', 'details': ':) cannot remove yourself'}}
-            
+            return JSONResponse(
+                content={"type": "error", "details": "Cannot remove yourself as coordinator"},
+                status_code=400
+            )
+        
         existing_unverified_member = db.query(UnverifiedParticipant).filter(UnverifiedParticipant.email == member, UnverifiedParticipant.project_id == id).first()
         if not existing_unverified_member:
             existing_approved_member = db.query(ApprovedParticipant).filter(ApprovedParticipant.email == member, ApprovedParticipant.project_id == id).first()
             if not existing_approved_member:
-                return {'content': {'type': 'error', 'details': 'User application not found'}}
+                return JSONResponse(
+                    content={"type": "error", "details": "No application or membership found"},
+                    status_code=404
+                )
             db.delete(existing_approved_member)
+            db.commit()
         else:
             db.delete(existing_unverified_member)
-        db.commit()
-        return {'content': {'type': "ok", 'details': "Member removed"}}
+            db.commit()
+        return JSONResponse(
+                content={
+                    "type": "ok",
+                    "details": "Member removed successfully"
+                }
+            )
     except Exception as e:
-        print("ERROR in applying to project:", e)
-        return {'content': {'type': "error", 'details': "An error occurred"}}
+        db.rollback()
+        print("Error removing member:", e)
+        return JSONResponse(
+            content={"type": "error", "details": "Failed to remove member"},
+            status_code=500
+        )
 
 @router.post("/meeting/add")
 def add_meeting(data: AddMeetingRequest, db: Session = Depends(get_projects_db)):
@@ -637,21 +808,35 @@ def add_meeting(data: AddMeetingRequest, db: Session = Depends(get_projects_db))
     try:
         existing_project = db.query(Project).filter(Project.id == project_id).first()
         if not existing_project:
-            return {'content': {'type': 'error', 'details': 'Project not found'}}
+            return JSONResponse(
+                content={"type": "error", "details": "Project not found"},
+                status_code=404
+            )
         if existing_project.coordinator != request_by:
-            return {'content': {'type': 'error', 'details': 'Unauthorized user'}}
-        if meeting_type == MeetingType.ONLINE:
+            return JSONResponse(
+                content={"type": "error", "details": "Unauthorized"},
+                status_code=403
+            )
+        if meeting_type.value == MeetingType.ONLINE.value:
             if not meeting_link:
-                return {'content': {'type': 'error', 'details': 'Meeting link not sepecified'}}
-        elif meeting_type == MeetingType.OFFLINE:
+                return JSONResponse(
+                    content={"type": "error", "details": "Online meeting requires a link"},
+                    status_code=400
+                )
+        elif meeting_type.value == MeetingType.OFFLINE.value:
             if not meeting_link:
-                return {'content': {'type': 'error', 'details': 'Meeting venue not sepecified'}}
+                return JSONResponse(
+                    content={"type": "error", "details": "Offline meeting requires a venue"},
+                    status_code=400
+                )
         else:
-            # critical error
-            return {'content': {'type': 'error', 'details': 'Invalid meeting type'}}
+            return JSONResponse(content= {'type': 'error', 'details': 'Invalid meeting type'})
         for role in roles:
             if role not in existing_project.member_roles:
-                return {'content': {'type': 'error', 'details': 'Invalid member role'}}
+                return JSONResponse(
+                    content={"type": "error", "details": "Invalid roles specified"},
+                    status_code=400
+                )
         new_meeting = Meetings(
             project_id=project_id,
             title=title,
@@ -665,16 +850,31 @@ def add_meeting(data: AddMeetingRequest, db: Session = Depends(get_projects_db))
         db.add(new_meeting)
         db.commit()
         db.refresh(new_meeting)
+        users = []
         for role in roles:
-            users = db.query(ApprovedParticipant).filter(ApprovedParticipant.project_id == project_id, ApprovedParticipant.role == role).all()
-            for user in users:
-                response = send_new_meeting_mail(to_mail=user.email, meeting=new_meeting, project_title=existing_project.title, contact_email=existing_project.coordinator)
-                if response['type'] == "error":
-                    return {'content': {'type': "ok", 'id': new_meeting.id, 'details': "Meeting scheduled but error in sending invitation mail"}}
-        return {'content': {'type': "ok", 'id': new_meeting.id, 'details': "New meeting scheduled"}}
+            members = db.query(ApprovedParticipant).filter(ApprovedParticipant.project_id == project_id, ApprovedParticipant.role == role).all()
+            for member in members:
+                users.append(member.email)
+        response = send_new_meeting_mail(to_mail=users[0], meeting=new_meeting, project_title=existing_project.title, contact_email=existing_project.coordinator, cc=users[1:])
+        if response['type'] == "error":
+            return JSONResponse(content={'type': "ok", 'id': new_meeting.id, 'details': "Meeting scheduled but error in sending invitation mail"})
+        return JSONResponse(
+            content={
+                "type": "ok",
+                "details": "Meeting scheduled successfully",
+                "meeting": {
+                    "id": new_meeting.id,
+                    "title": new_meeting.title
+                }
+            }
+        )
     except Exception as e:
-        print("ERROR in adding a meeting:", e)
-        return {'content': {'type': "error", 'details': "An error occurred"}}
+        db.rollback()
+        print("Error scheduling meeting:", e)
+        return JSONResponse(
+            content={"type": "error", "details": "Failed to schedule meeting"},
+            status_code=500
+        )
 
 @router.post("/meeting/delete")
 def remove_meeting(data: DeleteMeetingRequest, db: Session = Depends(get_projects_db)):
@@ -684,18 +884,36 @@ def remove_meeting(data: DeleteMeetingRequest, db: Session = Depends(get_project
     try:
         existing_project = db.query(Project).filter(Project.id == project_id).first()
         if not existing_project:
-            return {'content': {'type': 'error', 'details': 'Project not found'}}
+            return JSONResponse(
+                content={"type": "error", "details": "Project not found"},
+                status_code=404
+            )
         if existing_project.coordinator != request_by:
-            return {'content': {'type': 'error', 'details': 'Unauthorized user'}}
+            return JSONResponse(
+                content={"type": "error", "details": "Unauthorized"},
+                status_code=403
+            )
         existing_meeting = db.query(Meetings).filter(Meetings.id == meeting_id).first()
         if not existing_meeting:
-            return {'content': {'type': 'error', 'details': 'Existing scheduled meeting not found'}}
+            return JSONResponse(
+                content={"type": "error", "details": "Meeting not found"},
+                status_code=404
+            )
         db.delete(existing_meeting)
         db.commit()
-        return {'content': {'type': "ok", 'details': "Meeting removed successfully"}}
+        return JSONResponse(
+            content={
+                "type": "ok",
+                "details": "Meeting deleted successfully"
+            }
+        )
     except Exception as e:
-        print("ERROR in applying to project:", e)
-        return {'content': {'type': "error", 'details': "An error occurred"}}
+        db.rollback()
+        print("Error deleting meeting:", e)
+        return JSONResponse(
+            content={"type": "error", "details": "Failed to delete meeting"},
+            status_code=500
+        )
 
 @router.post("/meeting/update")
 def update_meeting(data: UpdateMeetingRequest, db: Session = Depends(get_projects_db)):
@@ -712,23 +930,41 @@ def update_meeting(data: UpdateMeetingRequest, db: Session = Depends(get_project
     try:
         existing_project = db.query(Project).filter(Project.id == project_id).first()
         if not existing_project:
-            return {'content': {'type': 'error', 'details': 'Project not found'}}
+            return JSONResponse(
+                content={"type": "error", "details": "Project not found"},
+                status_code=404
+            )
         if existing_project.coordinator != request_by:
-            return {'content': {'type': 'error', 'details': 'Unauthorized user'}}
+            return JSONResponse(
+                content={"type": "error", "details": "Unauthorized"},
+                status_code=403
+            )
         existing_meeting = db.query(Meetings).filter(Meetings.id == meeting_id).first()
         if not existing_meeting:
-            return {'content': {'type': 'error', 'details': 'Meeting not found'}}
-        if meeting_type == MeetingType.ONLINE:
-            if not meeting_link:
-                return {'content': {'type': 'error', 'details': 'Meeting link not sepecified'}}
-        elif meeting_type == MeetingType.OFFLINE:
-            if not meeting_link:
-                return {'content': {'type': 'error', 'details': 'Meeting venue not sepecified'}}
+            return JSONResponse(
+                content={"type": "error", "details": "Meeting not found"},
+                status_code=404
+            )
+        if data.meeting_type == MeetingType.ONLINE.value:
+            if not data.meeting_link:
+                return JSONResponse(
+                    content={"type": "error", "details": "Online meeting requires a link"},
+                    status_code=400
+                )
+        elif data.meeting_type == MeetingType.OFFLINE.value:
+            if not data.venue:
+                return JSONResponse(
+                    content={"type": "error", "details": "Offline meeting requires a venue"},
+                    status_code=400
+                )
         else:
-            return {'content': {'type': 'error', 'details': 'Invalid meeting type'}}
+            return JSONResponse(content= {'type': 'error', 'details': 'Invalid meeting type'})
         for role in roles:
             if role not in existing_project.member_roles:
-                return {'content': {'type': 'error', 'details': 'Invalid member role'}}
+                return JSONResponse(
+                    content={"type": "error", "details": "Invalid roles specified"},
+                    status_code=400
+                )
         existing_meeting.project_id=project_id
         existing_meeting.title=title
         existing_meeting.description=description
@@ -738,10 +974,23 @@ def update_meeting(data: UpdateMeetingRequest, db: Session = Depends(get_project
         existing_meeting.venue=venue
         existing_meeting.roles=roles
         db.commit()
-        return {'content': {'type': "ok", 'details': "Meeting updated"}}
+        return JSONResponse(
+            content={
+                "type": "ok",
+                "details": "Meeting updated successfully",
+                "meeting": {
+                    "id": existing_meeting.id,
+                    "title": existing_meeting.title
+                }
+            }
+        )
     except Exception as e:
-        print("ERROR in applying to project:", e)
-        return {'content': {'type': "error", 'details': "An error occurred"}}
+        db.rollback()
+        print("Error updating meeting:", e)
+        return JSONResponse(
+            content={"type": "error", "details": "Failed to update meeting"},
+            status_code=500
+        )
 
 @router.post("/meeting/reminder")
 def meeting_reminder(data: MeetingReminderRequest, db: Session = Depends(get_projects_db)):
@@ -750,16 +999,43 @@ def meeting_reminder(data: MeetingReminderRequest, db: Session = Depends(get_pro
     try:
         existing_meeting = db.query(Meetings).filter(Meetings.id == meeting_id).first()
         if not existing_meeting:
-            return {'content': {'type': 'error', 'details': 'Meeting not found'}}
+            return JSONResponse(
+                content={"type": "error", "details": "Meeting not found"},
+                status_code=404
+            )
         existing_project = db.query(Project).filter(Project.id == existing_meeting.project_id).first()
         if not existing_project:
-            return {'content': {'type': 'error', 'details': 'Project not found'}}
+            return JSONResponse(
+                content={"type": "error", "details": "Project not found"},
+                status_code=404
+            )
         if existing_project.coordinator != request_by:
-            return {'content': {'type': 'error', 'details': 'Unauthorized user'}}
-        members = db.query(ApprovedParticipant).filter(ApprovedParticipant.project_id == existing_project.id).all()
-        users = [member.email for member in members]
+            return JSONResponse(
+                content={"type": "error", "details": "Unauthorized"},
+                status_code=403
+            )
+        roles = existing_meeting.roles
+        users = []
+        for role in roles:
+            members = db.query(ApprovedParticipant).filter(ApprovedParticipant.project_id == existing_project.id, ApprovedParticipant.role == role).all()
+            for member in members:
+                users.append(member.email.email)
         response = send_meeting_reminder_mail(to_mail=users[0], meeting=existing_meeting, project_title=existing_project.title, contact_email=existing_project.coordinator, cc=users[1:])
-        return {'content': response}
+        if response['type'] == "error":
+            return JSONResponse(content={'type': "ok", 'id': existing_meeting.id, 'details': "Error in sending invitation mail"})
+        return JSONResponse(
+            content={
+                "type": "ok",
+                "details": f"Reminder prepared for {len(members)} participants",
+                "meeting": {
+                    "id": existing_meeting.id,
+                    "title": existing_meeting.title
+                }
+            }
+        )
     except Exception as e:
-        print("ERROR in applying to project:", e)
-        return {'content': {'type': "error", 'details': "An error occurred"}}
+        print("Error sending reminder:", e)
+        return JSONResponse(
+            content={"type": "error", "details": "Failed to send reminder"},
+            status_code=500
+        )

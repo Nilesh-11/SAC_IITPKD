@@ -12,12 +12,12 @@ export const TechnicalInfo = async () => {
     });
     const responseData = await response.json();
     if (response.ok) {
-      if (responseData?.content?.type === "ok"){
-        return responseData.content;
+      if (responseData?.type === "ok"){
+        return responseData;
       }
       else{
-        if (responseData?.content?.type){
-          return responseData?.content
+        if (responseData?.type){
+          return responseData;
         }
         else{
           return {'type': "error", 'details': "An error occurred"};
@@ -44,12 +44,12 @@ export const AcademicInfo = async () => {
     });
     const responseData = await response.json();
     if (response.ok) {
-      if (responseData?.content?.type === "ok"){
-        return responseData.content;
+      if (responseData?.type === "ok"){
+        return responseData;
       }
       else{
-        if (responseData?.content?.type){
-          return responseData?.content
+        if (responseData?.type){
+          return responseData;
         }
         else{
           return {'type': "error", 'details': "An error occurred"};
@@ -76,12 +76,12 @@ export const CulturalInfo = async () => {
     });
     const responseData = await response.json();
     if (response.ok) {
-      if (responseData?.content?.type === "ok"){
-        return responseData.content;
+      if (responseData?.type === "ok"){
+        return responseData;
       }
       else{
-        if (responseData?.content?.type){
-          return responseData?.content
+        if (responseData?.type){
+          return responseData;
         }
         else{
           return {'type': "error", 'details': "An error occurred"};
@@ -107,12 +107,12 @@ export const HostelInfo = async () => {
     });
     const responseData = await response.json();
     if (response.ok) {
-      if (responseData?.content?.type === "ok"){
-        return responseData.content;
+      if (responseData?.type === "ok"){
+        return responseData;
       }
       else{
-        if (responseData?.content?.type){
-          return responseData?.content
+        if (responseData?.type){
+          return responseData;
         }
         else{
           return {'type': "error", 'details': "An error occurred"};
@@ -138,12 +138,12 @@ export const SportsInfo = async () => {
     });
     const responseData = await response.json();
     if (response.ok) {
-      if (responseData?.content?.type === "ok"){
-        return responseData.content;
+      if (responseData?.type === "ok"){
+        return responseData;
       }
       else{
-        if (responseData?.content?.type){
-          return responseData?.content
+        if (responseData?.type){
+          return responseData;
         }
         else{
           return {'type': "error", 'details': "An error occurred"};
@@ -169,12 +169,12 @@ export const ResearchInfo = async () => {
     });
     const responseData = await response.json();
     if (response.ok) {
-      if (responseData?.content?.type === "ok"){
-        return responseData.content;
+      if (responseData?.type === "ok"){
+        return responseData;
       }
       else{
-        if (responseData?.content?.type){
-          return responseData?.content
+        if (responseData?.type){
+          return responseData;
         }
         else{
           return {'type': "error", 'details': "An error occurred"};
@@ -200,12 +200,12 @@ export const PostgraduateInfo = async () => {
     });
     const responseData = await response.json();
     if (response.ok) {
-      if (responseData?.content?.type === "ok"){
-        return responseData.content;
+      if (responseData?.type === "ok"){
+        return responseData;
       }
       else{
-        if (responseData?.content?.type){
-          return responseData?.content
+        if (responseData?.type){
+          return responseData;
         }
         else{
           return {'type': "error", 'details': "An error occurred"};
@@ -232,12 +232,12 @@ export const AddClubApi = async (data) => {
     });
     const responseData = await response.json();
     if (response.ok) {
-      if (responseData?.content?.type === "ok"){
-        return responseData.content;
+      if (responseData?.type === "ok"){
+        return responseData;
       }
       else{
-        if (responseData?.content?.type){
-          return responseData?.content
+        if (responseData?.type){
+          return responseData;
         }
         else{
           return {'type': "error", 'details': "An error occurred"};
@@ -264,12 +264,12 @@ export const ClubListApi = async () => {
     });
     const responseData = await response.json();
     if (response.ok) {
-      if (responseData?.content?.type === "ok"){
-        return responseData.content;
+      if (responseData?.type === "ok"){
+        return responseData;
       }
       else{
-        if (responseData?.content?.type){
-          return responseData?.content
+        if (responseData?.type){
+          return responseData;
         }
         else{
           return {'type': "error", 'details': "An error occurred"};
@@ -296,12 +296,12 @@ export const UpdateClubApi = async (data) => {
     });
     const responseData = await response.json();
     if (response.ok) {
-      if (responseData?.content?.type === "ok"){
-        return responseData.content;
+      if (responseData?.type === "ok"){
+        return responseData;
       }
       else{
-        if (responseData?.content?.type){
-          return responseData?.content
+        if (responseData?.type){
+          return responseData;
         }
         else{
           return {'type': "error", 'details': "An error occurred"};
@@ -328,12 +328,12 @@ export const DeleteClubApi = async (data) => {
     });
     const responseData = await response.json();
     if (response.ok) {
-      if (responseData?.content?.type === "ok"){
-        return responseData.content;
+      if (responseData?.type === "ok"){
+        return responseData;
       }
       else{
-        if (responseData?.content?.type){
-          return responseData?.content
+        if (responseData?.type){
+          return responseData;
         }
         else{
           return {'type': "error", 'details': "An error occurred"};

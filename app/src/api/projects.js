@@ -18,15 +18,15 @@ export const getProjectsList = async () => {
     });
     const responseData = await response.json();
     if (
-      responseData?.content?.type === "error" &&
-      (responseData.content.details === "JWTExpired" ||
-        responseData.content.details === "JWTInvalid")
+      responseData?.type === "error" &&
+      (responseData.details === "JWTExpired" ||
+        responseData.details === "JWTInvalid")
     ) {
       handleAPIError();
       return;
     }
     if (response.ok) {
-      return responseData.content.projects;
+      return responseData.projects;
     } else {
       throw new Error(`HTTP error! Status: ${response.status}`);
     }
@@ -48,15 +48,15 @@ export const AddProjectApi = async (data) => {
     });
     const responseData = await response.json();
     if (
-      responseData?.content?.type === "error" &&
-      (responseData.content.details === "JWTExpired" ||
-        responseData.content.details === "JWTInvalid")
+      responseData?.type === "error" &&
+      (responseData.details === "JWTExpired" ||
+        responseData.details === "JWTInvalid")
     ) {
       handleAPIError();
       return;
     }
     if (response.ok) {
-      return responseData.content;
+      return responseData;
     } else {
       throw new Error(`HTTP error! Status: ${response.status}`);
     }
@@ -78,15 +78,15 @@ export const DeleteProjectApi = async (data) => {
     });
     const responseData = await response.json();
     if (
-      responseData?.content?.type === "error" &&
-      (responseData.content.details === "JWTExpired" ||
-        responseData.content.details === "JWTInvalid")
+      responseData?.type === "error" &&
+      (responseData.details === "JWTExpired" ||
+        responseData.details === "JWTInvalid")
     ) {
       handleAPIError();
       return;
     }
     if (response.ok) {
-      return responseData.content;
+      return responseData;
     } else {
       throw new Error(`HTTP error! Status: ${response.status}`);
     }
@@ -108,15 +108,15 @@ export const UpdateProjectApi = async (data) => {
     });
     const responseData = await response.json();
     if (
-      responseData?.content?.type === "error" &&
-      (responseData.content.details === "JWTExpired" ||
-        responseData.content.details === "JWTInvalid")
+      responseData?.type === "error" &&
+      (responseData.details === "JWTExpired" ||
+        responseData.details === "JWTInvalid")
     ) {
       handleAPIError();
       return;
     }
     if (response.ok) {
-      return responseData.content;
+      return responseData;
     } else {
       throw new Error(`HTTP error! Status: ${response.status}`);
     }
@@ -138,15 +138,15 @@ export const OwnProjectsApi = async () => {
     });
     const responseData = await response.json();
     if (
-      responseData?.content?.type === "error" &&
-      (responseData.content.details === "JWTExpired" ||
-        responseData.content.details === "JWTInvalid")
+      responseData?.type === "error" &&
+      (responseData.details === "JWTExpired" ||
+        responseData.details === "JWTInvalid")
     ) {
       handleAPIError();
       return;
     }
     if (response.ok) {
-      return responseData.content;
+      return responseData;
     } else {
       throw new Error(`HTTP error! Status: ${response.status}`);
     }
@@ -168,15 +168,15 @@ export const ProjectInfoApi = async (data) => {
     });
     const responseData = await response.json();
     if (
-      responseData?.content?.type === "error" &&
-      (responseData.content.details === "JWTExpired" ||
-        responseData.content.details === "JWTInvalid")
+      responseData?.type === "error" &&
+      (responseData.details === "JWTExpired" ||
+        responseData.details === "JWTInvalid")
     ) {
       handleAPIError();
       return;
     }
     if (response.ok) {
-      return responseData.content;
+      return responseData;
     } else {
       throw new Error(`HTTP error! Status: ${response.status}`);
     }
@@ -198,15 +198,15 @@ export const ApplyProjectApi = async (data) => {
     });
     const responseData = await response.json();
     if (
-      responseData?.content?.type === "error" &&
-      (responseData.content.details === "JWTExpired" ||
-        responseData.content.details === "JWTInvalid")
+      responseData?.type === "error" &&
+      (responseData.details === "JWTExpired" ||
+        responseData.details === "JWTInvalid")
     ) {
       handleAPIError();
       return;
     }
     if (response.ok) {
-      return responseData.content;
+      return responseData;
     } else {
       throw new Error(`HTTP error! Status: ${response.status}`);
     }
@@ -229,15 +229,15 @@ export const MyProjectListApi = async () => {
     });
     const responseData = await response.json();
     if (
-      responseData?.content?.type === "error" &&
-      (responseData.content.details === "JWTExpired" ||
-        responseData.content.details === "JWTInvalid")
+      responseData?.type === "error" &&
+      (responseData.details === "JWTExpired" ||
+        responseData.details === "JWTInvalid")
     ) {
       handleAPIError();
       return;
     }
     if (response.ok) {
-      return responseData.content;
+      return responseData;
     } else {
       throw new Error(`HTTP error! Status: ${response.status}`);
     }
@@ -259,15 +259,15 @@ export const AddProjectMeetingApi = async (data) => {
     });
     const responseData = await response.json();
     if (
-      responseData?.content?.type === "error" &&
-      (responseData.content.details === "JWTExpired" ||
-        responseData.content.details === "JWTInvalid")
+      responseData?.type === "error" &&
+      (responseData.details === "JWTExpired" ||
+        responseData.details === "JWTInvalid")
     ) {
       handleAPIError();
       return;
     }
     if (response.ok) {
-      return responseData.content;
+      return responseData;
     } else {
       throw new Error(`HTTP error! Status: ${response.status}`);
     }
@@ -289,15 +289,15 @@ export const DeleteMeetingApi = async (data) => {
     });
     const responseData = await response.json();
     if (
-      responseData?.content?.type === "error" &&
-      (responseData.content.details === "JWTExpired" ||
-        responseData.content.details === "JWTInvalid")
+      responseData?.type === "error" &&
+      (responseData.details === "JWTExpired" ||
+        responseData.details === "JWTInvalid")
     ) {
       handleAPIError();
       return;
     }
     if (response.ok) {
-      return responseData.content;
+      return responseData;
     } else {
       throw new Error(`HTTP error! Status: ${response.status}`);
     }
@@ -319,15 +319,15 @@ export const UpdateMeetingApi = async (data) => {
     });
     const responseData = await response.json();
     if (
-      responseData?.content?.type === "error" &&
-      (responseData.content.details === "JWTExpired" ||
-        responseData.content.details === "JWTInvalid")
+      responseData?.type === "error" &&
+      (responseData.details === "JWTExpired" ||
+        responseData.details === "JWTInvalid")
     ) {
       handleAPIError();
       return;
     }
     if (response.ok) {
-      return responseData.content;
+      return responseData;
     } else {
       throw new Error(`HTTP error! Status: ${response.status}`);
     }
@@ -349,15 +349,15 @@ export const ShortlistMemberApi = async (data) => {
     });
     const responseData = await response.json();
     if (
-      responseData?.content?.type === "error" &&
-      (responseData.content.details === "JWTExpired" ||
-        responseData.content.details === "JWTInvalid")
+      responseData?.type === "error" &&
+      (responseData.details === "JWTExpired" ||
+        responseData.details === "JWTInvalid")
     ) {
       handleAPIError();
       return;
     }
     if (response.ok) {
-      return responseData.content;
+      return responseData;
     } else {
       throw new Error(`HTTP error! Status: ${response.status}`);
     }
@@ -379,15 +379,15 @@ export const RemoveMemberApi = async (data) => {
     });
     const responseData = await response.json();
     if (
-      responseData?.content?.type === "error" &&
-      (responseData.content.details === "JWTExpired" ||
-        responseData.content.details === "JWTInvalid")
+      responseData?.type === "error" &&
+      (responseData.details === "JWTExpired" ||
+        responseData.details === "JWTInvalid")
     ) {
       handleAPIError();
       return;
     }
     if (response.ok) {
-      return responseData.content;
+      return responseData;
     } else {
       throw new Error(`HTTP error! Status: ${response.status}`);
     }

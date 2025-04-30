@@ -1,5 +1,6 @@
 from src.config import AUTH_SERVICE_URL
 import httpx
+from fastapi.responses import JSONResponse
 
 headers = {
     'Content-type': 'application/json',
@@ -10,12 +11,17 @@ async def forward_auth_request(path: str, data):
     try:
         async with httpx.AsyncClient() as client:
             response = await client.post(f"{AUTH_SERVICE_URL}{path}", json=data, headers=headers)
-            print(response)
         if "application/json" in response.headers.get("Content-Type", ""):
-            return response.json()
+            return JSONResponse(content=response.json(), status_code=response.status_code)
         else:
             print("Invalid response format from auth service")
-            return {'content':{'type': "error", "details": "An error occurred", "status_code": response.status_code}}
+            return JSONResponse(
+                content={'type': "error", "details": "Invalid response format", "status_code": response.status_code},
+                status_code=response.status_code
+            )
     except Exception as e:
         print("Failed to connect to auth service: ", e)
-        return {'content':{'type':"error", 'details': f"An error occured", 'status_code': 503}}
+        return JSONResponse(
+            content={'type': "error", 'details': "An error occurred while connecting to auth service"},
+            status_code=503
+        )

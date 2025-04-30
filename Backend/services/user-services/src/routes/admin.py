@@ -3,6 +3,7 @@ from src.schemas.request import AddStudentRequest, CouncilListRequest, UpdateCou
 from src.models.users import Admin, Council, Student
 from src.database.connection import get_users_db
 from fastapi import APIRouter, Depends
+from fastapi.responses import JSONResponse
 from sqlalchemy.orm import Session
 from sqlalchemy.orm import joinedload
 
@@ -19,10 +20,14 @@ def add_student(request: AddStudentRequest, db: Session = Depends(get_users_db))
     try:
         existing_admin = db.query(Admin).filter(Admin.email == request_by).first()
         if not existing_admin:
-            return {'content': {'type':"error", 'details': "Admin not found"}}
+            return JSONResponse(content={"type": "error", "details": "Admin authorization required"},
+                                status_code=403)
         existing_student = db.query(Student).filter(Student.email == email).first()
         if existing_student:
-            return {'content': {'type':"error", 'details': "Student already found"}}
+            return JSONResponse(
+                content={"type": "error", "details": "Student already exists"},
+                status_code=400
+            )
         new_student = Student(
             name=name,
             full_name=full_name,
@@ -32,10 +37,26 @@ def add_student(request: AddStudentRequest, db: Session = Depends(get_users_db))
         db.add(new_student)
         db.commit()
         db.refresh(new_student)
-        return {'content': {'type':"ok", 'details': "Council added",'id': new_student.id}}
+        return JSONResponse(
+            content={
+                "type": "ok",
+                "details": "Student created successfully",
+                "student": {
+                    "id": new_student.id,
+                    "email": new_student.email,
+                    "name": new_student.name
+                }
+            },
+            status_code=201
+        )
+
     except Exception as e:
-        print("ERROR in add council:", e)
-        return {'content':{'type': "error", 'details':"An error occurred"}}
+        db.rollback()
+        print("Error adding student:", e)
+        return JSONResponse(
+            content={"type": "error", "details": "Failed to create student"},
+            status_code=500
+        )
 
 @router.post("/council/add")
 def add_council(request: AddCouncilRequest, db: Session = Depends(get_users_db)):
@@ -52,15 +73,24 @@ def add_council(request: AddCouncilRequest, db: Session = Depends(get_users_db))
     try:
         existing_admin = db.query(Admin).filter(Admin.email == request_by).first()
         if not existing_admin:
-            return {'content': {'type':"error", 'details': "Admin not found"}}
+            return JSONResponse(
+                content={"type": "error", "details": "Admin authorization required"},
+                status_code=403
+            )
         existing_secretary = db.query(Student).filter(Student.email == secretary).first()
         if not existing_secretary:
-            return {'content': {'type':"error", 'details': "Secretary not found"}}
+            return JSONResponse(
+                content={"type": "error", "details": "Secretary student not found"},
+                status_code=404
+            )
         deputy_students = []
-        for user in deputy:
-            existing_deputy = db.query(Student).filter(Student.email == user).first()
+        for deputy_email in deputy:
+            existing_deputy = db.query(Student).filter(Student.email == deputy_email).first()
             if not existing_deputy:
-                return {'content': {'type':"error", 'details': "Deputy Secretary not found"}}
+                return JSONResponse(
+                    content={"type": "error", "details": f"Deputy {deputy_email} not found"},
+                    status_code=404
+                )
             deputy_students.append(existing_deputy)
         new_council = Council(
             email=email,
@@ -76,28 +106,55 @@ def add_council(request: AddCouncilRequest, db: Session = Depends(get_users_db))
         db.add(new_council)
         db.commit()
         db.refresh(new_council)
-        return {'content': {'type':"ok", 'details': "Council added",'id': new_council.id}}
+        return JSONResponse(
+            content={
+                "type": "ok",
+                "details": "Council created successfully",
+                "council": {
+                    "id": new_council.id,
+                    "name": new_council.name,
+                    "email": new_council.email
+                }
+            },
+            status_code=201
+        )
     except Exception as e:
-        print("ERROR in add council:", e)
-        return {'content':{'type': "error", 'details':"An error occurred"}}
+        db.rollback()
+        print("Error adding council:", e)
+        return JSONResponse(
+            content={"type": "error", "details": "Failed to create council"},
+            status_code=500
+        )
 
 @router.post("/council/update")
 def update_council(request: UpdateCouncilRequest, db: Session = Depends(get_users_db)):
     try:
         admin = db.query(Admin).filter(Admin.email == request.request_by).first()
         if not admin:
-            return {'content': {'type': 'error', 'details': 'Admin authorization required'}}
+            return JSONResponse(
+                content={"type": "error", "details": "Admin authorization required"},
+                status_code=403
+            )
         council = db.query(Council).filter(Council.id == request.council_id).first()
         if not council:
-            return {'content': {'type': 'error', 'details': 'Council not found'}}
+            return JSONResponse(
+                content={"type": "error", "details": "Council not found"},
+                status_code=404
+            )
         secretary = db.query(Student).filter(Student.email == request.secretary).first()
         if not secretary:
-            return {'content': {'type': 'error', 'details': 'Secretary student not found'}}
+            return JSONResponse(
+                content={"type": "error", "details": "Secretary student not found"},
+                status_code=404
+            )
         new_deputies = []
-        for email in request.deputy:
-            deputy = db.query(Student).filter(Student.email == email).first()
+        for deputy_email in request.deputy:
+            deputy = db.query(Student).filter(Student.email == deputy_email).first()
             if not deputy:
-                return {'content': {'type': 'error', 'details': f'Deputy {email} not found'}}
+                return JSONResponse(
+                    content={"type": "error", "details": f"Deputy {deputy_email} not found"},
+                    status_code=404
+                )
             new_deputies.append(deputy)
         council.email=request.email
         council.password_hash=hash_password(request.password)
@@ -108,25 +165,34 @@ def update_council(request: UpdateCouncilRequest, db: Session = Depends(get_user
         council.secretary_id=secretary.id
         council.deputy_ids=new_deputies
         db.commit()
-        return {
-            'content': {
-                'type': 'ok',
-                'details': 'Council updated successfully',
-                'council_id': council.id
+        return JSONResponse(
+            content={
+                "type": "ok",
+                "details": "Council updated successfully",
+                "council": {
+                    "id": council.id,
+                    "name": council.name
+                }
             }
-        }
+        )
 
     except Exception as e:
         db.rollback()
-        print(f"ERROR updating council: {e}")
-        return {'content': {'type': 'error', 'details': 'Failed to update council'}}
+        print("Error updating council:", e)
+        return JSONResponse(
+            content={"type": "error", "details": "Failed to update council"},
+            status_code=500
+        )
 
 @router.post("/council/list")
 def councils_list(request: CouncilListRequest, db: Session = Depends(get_users_db)):
     try:
         admin = db.query(Admin).filter(Admin.email == request.request_by).first()
         if not admin:
-            return {'content': {'type': 'error', 'details': 'Admin authorization required'}}
+            return JSONResponse(
+                content={"type": "error", "details": "Admin authorization required"},
+                status_code=403
+            )
 
         councils = db.query(Council).options(
             joinedload(Council.secretary),
@@ -149,17 +215,20 @@ def councils_list(request: CouncilListRequest, db: Session = Depends(get_users_d
                 'updated_at': council.updated_at.isoformat()
             }
             councils_data.append(council_data)
-
-        return {
-            'content': {
-                'type': 'ok',
-                'details': f"Found {len(councils)} councils",
-                'councils': councils_data
+        return JSONResponse(
+            content={
+                "type": "ok",
+                "details": f"Found {len(councils_data)} councils",
+                "councils": councils_data,
+                "count": len(councils_data)
             }
-        }
+        )
     except Exception as e:
-        print(f"ERROR retrieving councils: {e}")
-        return {'content': {'type': 'error', 'details': 'Failed to retrieve councils'}}
+        print("Error listing councils:", e)
+        return JSONResponse(
+            content={"type": "error", "details": "Failed to retrieve councils"},
+            status_code=500
+        )
 
 @router.post("/council/delete")
 def delete_council(request: DeleteCouncilRequest, db: Session = Depends(get_users_db)):
@@ -168,15 +237,31 @@ def delete_council(request: DeleteCouncilRequest, db: Session = Depends(get_user
     try:
         existing_admin = db.query(Admin).filter(Admin.email == request_by).first()
         if not existing_admin:
-            return {'content': {'type':"error", 'details': "Admin not found"}}
+            return JSONResponse(
+                content={"type": "error", "details": "Admin authorization required"},
+                status_code=403
+            )
         existing_council = db.query(Council).filter(Council.id == id).first()
         if not existing_council:
-            return {'content': {'type':"error", 'details': "Council not found"}}
+            return JSONResponse(
+                content={"type": "error", "details": "Council not found"},
+                status_code=404
+            )
         db.delete(existing_council)
         db.commit()
-        return {'content': {'type':"ok", 'details': "Council deleted"}}
+        return JSONResponse(
+            content={
+                "type": "ok",
+                "details": "Council deleted successfully",
+                "deleted_id": request.id
+            }
+        )
     except Exception as e:
-        print("ERROR in add council:", e)
-        return {'content':{'type': "error", 'details':"An error occurred"}}
+        db.rollback()
+        print("Error deleting council:", e)
+        return JSONResponse(
+            content={"type": "error", "details": "Failed to delete council"},
+            status_code=500
+        )
     
 

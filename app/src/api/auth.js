@@ -17,7 +17,7 @@ export const Api = async (path, { data }) => {
       body: JSON.stringify(data),
     });
     const responseData = await response.json();
-    if ( responseData?.content?.type === "error" && (responseData.content.details === "JWTExpired" || responseData.content.details === "JWTInvalid")) {
+    if ( responseData?.type === "error" && (responseData.details === "JWTExpired" || responseData.details === "JWTInvalid")) {
       handleAPIError();
       return;
     }
@@ -33,14 +33,11 @@ export const Api = async (path, { data }) => {
 
 export const verifyToken = async () => {
   try {
-    const res = await Api("/api/verify-token", {
+    const content = await Api("/api/verify-token", {
       data: {},
     });
 
-    const content = res?.content;
-
-    if (
-      content?.type === "error" &&
+    if (content.type === "error" &&
       (content.details === "JWTExpired" || content.details === "JWTInvalid")
     ) {
       return { valid: false, reason: content.details };
@@ -63,12 +60,12 @@ export const ForgotPasswordApi = async ({email}) => {
     });
     const responseData = await response.json();
     if (response.ok) {
-      if (responseData?.content?.type === "ok"){
-        return responseData.content;
+      if (responseData?.type === "ok"){
+        return responseData;
       }
       else{
-        if (responseData?.content?.type){
-          return responseData?.content
+        if (responseData?.type){
+          return responseData;
         }
         else{
           return {'type': "error", 'details': "An error occurred"};
@@ -94,12 +91,12 @@ export const ResetPasswordApi = async ({new_password, token}) => {
     });
     const responseData = await response.json();
     if (response.ok) {
-      if (responseData?.content?.type === "ok"){
-        return responseData.content;
+      if (responseData?.type === "ok"){
+        return responseData;
       }
       else{
-        if (responseData?.content?.type){
-          return responseData?.content
+        if (responseData?.type){
+          return responseData;
         }
         else{
           return {'type': "error", 'details': "An error occurred"};
@@ -126,12 +123,43 @@ export const getUsername = async () => {
     });
     const responseData = await response.json();
     if (response.ok) {
-      if (responseData?.content?.type === "ok"){
-        return responseData.content;
+      if (responseData?.type === "ok"){
+        return responseData;
       }
       else{
-        if (responseData?.content?.type){
-          return responseData?.content
+        if (responseData?.type){
+          return responseData;
+        }
+        else{
+          return {'type': "error", 'details': "An error occurred"};
+        }
+      }
+    } else {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const LoginUserApi = async (userType, data) => {
+  const url = `${BACKEND_URL}/api/auth/${userType}/login`;
+  try {
+    const response = await fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    });
+    const responseData = await response.json();
+    if (response.ok) {
+      if (responseData?.type === "ok"){
+        return responseData;
+      }
+      else{
+        if (responseData?.type){
+          return responseData;
         }
         else{
           return {'type': "error", 'details': "An error occurred"};

@@ -1,3 +1,5 @@
+from slowapi import Limiter
+from slowapi.util import get_remote_address
 import os
 from dotenv import load_dotenv
 import logging
@@ -16,6 +18,8 @@ with open("./secrets/private.pem", "r") as f:
 
 with open("./secrets/public.pem", "r") as f:
     JWT_PUBLIC_KEY = f.read()
+
+limiter = Limiter(key_func=get_remote_address)
 
 AUTH_SERVICE_URL = os.getenv("AUTH_SERVICE_URL", "http://localhost:8001")
 EVENTS_SERVICE_URL = os.getenv("EVENTS_SERVICE_URL", "http://localhost:8002")

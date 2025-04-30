@@ -9,7 +9,6 @@ import Paper from '@mui/material/Paper';
 import Button from '@mui/material/Button';
 import { FaChevronRight, FaChevronLeft } from "react-icons/fa";
 
-// Extend dayjs with plugins
 dayjs.extend(isSameOrBefore);
 dayjs.extend(isSameOrAfter);
 
@@ -27,23 +26,19 @@ const COUNCIL_COLORS = {
 const CalendarComponent = ({ events }) => {
   const [currentMonth, setCurrentMonth] = useState(dayjs());
 
-  // Generate days for the current month view
   const generateMonthDays = () => {
     const startOfMonth = currentMonth.startOf("month");
     const endOfMonth = currentMonth.endOf("month");
     const daysInMonth = currentMonth.daysInMonth();
     
-    // Add days from previous month to fill the week
     const startDay = startOfMonth.day();
     const daysFromPrevMonth = startDay === 0 ? 6 : startDay - 1;
     
-    // Add days from next month to fill the week
     const endDay = endOfMonth.day();
     const daysFromNextMonth = endDay === 0 ? 0 : 7 - endDay;
     
     const days = [];
     
-    // Previous month days
     for (let i = daysFromPrevMonth; i > 0; i--) {
       days.push({
         date: startOfMonth.subtract(i, "day"),

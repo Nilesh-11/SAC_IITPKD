@@ -34,7 +34,6 @@ import { CoreTeamApi } from "../../api/club";
 import { useSearchParams } from "react-router-dom";
 import CoreTeamHeader from "./ClubHeader";
 
-// Create custom theme with orange color scheme
 const orangeTheme = createTheme({
   palette: {
     primary: {

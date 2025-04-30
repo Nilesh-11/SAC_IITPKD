@@ -4,7 +4,7 @@ import Typography from "@mui/material/Typography";
 import Avatar from "@mui/material/Avatar";
 import Paper from "@mui/material/Paper";
 import Divider from "@mui/material/Divider";
-import { CircularProgress } from "@mui/material";
+import CircularProgress from '@mui/material/CircularProgress';
 import { getEventsList } from "../../api/events";
 import { getUsername } from "../../api/auth";
 
@@ -21,7 +21,7 @@ const RightNavbar = () => {
             getEventsList(),
             getUsername(),
           ]);
-          setUsername(userData.name);
+          setUsername(userData?.name || "Guest");
           setRole(userData.user_type);
           setLiveEvents(eventData);
         } catch (err) {
@@ -64,7 +64,7 @@ const RightNavbar = () => {
           {username}
         </Typography>
         <Avatar
-          src={`/roles/${userrole}_circular.png`}
+          src={`/roles/${userrole}_circular.webp`}
           sx={{
             width: 50,
             height: 50,
@@ -119,7 +119,7 @@ const RightNavbar = () => {
               gap={2}
             >
               <Avatar
-                src={`/logo/event.png`}
+                src={`/logo/event.webp`}
                 sx={{
                   width: 40,
                   height: 40,

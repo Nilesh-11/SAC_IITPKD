@@ -33,3 +33,4 @@ password_expiration_time=datetime.timedelta(minutes=15)
 otp_expiration_time = datetime.timedelta(minutes=3)
 otp_resend_time = datetime.timedelta(minutes=5)
 session_duration = datetime.timedelta(hours=6)
+otp_attempt_limit = 5

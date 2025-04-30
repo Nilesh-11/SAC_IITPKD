@@ -5,9 +5,11 @@ from src.models.projects import Project
 from src.models.events import Event
 from src.database.connection import get_events_db, get_public_db, get_users_db, get_projects_db
 from fastapi import APIRouter, Depends
+from fastapi.responses import JSONResponse
 from sqlalchemy.orm import Session
 from sqlalchemy.orm import joinedload
 import datetime
+from enum import Enum
 
 router = APIRouter()
 
@@ -15,7 +17,7 @@ def get_council_data(db: Session, council_name: str):
     try:
         council = db.query(Council).filter(Council.name == council_name).first()
         if not council:
-            return {'content': {'type': "error", 'details': "Council not found"}}
+            return JSONResponse(content={'type': "error", 'details': "Council not found"})
 
         secretary_data = {
             "name": council.secretary.name,
@@ -29,7 +31,7 @@ def get_council_data(db: Session, council_name: str):
             "email": deputy.email
         } for deputy in council.deputy_ids]
 
-        return {'content': {
+        return JSONResponse(content={
             'type': "ok",
             'council': {
                 "secretary": secretary_data,
@@ -38,10 +40,10 @@ def get_council_data(db: Session, council_name: str):
                 "council_email": council.email,
                 "council_title": council.title
             }
-        }}
+        })
     except Exception as e:
         print(f"Error in {council_name} endpoint:", e)
-        return {'content': {'type': "error", 'details': "An error occurred"}}
+        return JSONResponse(content={'type': "error", 'details': "An error occurred"})
 
 @router.post("/technical")
 def technical_council(data: CouncilInfoRequest, db: Session = Depends(get_users_db)):
@@ -82,27 +84,42 @@ def add_project(data: AnnouncementListRequest, db: Session = Depends(get_public_
                                           Announcements.author,
                                           Announcements.author_role,
                                           ).filter(Announcements.is_expired == False).order_by(Announcements.created_at).all()
-        announcements_list = [dict(row._mapping) for row in existing_announcements]
-        return {'content':{'type': "ok", 'announcements': announcements_list}}
+        announcements_list = []
+        for row in existing_announcements:
+            announcement = dict(row._mapping)
+            if isinstance(announcement['created_at'], datetime.datetime):
+                announcement['created_at'] = announcement['created_at'].isoformat()
+            if isinstance(announcement['priority'], Enum):
+                announcement['priority'] = announcement['priority'].value
+            if isinstance(announcement['author_role'], Enum):
+                announcement['author_role'] = announcement['author_role'].value
+            announcements_list.append(announcement)
+        return JSONResponse(content={'type': "ok", 'announcements': announcements_list})
     except Exception as e:
         print("ERROR in add event:", e)
-        return {'content':{'type': "error", 'details':"An error occurred"}}
+        return JSONResponse(content={'type': "error", 'details': "An error occurred"})
 
 @router.post("/events/list")
-def get_projects(data: EventsListRequest, 
+def get_events(data: EventsListRequest, 
                 db_events: Session = Depends(get_events_db),
                 db_users: Session = Depends(get_users_db)):
     try:
-        # Get base event data
         existing_events = db_events.query(
             Event.organizer,
             Event.title,
             Event.description,
             Event.start_time,
+            Event.end_time,
             Event.council
         ).filter(Event.cancelled == False).all()
         
-        events_list = [dict(row._mapping) for row in existing_events]
+        events_list = []
+        for row in existing_events:
+            event = dict(row._mapping)
+            for time_field in ['start_time', 'end_time']:
+                if isinstance(event[time_field], datetime.datetime):
+                    event[time_field] = event[time_field].isoformat()
+            events_list.append(event)
 
         council_names = {event['council'] for event in events_list}
         councils = db_users.query(Council.name, Council.title)\
@@ -115,11 +132,10 @@ def get_projects(data: EventsListRequest,
             event['council_name'] = council_name
             event['council_title'] = council_map.get(council_name, "No Title Found")
 
-        return {'content': {'type': "ok", 'events': events_list}}
-    
+        return JSONResponse(content={'type': "ok", 'events': events_list})
     except Exception as e:
         print("ERROR retrieving events:", e)
-        return {'content': {'type': "error", 'details': "An error occurred"}}
+        return JSONResponse(content={'type': "error", 'details': "An error occurred"})
 
 @router.post("/clubs/list")
 def clubs_list(request: ClubListRequest, db: Session = Depends(get_users_db)):
@@ -136,16 +152,14 @@ def clubs_list(request: ClubListRequest, db: Session = Depends(get_users_db)):
                 "email": club.email,
                 "council_name": club.council.title if club.council else None
             })
-        return {
-            'content': {
-                'type': 'ok',
-                'details': f"Found {len(clubs)} clubs",
-                'clubs': clubs_data
-            }
-        }
+        return JSONResponse(content={
+            'type': 'ok',
+            'details': f"Found {len(clubs)} clubs",
+            'clubs': clubs_data
+        })
     except Exception as e:
         print(f"ERROR retrieving clubs: {e}")
-        return {'content': {'type': 'error', 'details': 'Failed to retrieve clubs'}}
+        return JSONResponse(content={'type': 'error', 'details': 'Failed to retrieve clubs'})
 
 @router.post("/status")
 def get_status(
@@ -176,18 +190,11 @@ def get_status(
             {"title": "members registered", "count": members_count},
         ]
 
-        return {
-            'content': {
-                'type': 'ok',
-                'details': 'System status retrieved',
-                'status': status_data
-            }
-        }
+        return JSONResponse(content={
+            'type': 'ok',
+            'details': 'System status retrieved',
+            'status': status_data
+        })
     except Exception as e:
         print(f"ERROR retrieving system status: {e}")
-        return {
-            'content': {
-                'type': 'error',
-                'details': 'Failed to retrieve system status'
-            }
-        }
+        return JSONResponse(content={'type': 'error', 'details': 'Failed to retrieve system status'})

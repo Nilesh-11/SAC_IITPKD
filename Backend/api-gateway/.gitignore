@@ -2,8 +2,7 @@ __pycache__
 .venv
 .env.dev
 .pem
-*.logs
+*.log
 secrets
 .vscode
 test
-logs

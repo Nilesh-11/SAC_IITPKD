@@ -56,11 +56,11 @@ const ProjectList = ( {role} ) => {
   });
 
   const handleNavigation = (projectId) => {
-    navigate(`/project/info?project_id=${projectId}`); // Navigate to the project info page
+    navigate(`/project/info?project_id=${projectId}`);
   };
 
   const handleAddProject = () => {
-    navigate(`/${role}/dashboard?currSection=addproject`); // Navigate to the project info page
+    navigate(`/${role}/dashboard?currSection=addproject`);
   };
 
   if (loading) {
@@ -261,7 +261,7 @@ const ProjectList = ( {role} ) => {
                 >
                   <Box sx={{ display: "flex", alignItems: "center" }}>
                     <Avatar
-                      src={`/roles/${project.coordinator_role}_circular.png`}
+                      src={`/roles/${project.coordinator_role}_circular.webp`}
                       sx={{ width: 40, height: 40, mr: 1 }}
                     />
                     <Box>

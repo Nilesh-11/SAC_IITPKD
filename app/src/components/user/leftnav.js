@@ -24,7 +24,7 @@ const LeftNav = ({ menuItems, role }) => {
             {/* Logo */}
             <Box sx={{ display: "flex", justifyContent: "center", padding: 2 }}>
               <div style={{ padding: "10px", backgroundColor: "white", borderRadius: "8px" }}>
-                <img src="/sac/saclogo_horizontal.png" alt="Logo" style={{ width: "auto", height: "auto" }} />
+                <img src="/sac/saclogo_horizontal.webp" alt="Logo" style={{ width: "auto", height: "auto" }} />
               </div>
             </Box>
 

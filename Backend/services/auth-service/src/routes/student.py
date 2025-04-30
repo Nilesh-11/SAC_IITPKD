@@ -1,12 +1,13 @@
 from src.utils.auth import hash_password
 from src.utils.jwt import create_jwt, verify_jwt
-from src.config.config import otp_expiration_time, otp_resend_time
+from src.config.config import otp_expiration_time, otp_resend_time, otp_attempt_limit
 from src.models.users import Student
 from src.models.auth import Otp
 from src.schemas.request import StudentSignupRequest, VerifyotpRequest, ResendOtpRequest, LoginRequest, ForgotPasswordRequest, SavePasswordRequest
 from src.database.connection import get_users_db, get_auth_db
 from src.utils.mail import send_mail_otp
 from fastapi import APIRouter, HTTPException, Depends
+from fastapi.responses import JSONResponse
 from sqlalchemy.orm import Session
 import datetime
 
@@ -16,7 +17,8 @@ router = APIRouter()
 def signupwithCredentials(data: StudentSignupRequest, db: Session = Depends(get_auth_db), db_user: Session = Depends(get_users_db)):
     existing_user = db_user.query(Student).filter(Student.email == data.email).first()
     if existing_user:
-        raise HTTPException(status_code=400, detail="Email already registered")
+        return JSONResponse(content={"type": "error", "detail": "Email already registered"},
+                            status_code=400)
     
     name = data.name
     full_name = data.full_name
@@ -33,15 +35,17 @@ def signupwithCredentials(data: StudentSignupRequest, db: Session = Depends(get_
                 db.delete(existing_otp)
                 db.commit()
             else:
-                return {'content':{"type": "invalid", "verdict": "otpfound", 'status_code': 400, "detail": "Otp already sent, found try resending otp"}}
+                return JSONResponse(content={"type": "invalid", 'verdict': "otpfound", "detail": "OTP already sent, try resending OTP"},
+                                    status_code=400)
         
         mail_response = send_mail_otp(email)
         if mail_response['type'] != 'ok':
-            return {'content':{"type": "error", 'status_code': 400, "detail": "Otp not sent, check the input and try again"}}
+            return JSONResponse(content={"type": "error","detail": "OTP not sent, check the input and try again"},
+                                status_code=400)
         
         otp_code = mail_response['otp']
         exp_time = datetime.datetime.utcnow() + otp_expiration_time
-
+        
         new_otp = Otp(
             otp_code=otp_code,
             otp_type="email",
@@ -58,35 +62,39 @@ def signupwithCredentials(data: StudentSignupRequest, db: Session = Depends(get_
         )
         db.add(new_otp)
         db.commit()
-        return {'content':{'type': "ok"}}
+        return JSONResponse(content={"type": "ok", 'details': "Otp sent"})
     except Exception as e:
         print("Error in signup with credentials:", e)
-        return {'content':{"type": "error", 'status_code': 500, "detail": "An error occurred with signup"}}
+        return JSONResponse(content={"type": "error", "detail": "An error occurred with signup"},
+                            status_code=500)
 
 @router.post("/verify-otp")
 def verify_otp(data: VerifyotpRequest, db: Session = Depends(get_auth_db), db_user: Session = Depends(get_users_db)):
     otp_code = data.otp_code
     email = data.email
-    print(data)
     try:
         existing_otp = db.query(Otp).filter(Otp.email == email, Otp.is_used == False).first()
         if not existing_otp:
-            return {'content':{'type':"error", 'status_code':400, 'detail':"No Otp has been sent"}}
+            return JSONResponse(content={"type": "error", "detail": "No OTP has been sent"},
+                                status_code=400)
         if datetime.datetime.utcnow() > existing_otp.exp_time:
-            return {'content':{'type':"error", 'status_code':400, 'detail':"OTP has expired, request a new otp"}}
+            return JSONResponse(content={"type": "error", "detail": "OTP has expired, request a new OTP"},
+                                status_code=400)
 
         if existing_otp.otp_code != otp_code:
             existing_otp.attempts += 1
             db.commit()
-            if existing_otp.attempts >= 5:
-                return {'content':{'type':"error", 'status_code':400, 'detail':"Too many incorrect attempts. Request a new OTP."}}
-            return {'content':{'type':"invalid", 'status_code':400, 'detail':"Invalid OTP"}}
-
+            if existing_otp.attempts >= otp_attempt_limit:
+                return JSONResponse(content={"type": "error", "detail": "Too many incorrect attempts, request a new OTP"},
+                                    status_code=400)
+            return JSONResponse(content={"type": "invalid", "detail": "Invalid OTP"},
+                                status_code=400)
         existing_otp.is_used = True
         existing_otp.verified_at = datetime.datetime.utcnow()
+        db.commit()
         existing_user = db_user.query(Student).filter(Student.email == email).first()
         if existing_user:
-            return {'content':{'type': "ok", 'details': "Otp verified"}}
+            return JSONResponse(content={'type': "ok", 'details': "Student already registered and Otp verified. :O"})
         new_user = Student(
             name=existing_otp.name,
             full_name=existing_otp.full_name,
@@ -96,10 +104,11 @@ def verify_otp(data: VerifyotpRequest, db: Session = Depends(get_auth_db), db_us
         )
         db_user.add(new_user)
         db_user.commit()
-        return {'content':{'type': "ok", 'details': "Student created successfully."}}
+        return JSONResponse(content={"type": "ok", "details": "Student registration successfull :)"})
     except Exception as e:
         print("Error in verifying otp:", e)
-        return {'content':{"type": "error", 'status_code': 500, "detail": "An error occurred with verifying otp"}}
+        return JSONResponse(content={"type": "error", "detail": "An error occurred verifying OTP"},
+                            status_code=500)
 
 @router.post("/resend-otp")
 def resend_otp(data: ResendOtpRequest, db: Session = Depends(get_auth_db)):
@@ -109,20 +118,22 @@ def resend_otp(data: ResendOtpRequest, db: Session = Depends(get_auth_db)):
     
     try:
         existing_otp = db.query(Otp).filter(Otp.email == email, Otp.is_used == False).first()
-
         if existing_otp:
             if existing_otp.lock_until and datetime.datetime.utcnow() < existing_otp.lock_until:
-                return {'content':{"type": "error", "detail": "Wait for a while before sending a request"}}
+                return JSONResponse(content={"type": "error", "detail": "Wait before requesting again, ;)"},
+                                    status_code=400)
             elif existing_otp.resend_count >= 3:
                 existing_otp.lock_until = datetime.datetime.utcnow() + otp_resend_time
                 existing_otp.resend_count = 0
-                return {'content':{"type": "error", "detail": "OTP resend limit exceeded. Try again later."}}
+                return JSONResponse(content={"type": "error", "detail": "Resend limit exceeded, :|"},
+                                    status_code=400)
             existing_otp.resend_count += 1
             db.commit()
 
         mail_response = send_mail_otp(email)
         if mail_response['type'] != 'ok':
-            raise HTTPException(status_code=500, detail="Failed to send OTP")
+            return JSONResponse(content={"type": "error", "detail": "Failed to send OTP"},
+                                status_code=500)
 
         existing_otp.otp_code = mail_response['otp']
         existing_otp.exp_time = datetime.datetime.utcnow() + otp_expiration_time
@@ -134,10 +145,11 @@ def resend_otp(data: ResendOtpRequest, db: Session = Depends(get_auth_db)):
         existing_otp.ip_addr = ip_addr
         existing_otp.user_agent = user_agent
         db.commit()
-        return {'content':{"type": "ok", "detail": "OTP resent successfully"}}
+        return JSONResponse(content={"type": "ok", "detail": "OTP resent"})
     except Exception as e:
-        print("Error in resending otp:", e)
-        return {'content':{"type": "error", "detail": "An error occurred with resending otp", 'status_code': 500}}
+        print("Error resending OTP:", e)
+        return JSONResponse(content={"type": "error", "detail": "Error resending OTP"},
+                            status_code=500)
 
 @router.post("/login")
 def user_login(data: LoginRequest, db_user: Session = Depends(get_users_db)):
@@ -147,9 +159,17 @@ def user_login(data: LoginRequest, db_user: Session = Depends(get_users_db)):
     try:
         existing_user = db_user.query(Student).filter(Student.email == email, Student.password_hash == password_hash).first()
         if not existing_user:
-            return {'content':{'type': "error", 'details': "Student not found"}}
+            return JSONResponse(content={"type": "error", "details": "Student not found"},status_code=404)
         token = create_jwt(email=existing_user.email, id=str(existing_user.id), role="student", aud="internal")
-        return {'content':{'type': "ok", 'token': token}}
+        return JSONResponse(content={
+            "type": "ok",
+            "token": token,
+            "student": {
+                "email": existing_user.email,
+                "name": existing_user.name,
+            }
+        })
     except Exception as e:
-        print("Error in log in:", e)
-        return {'content':{"type": "error", "detail": "An error occurred with login", 'status_code': 500}}
+        print("Login ERROR:", e)
+        return JSONResponse(content={"type": "error", "detail": "Login failed"},
+                            status_code=500)

@@ -132,7 +132,7 @@ const ClubInfo = () => {
           >
             <Box
               component="img"
-              src={`/clubs/${clubData.name}/logo.png`}
+              src={`/clubs/${clubData.name}/logo.webp`}
               alt={`${clubData.name} logo`}
               sx={{
                 width: "100%",
@@ -277,7 +277,7 @@ const ClubInfo = () => {
                 <Box sx={{ display: "flex", alignItems: "center", flex: 1 }}>
                   <Box
                     component="img"
-                    src={`/roles/student_circular.png`}
+                    src={`/roles/student_circular.webp`}
                     alt="member"
                     sx={{ width: 48, height: 48, mr: 2 }}
                   />

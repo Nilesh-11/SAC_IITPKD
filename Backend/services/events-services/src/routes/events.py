@@ -1,9 +1,8 @@
 from src.schemas.request import MyEventRequest, AddEventRequest, GetEventsRequest, GetEventRequest, UpdateEventRequest, DeleteEventRequest
 from src.utils.verify import verify_user
-from src.models.events import Event
-from src.models.users import Club
 from src.database.connection import get_events_db, get_users_db
-from src.models.users import Student, Club, Council, Admin
+from src.models.events import Event
+from src.models.users import Student, Club, Council
 from fastapi.responses import JSONResponse
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
@@ -24,17 +23,20 @@ def add_event(data: AddEventRequest, db: Session = Depends(get_events_db), db_us
 
     try:
         if start_time > end_time:
-            return {'content':{'type': "error", "details": "Start time is greater than end time"}}
+            return JSONResponse(content={"type": "error", "details": "Start time cannot be after end time"},
+                                status_code=400)
         existing_request_by_type =  verify_user(request_by, db_user)
         if existing_request_by_type not in ["club", "council"]:
-            return {'content':{'type': "error", "details": "User is not a club or a council"}}
+            return JSONResponse(content={"type": "error", "details": "Only clubs or councils can create events"},
+                                status_code=403)
         if existing_request_by_type == "council":
             existing_request_by = db_user.query(Council).filter(Council.email == request_by).first()
         else:
             existing_request_by = db_user.query(Club).filter(Club.email == request_by).first()
         existing_organizer = db_user.query(exists().where(Student.email == organizer)).scalar()
         if not existing_organizer:
-            return {'content':{'type': "error", "details": "Organizer is not registered on sac website or is not a student"}}
+            return JSONResponse(content={"type": "error", "details": "Organizer must be a registered student"},
+                                status_code=400)
         new_event = Event(
             organizer=organizer,
             title=title,
@@ -48,19 +50,53 @@ def add_event(data: AddEventRequest, db: Session = Depends(get_events_db), db_us
         db.add(new_event)
         db.commit()
         db.refresh(new_event)
-        return {'content':{'type': "ok", 'id': new_event.id, 'details': "New event added"}}
+        return JSONResponse(
+            content={
+                "type": "ok",
+                "id": new_event.id,
+                "details": "Event created successfully",
+                "event": {
+                    "title": new_event.title,
+                    "start_time": new_event.start_time.isoformat(),
+                    "end_time": new_event.end_time.isoformat()
+                }
+            }
+        )
     except Exception as e:
         print("ERROR in add event:", e)
-        return {'content':{'type': "error", 'details':"An error occurred"}}
+        return JSONResponse(content={"type": "error", "details": "Failed to create event"},
+                            status_code=500)
 
 @router.post("/list")
 def get_events(data: GetEventsRequest, db: Session = Depends(get_events_db)):
     try:
-        all_events = db.query(Event).filter(Event.start_time >= datetime.datetime.utcnow() - datetime.timedelta(days=25)).all()
-        return {'content':{'type': "ok", 'events': all_events}}
+        events = db.query(Event).filter(Event.start_time >= datetime.datetime.utcnow() - datetime.timedelta(days=25)).all()
+        events_list = [{
+            "id": e.id,
+            "organizer": e.organizer,
+            "title": e.title,
+            "description": e.description,
+            "start_time": e.start_time.isoformat(),
+            "end_time": e.end_time.isoformat(),
+            "venue": e.venue,
+            "registered_by": e.registered_by,
+            "council": e.council,
+            "cancelled": e.cancelled
+        } for e in events]
+        
+        return JSONResponse(
+            content={
+                "type": "ok",
+                "events": events_list,
+                "count": len(events_list)
+            }
+        )
+        
     except Exception as e:
         print("ERROR in events list:", e)
-        return {'content':{'type': "error", 'details':"An error occurred"}}
+        return JSONResponse(content={"type": "error", "details": "Failed to retrieve events"},
+                            status_code=500)
+
 
 @router.post("/my")
 def get_own_events(data: MyEventRequest, 
@@ -68,22 +104,16 @@ def get_own_events(data: MyEventRequest,
                   db_user: Session = Depends(get_users_db)):
     try:
         if not verify_user(data.request_by, db_user):
-            return {'content': {'type': 'error', 'details': 'Unauthorized user'}}
+            return JSONResponse(content={"type": "error", "details": "Unauthorized"},
+                                status_code=401)
 
         events = db.query(Event).filter(
             Event.registered_by == data.request_by
         ).order_by(Event.start_time.desc()).all()
 
         formatted_events = []
-        current_time = datetime.datetime.utcnow()
         
         for event in events:
-            if current_time < event.start_time:
-                status = "upcoming"
-            elif event.start_time <= current_time < event.end_time:
-                status = "ongoing"
-            else:
-                status = "completed"
 
             formatted_events.append({
                 "id": event.id,
@@ -94,21 +124,20 @@ def get_own_events(data: MyEventRequest,
                 "end_time": event.end_time.isoformat(),
                 "venue": event.venue,
                 "council": event.council,
-                "status": status,
+                "status": event.event_status,
                 "cancelled": event.cancelled,
                 "registered_by": event.registered_by
             })
 
-        return {
-            'content': {
-                'type': 'ok',
-                'details': f"Found {len(formatted_events)} events",
-                'events': formatted_events
-            }
-        }
+        return JSONResponse(content={
+                                "type": "ok",
+                                "events": formatted_events,
+                                "count": len(formatted_events)
+                            })
     except Exception as e:
         print(f"ERROR retrieving events: {e}")
-        return {'content': {'type': 'error', 'details': 'Failed to retrieve events'}}
+        return JSONResponse(content={"type": "error", "details": "Failed to retrieve events"},
+                            status_code=500)
 
 @router.post("/event")
 def get_event(data: GetEventRequest, db: Session = Depends(get_events_db)):
@@ -116,11 +145,27 @@ def get_event(data: GetEventRequest, db: Session = Depends(get_events_db)):
     try:
         event = db.query(Event).filter(Event.id == id).first()
         if not event:
-            return {'content': {'type': "error", 'details': "Event not found"}}
-        return {'content': {'type': "ok", 'events': event}}
+            return JSONResponse(content={"type": "error", "details": "Event not found"},
+                                status_code=404)
+        return JSONResponse(content={
+                                "type": "ok",
+                                "event": {
+                                    "id": event.id,
+                                    "title": event.title,
+                                    "organizer": event.organizer,
+                                    "description": event.description,
+                                    "start_time": event.start_time.isoformat(),
+                                    "end_time": event.end_time.isoformat(),
+                                    "venue": event.venue,
+                                    "council": event.council,
+                                    "cancelled": event.cancelled,
+                                    "registered_by": event.registered_by
+                                }
+                            })
     except Exception as e:
-        print("ERROR in an event:", e)
-        return {'content':{'type': "error", 'details':"An error occurred"}}
+        print("Error getting event:", e)
+        return JSONResponse(content={"type": "error", "details": "Failed to retrieve event"},
+                            status_code=500)
 
 @router.post("/update")
 def update_event(data: UpdateEventRequest, db: Session = Depends(get_events_db)):
@@ -135,10 +180,11 @@ def update_event(data: UpdateEventRequest, db: Session = Depends(get_events_db))
     try:
         existing_event = db.query(Event).filter(Event.id == id).first()
         if not existing_event:
-            return {'content':{'type': 'error', 'details': 'Event not found'}}
+            return JSONResponse(content={"type": "error", "details": "Event not found"},
+                                status_code=404)
         if existing_event.registered_by != request_by:
-            return {'content':{'type': 'error', 'details': 'Unauthorized user'}}
-        
+            return JSONResponse(content={"type": "error", "details": "Unauthorized"},
+                                status_code=403)
         existing_event.organizer=organizer
         existing_event.title=title
         existing_event.description=description
@@ -146,10 +192,21 @@ def update_event(data: UpdateEventRequest, db: Session = Depends(get_events_db))
         existing_event.end_time=end_time
         existing_event.venue=venue
         db.commit()
-        return {'content':{'type': "ok", 'event': existing_event}}
+        return JSONResponse(
+            content={
+                "type": "ok",
+                "details": "Event updated successfully",
+                "event": {
+                    "id": existing_event.id,
+                    "title": existing_event.title
+                }
+            }
+        )
     except Exception as e:
-        print("ERROR in an updating event:", e)
-        return {'content':{'type': "error", 'details':"An error occurred"}}
+        print("Error updating event:", e)
+        db.rollback()
+        return JSONResponse(content={"type": "error", "details": "Failed to update event"},
+                            status_code=500)
 
 @router.post("/delete")
 def delete_event(data: DeleteEventRequest, db: Session = Depends(get_events_db)):
@@ -158,12 +215,15 @@ def delete_event(data: DeleteEventRequest, db: Session = Depends(get_events_db))
     try:
         existing_event = db.query(Event).filter(Event.id == id).first()
         if not existing_event:
-            return {'content':{'type': 'error', 'details': 'Event not found'}}
+            return JSONResponse(content={"type": "error", "details": "Event not found"},
+                                status_code=404)
         if existing_event.registered_by != request_by:
-            return {'content':{'type': 'error', 'details': 'Unauthorized user'}}
+            return JSONResponse(content={"type": "error", "details": "Unauthorized"},
+                                status_code=403)
         db.delete(existing_event)
         db.commit()
-        return {'content':{'type': "ok", 'details': "Event successfully removed"}}
+        return JSONResponse(content={"type": "ok","details": "Event deleted successfully"})
     except Exception as e:
-        print("ERROR in an updating event:", e)
-        return {'content':{'type': "error", 'details':"An error occurred"}}
+        print("Error deleting event:", e)
+        db.rollback()
+        return JSONResponse(content={"type": "error", "details": "Failed to delete event"},status_code=500)

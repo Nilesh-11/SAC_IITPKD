@@ -1,11 +1,9 @@
-
-from src.utils.auth import hash_password
 from src.models.users import Student, Club, ClubMembership, ClubRole
 from src.schemas.request import CoreteamRequest, ClubInfoRequest, JoinClubRequest
-from src.schemas.objects import CoreTeamMember
 from src.models.projects import Project
 from src.database.connection import get_users_db, get_projects_db
 from fastapi import APIRouter, Depends
+from fastapi.responses import JSONResponse
 from sqlalchemy.orm import Session
 
 router = APIRouter()
@@ -15,37 +13,50 @@ def core_team(data: CoreteamRequest, db: Session = Depends(get_users_db)):
     try:
         existing_student = db.query(Student).filter(Student.email == data.request_by).first()
         if not existing_student:
-            return {'content':{'type': "error", 'details': "Student not found"}}
+            return JSONResponse(
+                content={"type": "error", "details": "Student not found"},
+                status_code=404
+            )
+
         requesting_club = db.query(Club).filter(Club.email == data.club_email).first()
         if not requesting_club:
-            return {'content': {'type': 'error', 'details': 'Club not found'}}
+            return JSONResponse(
+                content={"type": "error", "details": "Club not found"},
+                status_code=404
+            )
+
         memberships = db.query(ClubMembership).join(ClubRole).filter(
             ClubMembership.club_id == requesting_club.id,
-            (
-                (~ClubRole.title.startswith('ex-')) | 
-                (ClubRole.privilege > 50)
-            )
+            (~ClubRole.title.startswith('ex-')) | (ClubRole.privilege > 50)
         ).all()
+
         core_team_members = []
         for membership in memberships:
-            core_team_members.append(CoreTeamMember(
-                user_id=membership.student.id,
-                name=membership.student.name,
-                email=membership.student.email,
-                role_title=membership.role.title if membership.role else None,
-                role_privilege=membership.role.privilege if membership.role else 0,
-                club_name=requesting_club.name
-            ))
-        return {
-            'content': {
-                'type': 'ok',
-                'details': 'Core team retrieved',
-                'core_team': [member.dict() for member in core_team_members]
+            member_data = {
+                "user_id": membership.student.id,
+                "name": membership.student.name,
+                "email": membership.student.email,
+                "role_title": membership.role.title if membership.role else None,
+                "role_privilege": membership.role.privilege if membership.role else 0,
+                "club_name": requesting_club.name
             }
-        }
+            core_team_members.append(member_data)
+
+        return JSONResponse(
+            content={
+                "type": "ok",
+                "details": "Core team retrieved",
+                "core_team": core_team_members,
+                "count": len(core_team_members)
+            }
+        )
+
     except Exception as e:
-        print("ERROR in getting core team:", e)
-        return {'content': {'type': 'error', 'details': 'An error occurred'}}
+        print("Error getting core team:", e)
+        return JSONResponse(
+            content={"type": "error", "details": "Failed to retrieve core team"},
+            status_code=500
+        )
 
 @router.post("/club/join")
 def join_club(data: JoinClubRequest, db: Session = Depends(get_users_db)):
@@ -54,17 +65,22 @@ def join_club(data: JoinClubRequest, db: Session = Depends(get_users_db)):
     try:
         existing_student = db.query(Student).filter(Student.email == request_by).first()
         if not existing_student:
-            return {'content':{'type': "error", 'details': "Student not found"}}
+            return JSONResponse(content={"type": "error", "details": "Student not found"},
+                                status_code=404)
         existing_club = db.query(Club).filter(Club.id == club_id).first()
         if not existing_club:
-            return {'content':{'type': "error", 'details': "Club not found"}}
+            return JSONResponse(content={"type": "error", "details": "Club not found"},
+                                status_code=404)
         existing_membership = db.query(ClubMembership)\
                                 .filter(ClubMembership.student_id == existing_student.id, 
                                         ClubMembership.club_id == existing_club.id,
                                         ~ClubRole.title.startswith('ex-'))\
                                 .first()
         if existing_membership:
-            return {'content':{'type': "error", 'details': f"Already a member as {existing_membership.role.title}"}}
+            return JSONResponse(content={
+                                    "type": "error", 
+                                    "details": f"Already a member as {existing_membership.role.title}"},
+                                status_code=400)
         default_role = db.query(ClubRole)\
                         .filter(ClubRole.club_id == club_id, ClubRole.title == "member")\
                         .first()
@@ -76,11 +92,16 @@ def join_club(data: JoinClubRequest, db: Session = Depends(get_users_db)):
         db.add(new_club_membership)
         db.commit()
         db.refresh(new_club_membership)
-        return {'content':{'type': "ok", 'details': "Club membership added", 'id':new_club_membership.id}}
+        return JSONResponse(content={
+                                "type": "ok",
+                                "details": "Successfully joined club",
+                                "membership_id": new_club_membership.id
+                            })
     except Exception as e:
         db.rollback()
-        print("Error in club join:", e)
-        return {'content':{"type": "error", "detail": "An error occurred with join club", 'status_code': 500}}
+        print("Error joining club:", e)
+        return JSONResponse(content={"type": "error", "details": "Failed to join club"},
+                            status_code=500)
 
 @router.post("/club/info")
 def club_information(data: ClubInfoRequest, db: Session = Depends(get_users_db), db_projects: Session = Depends(get_projects_db)):
@@ -89,7 +110,8 @@ def club_information(data: ClubInfoRequest, db: Session = Depends(get_users_db),
     try:
         existing_club = db.query(Club).filter(Club.id == club_id).first()
         if not existing_club:
-            return {'content':{"type": "error", "detail": "club not found"}}
+            return JSONResponse(content={"type": "error", "details": "Club not found"},
+                                status_code=404)
         members = db.query(ClubMembership, Student)\
             .join(ClubRole)\
             .join(Student)\
@@ -142,19 +164,26 @@ def club_information(data: ClubInfoRequest, db: Session = Depends(get_users_db),
         response_data = {
             "id": existing_club.id,
             "name": existing_club.name,
-            "is_member": is_member,
-            "role": user_role,
             "title": existing_club.title,
             "description": existing_club.description,
+            "email": existing_club.email,
+            "is_member": is_member,
+            "role": user_role,
             "head": head_name,
             "coheads": cohead_names,
-            "email": existing_club.email,
             "members": formatted_members,
-            "projects": formatted_projects
+            "projects": formatted_projects,
+            "members_count": len(members),
+            "projects_count": len(projects)
         }
-        return {'content': {'type': "ok", 'details': "Club info fetched successfully", 'club': response_data}}
+        return JSONResponse(content={
+                                "type": "ok",
+                                "details": "Club information retrieved",
+                                "club": response_data
+                            })
     except Exception as e:
-        print("Error in club info:", e)
+        print("Error getting club info:", e)
         db.rollback()
-        return {'content':{"type": "error", "detail": "An error occurred with club info", 'status_code': 500}}
+        return JSONResponse(content={"type": "error", "details": "Failed to retrieve club information"},
+                            status_code=500)
 

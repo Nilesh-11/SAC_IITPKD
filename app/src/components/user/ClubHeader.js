@@ -62,7 +62,7 @@ const CoreTeamHeader = ({ memberCount, title }) => {
           <Toolbar sx={{ justifyContent: "space-between" }}>
             <Box
               component="img"
-              src="/sac/saclogo_horizontal.png"
+              src="/sac/saclogo_horizontal.webp"
               alt="Logo"
               onClick={() => navigate("/")}
               sx={{

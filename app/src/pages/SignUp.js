@@ -1,18 +1,18 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import {Api} from "../api/auth";
-import Box from '@mui/material/Box';
-import Typography from '@mui/material/Typography';
-import TextField from '@mui/material/TextField';
-import Button from '@mui/material/Button';
-import Alert from '@mui/material/Alert';
-import Tooltip from '@mui/material/Tooltip';
-import IconButton from '@mui/material/IconButton';
-import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import ListItemText from '@mui/material/ListItemText';
-import InputAdornment from '@mui/material/InputAdornment';
-import {FaInfoCircle} from "react-icons/fa";
+import { Api } from "../api/auth";
+import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
+import TextField from "@mui/material/TextField";
+import Button from "@mui/material/Button";
+import Alert from "@mui/material/Alert";
+import Tooltip from "@mui/material/Tooltip";
+import IconButton from "@mui/material/IconButton";
+import List from "@mui/material/List";
+import ListItem from "@mui/material/ListItem";
+import ListItemText from "@mui/material/ListItemText";
+import InputAdornment from "@mui/material/InputAdornment";
+import { FaInfoCircle } from "react-icons/fa";
 
 const Signup = () => {
   const navigate = useNavigate();
@@ -26,14 +26,14 @@ const Signup = () => {
   const handleResendOtp = async () => {
     setResendStatus("");
     setResending(true);
-  
+
     try {
       const data = {
-        email: SignupForm.email
+        email: SignupForm.email,
       };
       const res = await Api("/api/auth/student/resend-otp", { data });
-      const content = res.content;
-  
+      const content = res;
+
       if (content.type === "ok") {
         setResendStatus("OTP resent successfully. Check your email.");
       } else {
@@ -46,7 +46,6 @@ const Signup = () => {
       setResending(false);
     }
   };
-  
 
   const [SignupForm, setSignupForm] = useState({
     name: "",
@@ -90,7 +89,7 @@ const Signup = () => {
         email: SignupForm.email,
       };
       const res = await Api("/api/auth/student/signup", { data });
-      const content = res.content;
+      const content = res;
 
       if (content.type === "ok") {
         setIsOtp(true);
@@ -118,7 +117,7 @@ const Signup = () => {
         email: SignupForm.email,
       };
       const res = await Api("/api/auth/student/verify-otp", { data });
-      const content = res.content;
+      const content = res;
 
       if (content.type === "ok") {
         alert("User registered successfully");
@@ -198,7 +197,7 @@ const Signup = () => {
             style={{ height: "64px", objectFit: "contain" }}
           />
         </Box>
-  
+
         <Typography
           variant="h6"
           sx={{
@@ -213,13 +212,13 @@ const Signup = () => {
         <Typography variant="body2" sx={{ mb: 2, color: "gray" }}>
           {isOtp ? "Check your email for the code" : "Sign up to get started"}
         </Typography>
-  
+
         {error && (
           <Alert severity="error" sx={{ mb: 2 }}>
             {error}
           </Alert>
         )}
-  
+
         {!isOtp ? (
           <>
             <TextField
@@ -253,7 +252,7 @@ const Signup = () => {
               required
               sx={textFieldSx}
             />
-  
+
             <TextField
               fullWidth
               label="Password"
@@ -267,12 +266,14 @@ const Signup = () => {
               InputProps={{
                 endAdornment: (
                   <InputAdornment position="end">
-                    <Tooltip title={`Password must contain: 
+                    <Tooltip
+                      title={`Password must contain: 
   - At least 8 characters
   - One digit
   - One uppercase
   - One lowercase
-  - One special character`}>
+  - One special character`}
+                    >
                       <IconButton
                         onClick={() =>
                           setShowPasswordCriteria(!showPasswordCriteria)
@@ -287,7 +288,7 @@ const Signup = () => {
                 ),
               }}
             />
-  
+
             {showPasswordCriteria && (
               <List dense sx={{ textAlign: "left", mt: 1 }}>
                 <ListItem>
@@ -305,19 +306,25 @@ const Signup = () => {
                 <ListItem>
                   <ListItemText
                     primary="✅ At least one lowercase letter"
-                    sx={{ color: passwordValidations.lowercase ? "green" : "red" }}
+                    sx={{
+                      color: passwordValidations.lowercase ? "green" : "red",
+                    }}
                   />
                 </ListItem>
                 <ListItem>
                   <ListItemText
                     primary="✅ At least one uppercase letter"
-                    sx={{ color: passwordValidations.uppercase ? "green" : "red" }}
+                    sx={{
+                      color: passwordValidations.uppercase ? "green" : "red",
+                    }}
                   />
                 </ListItem>
                 <ListItem>
                   <ListItemText
                     primary="✅ At least one special character"
-                    sx={{ color: passwordValidations.special ? "green" : "red" }}
+                    sx={{
+                      color: passwordValidations.special ? "green" : "red",
+                    }}
                   />
                 </ListItem>
               </List>
@@ -335,13 +342,13 @@ const Signup = () => {
               required
               sx={textFieldSx}
             />
-  
+
             {resendStatus && (
               <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
                 {resendStatus}
               </Typography>
             )}
-  
+
             <Button
               onClick={handleResendOtp}
               disabled={resending}
@@ -353,7 +360,7 @@ const Signup = () => {
             </Button>
           </>
         )}
-  
+
         <Button
           type="submit"
           fullWidth
@@ -366,7 +373,7 @@ const Signup = () => {
             fontWeight: 500,
             fontFamily: "Roboto, sans-serif",
             textTransform: "none",
-            '&:hover': {
+            "&:hover": {
               backgroundColor: darkOrange,
               boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
             },
@@ -375,7 +382,7 @@ const Signup = () => {
         >
           {loading ? "Submitting..." : isOtp ? "Verify OTP" : "Sign Up"}
         </Button>
-  
+
         {!isOtp && (
           <Typography variant="body2" sx={{ mt: 2 }}>
             Already have an account?{" "}
@@ -387,7 +394,6 @@ const Signup = () => {
       </Box>
     </Box>
   );
-  
 };
 
 export default Signup;

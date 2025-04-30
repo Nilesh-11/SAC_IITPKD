@@ -28,7 +28,7 @@ const CouncilClubs = () => {
             grouped[council].push({
               id: club.id,
               title: club.title,
-              image: `/clubs/${club.name}/opaque_logo_square.png`,
+              image: `/clubs/${club.name}/opaque_logo_square.webp`,
               link: `/club/info?club_id=${club.id}`,
             });
           });

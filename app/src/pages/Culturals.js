@@ -19,7 +19,6 @@ import useMediaQuery from "@mui/material/useMediaQuery";
 import { motion } from "framer-motion";
 import { CulturalInfo } from "../api/council";
 
-// Lazy load components
 const Header = lazy(() => import("../components/common/header"));
 const Footer = lazy(() => import("../components/common/footer"));
 const Gallery = lazy(() => import("../components/common/gallery"));

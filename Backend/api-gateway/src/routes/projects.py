@@ -1,13 +1,15 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, Request
 from src.utils.jwt import get_token_from_header
 from src.schemas.auth import ProjectsRequest
 from src.services.projects_service import forward_projects_request
 from src.middleware.authenticate import authenticate_jwt
+from src.config import limiter
 
 router = APIRouter()
 
 @router.post("/{path:path}")
-async def projects(path: str, data: ProjectsRequest, token: str = Depends(get_token_from_header)):
+@limiter.limit("50/minute")
+async def projects(path: str, request: Request, data: ProjectsRequest, token: str = Depends(get_token_from_header)):
     payload = authenticate_jwt(token)['content']
     if payload['type'] != "ok":
         return {'content': {'type': "navigate", 'details': 'login'}}
@@ -15,5 +17,4 @@ async def projects(path: str, data: ProjectsRequest, token: str = Depends(get_to
 
     data_dict = data.model_dump()
     data_dict['request_by'] = payload['email']
-    response = await forward_projects_request(f"/{path}", data_dict)
-    return response
+    return await forward_projects_request(f"/{path}", data_dict)

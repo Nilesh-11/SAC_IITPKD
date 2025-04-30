@@ -41,8 +41,10 @@
   
   .events-column {
     position: relative;
-    height: calc(60px * 17); /* for 17 time slots */
+    height: 1020px; /* 17 hours * 60px */
+    border-left: 1px solid #ccc;
   }
+  
   
   .event-block {
     position: absolute;

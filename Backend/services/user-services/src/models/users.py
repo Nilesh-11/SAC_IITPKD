@@ -107,13 +107,13 @@ class Club(BaseUser):
     __tablename__ = "clubs"
 
     id = Column(Integer, primary_key=True, index=True)
-    name = Column(String, nullable=False)
-    title = Column(String, nullable=False)
+    name = Column(String, nullable=False, unique=True)
+    title = Column(String, nullable=False, unique=True)
     description = Column(String, nullable=False)
     email = Column(String, unique=True, index=True, nullable=False)
     password_hash = Column(String, nullable=False)
     
-    faculty_advisor = Column(String, unique=True, index=True, nullable=False)
+    faculty_advisor = Column(String, unique=True, nullable=False)
 
     head_id = Column(Integer, ForeignKey("students.id", ondelete="SET NULL"), nullable=True)
     registered_date = Column(DateTime, default=datetime.utcnow())

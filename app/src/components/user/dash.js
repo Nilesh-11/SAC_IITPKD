@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
@@ -7,14 +8,12 @@ import Grid from "@mui/material/Grid";
 import Divider from "@mui/material/Divider";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { useTheme } from "@mui/material/styles";
+import CircularProgress from '@mui/material/CircularProgress';
 import { FaUniversity } from "react-icons/fa";
 import SquareGallery from "./squareGallery";
 import timeAgo from "../../utils/parser";
 import { ClubsListApi, StatusApi } from "../../api/public";
 import { getAnnouncementsList } from "../../api/announcement";
-import { CircularProgress } from "@mui/material";
-import { useNavigate } from "react-router-dom";
-import { ClubListApi } from "../../api/council";
 
 const Dashboard = ({
   role = "student",
@@ -42,7 +41,7 @@ const Dashboard = ({
           StatusApi(),
           ClubsListApi()
         ]);
-        setMyClubs(clubData.clubs.map(item => `/clubs/${item.name}/opaque_logo_square.png`));
+        setMyClubs(clubData.clubs.map(item => `/clubs/${item.name}/opaque_logo_square.webp`));
         setAnnouncements(annData);
         setStatus(statData);
       } catch (err) {
@@ -76,7 +75,6 @@ const Dashboard = ({
         DASHBOARD
       </Typography>
 
-      {/* Announcements Section */}
       <Box mt={3}>
         <Box
           display="flex"
@@ -95,6 +93,7 @@ const Dashboard = ({
             variant="contained"
             color="warning"
             size="small"
+            disabled={!(role === "student" || role==="guest")}
             onClick={handleAllAnnouncementClick}
             sx={{
               borderRadius: "20px",
@@ -127,7 +126,7 @@ const Dashboard = ({
                   }}
                 >
                   <img
-                    src={`/roles/${announcement.author_role}_circular.png`}
+                    src={`/roles/${announcement.author_role}_circular.webp`}
                     alt="logo"
                     style={{
                       width: 40,
@@ -166,7 +165,6 @@ const Dashboard = ({
         )}
       </Box>
 
-      {/* Status Section */}
       <Typography
         mt={3}
         variant="h6"
@@ -237,7 +235,7 @@ const Dashboard = ({
             color="warning"
             size="small"
             onClick={handleAllClubLink}
-            disabled={role === "guest"}
+            disabled={!(role === "student")}
             sx={{
               borderRadius: "20px",
               fontWeight: 600,

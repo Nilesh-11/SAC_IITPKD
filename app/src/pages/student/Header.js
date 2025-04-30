@@ -4,10 +4,7 @@ import Toolbar from "@mui/material/Toolbar";
 import IconButton from "@mui/material/IconButton";
 import Box from "@mui/material/Box";
 import Drawer from "@mui/material/Drawer";
-
 import { FaBars } from "react-icons/fa";
-import { FaUserCircle } from "react-icons/fa";
-
 import LeftNav from "../../components/user/leftnav";
 import RightNavbar from "../../components/user/rightnav";
 import { useNavigate } from "react-router-dom";
@@ -43,7 +40,7 @@ const Header = ({
           <Box
             component="img"
             onClick={handleimagenavigation}
-            src="/sac/saclogo_horizontal.png"
+            src="/sac/saclogo_horizontal.webp"
             alt="Logo"
             sx={{
               height: 40,
@@ -57,13 +54,18 @@ const Header = ({
           {!isRightDrawerOpen && (
             <IconButton
               edge="end"
+              
               onClick={() => setIsRightDrawerOpen(true)}
               sx={{
                 transition: "transform 0.3s ease-in-out",
                 "&:hover": { transform: "scale(1.1)" },
               }}
             >
-              <FaUserCircle size={40} />
+              <img
+                src={`/roles/${userrole}_circular.webp`}
+                alt="Profile"
+                style={{ width: 40, height: 40, borderRadius: "50%" }}
+              />
             </IconButton>
           )}
         </Toolbar>

@@ -19,22 +19,6 @@ class Event(BaseEvents):
 
     @hybrid_property
     def event_status(self):
-        now = datetime.datetime.now()
-        event_start = datetime.datetime.combine(self.event_date, self.event_time)
-        event_end = event_start + self.duration
-
-        if now < event_start:
-            return "upcoming"
-        elif event_start <= now < event_end:
-            return "ongoing"
-        else:
-            return "completed"
-
-# class EventParticipant(BaseEvents):
-#     __tablename__ = "event_participants"
-
-#     id = Column(Integer, primary_key=True, index=True)
-#     event_id = Column(Integer, nullable=False)
-#     name = Column(String, nullable=False)
-#     email = Column(String, index=True, nullable=False)
-#     phone_number = Column(String, nullable=True)
+        current_time = datetime.datetime.now()
+        return "upcoming" if current_time < self.start_time else \
+                    "ongoing" if current_time < self.end_time else "completed"

@@ -4,6 +4,7 @@ from src.models.users import Admin
 from src.schemas.request import LoginRequest
 from src.database.connection import get_users_db
 from fastapi import APIRouter, Depends
+from fastapi.responses import JSONResponse
 from sqlalchemy.orm import Session
 
 router = APIRouter()
@@ -16,9 +17,22 @@ def user_login(data: LoginRequest, db_user: Session = Depends(get_users_db)):
     try:
         existing_user = db_user.query(Admin).filter(Admin.email == email, Admin.password_hash == password_hash).first()
         if not existing_user:
-            return {'content':{'type': "error", 'details': "Admin not found"}}
+            return JSONResponse(content={'type': "error", 'details': "Admin not found"}, status_code=404)
         token = create_jwt(email=existing_user.email, id=str(existing_user.id), role="admin", aud="internal")
-        return {'content':{'type': "ok", 'token': token}}
+        return JSONResponse(content={
+            'type': "ok",
+            'token': token,
+            'user': {
+                'email': existing_user.email,
+                'name': existing_user.name
+            }
+        })
     except Exception as e:
         print("Error in log in:", e)
-        return {'content':{"type": "error", "detail": "An error occurred with login", 'status_code': 500}}
+        return JSONResponse(
+            content={
+                'type': "error",
+                'details': "An error occurred with login"
+            },
+            status_code=500
+        )

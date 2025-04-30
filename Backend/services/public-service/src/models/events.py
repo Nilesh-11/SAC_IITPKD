@@ -29,12 +29,3 @@ class Event(BaseEvents):
             return "ongoing"
         else:
             return "completed"
-
-# class EventParticipant(BaseEvents):
-#     __tablename__ = "event_participants"
-
-#     id = Column(Integer, primary_key=True, index=True)
-#     event_id = Column(Integer, nullable=False)
-#     name = Column(String, nullable=False)
-#     email = Column(String, index=True, nullable=False)
-#     phone_number = Column(String, nullable=True)

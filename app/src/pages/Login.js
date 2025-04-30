@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useAuth } from "../contexts/AuthContext";
-import { ForgotPasswordApi, Api } from "../api/auth";
+import { ForgotPasswordApi, Api, LoginUserApi } from "../api/auth";
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import TextField from '@mui/material/TextField';
@@ -14,8 +14,8 @@ import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
-import { FaSignInAlt } from "react-icons/fa"; // Login Icon from react-icons
-import { FaUserAlt } from "react-icons/fa";  // Person Icon from react-icons
+import { FaSignInAlt } from "react-icons/fa";
+import { FaUserAlt } from "react-icons/fa";
 
 const LoginDashboard = () => {
   const { loginUser } = useAuth();
@@ -77,10 +77,7 @@ const LoginDashboard = () => {
   
     try {
       const { email, password, userType } = form;
-      const res = await Api(`/api/auth/${userType}/login`, {
-        data: { email, password },
-      });
-      const content = res?.content;
+      const content = await LoginUserApi(userType, {'email': email, 'password': password});
   
       if (content?.type === "ok" && content?.token) {
         loginUser(content.token);
@@ -100,10 +97,7 @@ const LoginDashboard = () => {
   
     try {
       const userType = "guest";
-      const res = await Api(`/api/auth/${userType}/login`, {
-        data: { email: "", password: "" },
-      });
-      const content = res?.content;
+      const content = await LoginUserApi("guest", { email: "", password: "" });
   
       if (content?.type === "ok" && content?.token) {
         loginUser(content.token);

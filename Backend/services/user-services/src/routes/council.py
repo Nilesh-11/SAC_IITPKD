@@ -27,16 +27,19 @@ def add_club(request: AddClubRequest, db: Session = Depends(get_users_db)):
     try:
         existing_council = db.query(Council).filter(Council.email == request_by).first()
         if not existing_council:
-            return {'content': {'type':"error", 'details': "Council not found"}}
+            return JSONResponse(content={"type": "error", "details": "Council not found"},
+                                status_code=404)
         head_student  = db.query(Student).filter(Student.email == head).first()
         if not head_student :
-            return {'content': {'type':"error", 'details': "Head not found"}}
+            return JSONResponse(content={"type": "error", "details": "Head student not found"},
+                                status_code=404)
         
         cohead_objs = []
-        for cohead in coheads:
-            existing_cohead = db.query(Student).filter(Student.email == cohead).first()
+        for cohead_email in coheads:
+            existing_cohead = db.query(Student).filter(Student.email == cohead_email).first()
             if not existing_cohead:
-                return {'content': {'type':"error", 'details': "CO-Head not found"}}
+                return JSONResponse(content={"type": "error", "details": f"Co-head {cohead_email} not found"},
+                                    status_code=404)
             cohead_objs.append(existing_cohead)
 
         new_club = Club(
@@ -91,10 +94,22 @@ def add_club(request: AddClubRequest, db: Session = Depends(get_users_db)):
             )
             db.add(cohead_membership)
             db.commit()
-        return {'content': {'type':"ok", 'details': "Club created",'id': new_club.id}}
+        return JSONResponse(content={
+                                "type": "ok",
+                                "details": "Club created successfully",
+                                "club": {
+                                    "id": new_club.id,
+                                    "name": new_club.name,
+                                    "email": new_club.email
+                                }
+                            },
+                            status_code=201)
+
     except Exception as e:
-        print("ERROR in adding new club:", e)
-        return {'content':{'type': "error", 'details':"An error occurred"}}
+        db.rollback()
+        print("Error adding club:", e)
+        return JSONResponse(content={"type": "error", "details": "Failed to create club"},
+                            status_code=500)
 
 @router.post("/club/update")
 def update_club(request: UpdateClubRequest, db: Session = Depends(get_users_db)):
@@ -112,21 +127,27 @@ def update_club(request: UpdateClubRequest, db: Session = Depends(get_users_db))
     try:
         existing_council = db.query(Council).filter(Council.email == request_by).first()
         if not existing_council:
-            return {'content': {'type':"error", 'details': "Council not found"}}
+            return JSONResponse(content={"type": "error", "details": "Council not found"},
+                                status_code=404)
         if len(coheads) != len(set(coheads)):
-            return {'content': {'type': "error", 'details': "Duplicate co-heads found"}}
+            return JSONResponse(content={"type": "error", "details": "Duplicate co-heads found"},
+                                status_code=400)
         if head in coheads:
-            return {'content': {'type': "error", 'details': "Head cannot also be a co-head"}}
+            return JSONResponse(content={"type": "error", "details": "Head cannot also be a co-head"},
+                                status_code=400)
         existing_head = db.query(Student).filter(Student.email == head).first()
         if not existing_head:
-            return {'content': {'type':"error", 'details': "Head not found"}}
-        for cohead in coheads:
-            existing_cohead = db.query(Student).filter(Student.email == cohead).first()
+            return JSONResponse(content={"type": "error", "details": "Head student not found"},
+                                status_code=404)
+        for cohead_email in coheads:
+            existing_cohead = db.query(Student).filter(Student.email == cohead_email).first()
             if not existing_cohead:
-                return {'content': {'type':"error", 'details': "Co-Head not found"}}
+                return JSONResponse(content={"type": "error", "details": f"Co-head {cohead_email} not found"},
+                                    status_code=404)
         existing_club = db.query(Club).filter(Club.email == email, Club.council_id == existing_council.id).first()
         if not existing_club:
-            return {'content': {'type':"error", 'details': "Club not found"}}
+            return JSONResponse(content={"type": "error", "details": "Club not found"},
+                                status_code=404)
 
         current_head = existing_club.head
         current_coheads = existing_club.coheads
@@ -236,12 +257,25 @@ def update_club(request: UpdateClubRequest, db: Session = Depends(get_users_db))
             existing_club.password_hash = password_hash
         db.commit()
         db.refresh(existing_club)
-        return {'content': {'type': "ok", 'details': "Club updated", 'id': existing_club.id}}
+        return JSONResponse(
+            content={
+                "type": "ok",
+                "details": "Club updated successfully",
+                "club": {
+                    "id": existing_club.id,
+                    "name": existing_club.name,
+                    "email": existing_club.email
+                }
+            }
+        )
 
     except Exception as e:
-        print("ERROR in updating club:", e)
         db.rollback()
-        return {'content': {'type': "error", 'details': "An error occurred"}}
+        print("Error updating club:", e)
+        return JSONResponse(
+            content={"type": "error", "details": "Failed to update club"},
+            status_code=500
+        )
 
 @router.post("/club/delete")
 def delete_club(data: DeleteClubRequest, db: Session = Depends(get_users_db)):
@@ -250,24 +284,41 @@ def delete_club(data: DeleteClubRequest, db: Session = Depends(get_users_db)):
     try:
         existing_council = db.query(Council).filter(Council.email == request_by).first()
         if not existing_council:
-            return {'content': {'type':"error", 'details': "Council not found"}}
+            return JSONResponse(
+                content={"type": "error", "details": "Council not found"},
+                status_code=404
+            )
         existing_club = db.query(Club).filter(Club.id == club_id, Club.council_id == existing_council.id).first()
         if not existing_club:
-            return {'content': {'type':"error", 'details': "Club not found"}}
+            return JSONResponse(
+                content={"type": "error", "details": "Club not found"},
+                status_code=404
+            )
         db.delete(existing_club)
         db.commit()
-        return {'content': {'type': "ok", 'details': "Club deleted"}}
+        return JSONResponse(
+            content={
+                "type": "ok",
+                "details": "Club deleted successfully"
+            }
+        )
     except Exception as e:
-        print("ERROR in updating club:", e)
         db.rollback()
-        return {'content': {'type': "error", 'details': "An error occurred"}}
+        print("Error deleting club:", e)
+        return JSONResponse(
+            content={"type": "error", "details": "Failed to delete club"},
+            status_code=500
+        )
 
 @router.post("/club/list")
 def clubs_list(request: ClubListRequest, db: Session = Depends(get_users_db)):
     try:
         existing_council = db.query(Council).filter(Council.email == request.request_by).first()
         if not existing_council:
-            return {'content': {'type': 'error', 'details': 'Council not found'}}
+            return JSONResponse(
+                content={"type": "error", "details": "Council not found"},
+                status_code=404
+            )
 
         clubs = db.query(Club).filter(Club.council_id == existing_council.id).all()
 
@@ -288,7 +339,6 @@ def clubs_list(request: ClubListRequest, db: Session = Depends(get_users_db)):
                     'email': cohead.email
                 })
 
-            # Format club data
             club_data = {
                 'id': club.id,
                 'name': club.name,
@@ -302,14 +352,18 @@ def clubs_list(request: ClubListRequest, db: Session = Depends(get_users_db)):
             }
             formatted_clubs.append(club_data)
 
-        return {
-            'content': {
-                'type': 'ok',
-                'details': f'Found {len(formatted_clubs)} clubs',
-                'clubs': formatted_clubs
+        return JSONResponse(
+            content={
+                "type": "ok",
+                "details": f"Found {len(formatted_clubs)} clubs",
+                "clubs": formatted_clubs,
+                "count": len(formatted_clubs)
             }
-        }
+        )
 
     except Exception as e:
-        print("ERROR in clubs list:", e)
-        return {'content': {'type': 'error', 'details': 'Failed to retrieve clubs list'}}
+        print("Error listing clubs:", e)
+        return JSONResponse(
+            content={"type": "error", "details": "Failed to retrieve clubs"},
+            status_code=500
+        )

@@ -4,10 +4,10 @@ import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
-import { FaBell } from "react-icons/fa";
 import { keyframes } from "@mui/system";
+import CircularProgress from '@mui/material/CircularProgress';
+import { FaBell } from "react-icons/fa";
 import { getAnnouncementsList } from "../../api/announcement";
-import { CircularProgress } from "@mui/material";
 
 const fadeIn = keyframes`
   from {
@@ -119,7 +119,6 @@ const AnnouncementsDash = () => {
               <FaBell size={18} color="#000" />
             </Box>
 
-            {/* Responsive Image with Reduced Size */}
             <Box
               sx={{
                 width: "80%",
@@ -130,7 +129,7 @@ const AnnouncementsDash = () => {
             >
               <CardMedia
                 component="img"
-                image={`/roles/${announcement.author_role}_circular.png`}
+                image={`/roles/${announcement.author_role}_circular.webp`}
                 alt={announcement.title}
                 sx={{
                   width: "100%", // Make it responsive
@@ -144,7 +143,6 @@ const AnnouncementsDash = () => {
               />
             </Box>
 
-            {/* Info (expands dynamically) */}
             <CardContent sx={{ flexGrow: 1, p: 1 }}>
               <Typography variant="body2" color="text.secondary">
                 {announcement.body}

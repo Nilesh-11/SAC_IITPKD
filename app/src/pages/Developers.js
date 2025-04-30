@@ -1,13 +1,13 @@
 import React from "react";
-import Container from '@mui/material/Container';
-import Typography from '@mui/material/Typography';
-import Grid from '@mui/material/Grid';
-import Card from '@mui/material/Card';
-import CardContent from '@mui/material/CardContent';
-import CardMedia from '@mui/material/CardMedia';
-import Box from '@mui/material/Box';
-import Link from '@mui/material/Link';
-import IconButton from '@mui/material/IconButton';
+import Container from "@mui/material/Container";
+import Typography from "@mui/material/Typography";
+import Grid from "@mui/material/Grid";
+import Card from "@mui/material/Card";
+import CardContent from "@mui/material/CardContent";
+import CardMedia from "@mui/material/CardMedia";
+import Box from "@mui/material/Box";
+import Link from "@mui/material/Link";
+import IconButton from "@mui/material/IconButton";
 import { FaGithub, FaLinkedin } from "react-icons/fa";
 import Header from "../components/common/header";
 
@@ -57,7 +57,8 @@ const developers = {
       role: "Frontend Developer",
       image: "/developers/zeeshan.webp",
       github: "https://github.com/Zeeshan1903",
-      linkedin: "https://www.linkedin.com/in/zeeshan-mohammed-rangrej-946ab927b/",
+      linkedin:
+        "https://www.linkedin.com/in/zeeshan-mohammed-rangrej-946ab927b/",
     },
     {
       name: "Abhishek Iyer",
@@ -112,7 +113,11 @@ const renderSection = (title, devList) => (
               }}
             />
             <CardContent>
-              <Typography variant="h6" fontWeight={600} sx={{fontFamily: "Poppins, sans-serif"}}>
+              <Typography
+                variant="h6"
+                fontWeight={600}
+                sx={{ fontFamily: "Poppins, sans-serif" }}
+              >
                 {dev.name}
               </Typography>
               <Typography

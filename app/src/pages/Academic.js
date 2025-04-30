@@ -140,10 +140,6 @@ const Academic = () => {
                   of IIT Palakkad, which was registered on July 26, 2019, aiming to nurture and maintain good 
                   relationships with our alumnus even after graduation.
                   <br /><br />
-                  With Students' Advisor and a faculty (currently, Dr. Lakshmi Narasimhan) as advisors, the team 
-                  now has an Alumni Head and further team members are being selected (formation of remaining team 
-                  is being held now).
-                  <br /><br />
                   The Secretary also works closely with Dean, Academic Research, besides Dean, Academics, to 
                   provide better guidance and infrastructure to the students who are interested in further studies.
                   <br /><br />

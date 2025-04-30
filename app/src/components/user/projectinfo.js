@@ -20,6 +20,7 @@ import {
   ApplyProjectApi,
   ProjectInfoApi,
 } from "../../api/projects";
+import ProjectHeader from "./ProjectHeader";
 
 const ProjectInfo = () => {
   const [searchParams] = useSearchParams();
@@ -130,6 +131,7 @@ const ProjectInfo = () => {
 
   return (
     <Box sx={{ p: { xs: 2, sm: 4 }, backgroundColor: "#fafafa" }}>
+      <ProjectHeader currentMembers={projectData.capacity.current} totalMembers={projectData.capacity.max}></ProjectHeader>
       <Typography
         variant="h4"
         fontWeight="bold"
@@ -164,7 +166,7 @@ const ProjectInfo = () => {
           >
             <Box
               component="img"
-              src={`/roles/${projectData.coordinator.role}_circular.png`}
+              src={`/roles/${projectData.coordinator.role}_circular.webp`}
               alt={`${projectData.coordinator.name} logo`}
               sx={{
                 width: "100%",
@@ -349,7 +351,7 @@ const ProjectInfo = () => {
                 <Box sx={{ display: "flex", alignItems: "center", flex: 1 }}>
                   <Box
                     component="img"
-                    src={`/roles/student_circular.png`}
+                    src={`/roles/student_circular.webp`}
                     alt="member"
                     sx={{ width: 48, height: 48, mr: 2 }}
                   />

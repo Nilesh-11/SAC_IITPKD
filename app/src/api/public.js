@@ -12,12 +12,12 @@ export const StatusApi = async () => {
     });
     const responseData = await response.json();
     if (response.ok) {
-      if (responseData?.content?.type === "ok"){
-        return responseData.content.status;
+      if (responseData?.type === "ok"){
+        return responseData.status;
       }
       else{
-        if (responseData?.content?.type){
-          return responseData?.content
+        if (responseData?.type){
+          return responseData;
         }
         else{
           return {'type': "error", 'details': "An error occurred"};
@@ -43,12 +43,12 @@ export const ClubsListApi = async () => {
     });
     const responseData = await response.json();
     if (response.ok) {
-      if (responseData?.content?.type === "ok"){
-        return responseData.content;
+      if (responseData?.type === "ok"){
+        return responseData;
       }
       else{
-        if (responseData?.content?.type){
-          return responseData?.content
+        if (responseData?.type){
+          return responseData;
         }
         else{
           return {'type': "error", 'details': "An error occurred"};
