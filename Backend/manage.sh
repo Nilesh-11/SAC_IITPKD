@@ -81,7 +81,7 @@ create_databases() {
     
     sudo -u postgres psql -c "DO \$\$ BEGIN CREATE ROLE $pg_user WITH LOGIN PASSWORD '$pg_password' CREATEDB; EXCEPTION WHEN duplicate_object THEN RAISE NOTICE 'User already exists'; END \$\$;"
     sudo -u postgres psql -c "ALTER USER $pg_user CREATEDB;"
-    
+
     for db in "${DATABASES[@]}"; do
         echo -e "${YELLOW}Creating database: $db${NC}"
         sudo -u postgres psql -c "CREATE DATABASE $db OWNER $pg_user;"
@@ -124,24 +124,12 @@ EOF
 
 install_virtualenv() {
     echo -e "${YELLOW}Installing Python virtualenv...${NC}"
-    sudo apt update
-    sudo apt install -y python3 python3-pip python3-venv
     
-    python3 -m pip install --upgrade pip
-    python3 -m pip install virtualenv
+    apt install python3-virtualenv
     
     echo -e "${GREEN}Python virtualenv installed successfully!${NC}"
     echo -e "Python version: $(python3 --version)"
-    echo -e "Pip version: $(python3 -m pip --version)"
     echo -e "Virtualenv version: $(virtualenv --version)"
-}
-
-configure_psycopg2() {
-    echo -e "${YELLOW}Installing PostgreSQL Python adapter (psycopg2)...${NC}"
-    sudo apt install -y libpq-dev python3-dev
-    python3 -m pip install psycopg2-binary
-    
-    echo -e "${GREEN}psycopg2 installed successfully!${NC}"
 }
 
 setup_environment() {
@@ -149,7 +137,6 @@ setup_environment() {
     install_postgres
     create_databases
     install_virtualenv
-    configure_psycopg2
     generate_key_pairs
     echo -e "${GREEN}Environment setup completed successfully!${NC}"
 }
