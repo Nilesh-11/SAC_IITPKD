@@ -47,14 +47,15 @@ const Home = () => {
     "/council/photo9.webp",
     "/council/photo7.webp",
     "/council/photo11.webp",
+    "/council/photo16.webp",
     "/council/photo10.webp",
     "/council/photo14.webp",
   ];
   const council_images = [
-    "/council/photo6.webp",
     "/council/photo13.webp",
+    "/council/photo17.webp",
+    "/council/photo18.webp",
     "/council/photo12.webp",
-    "/council/photo15.webp",
   ];
 
   const deanOfficePeople = [

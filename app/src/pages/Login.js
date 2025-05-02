@@ -16,8 +16,10 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import { FaSignInAlt } from "react-icons/fa";
 import { FaUserAlt } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 
 const LoginDashboard = () => {
+  const navigate = useNavigate();
   const { loginUser } = useAuth();
 
   const [form, setForm] = useState({
@@ -70,6 +72,10 @@ const LoginDashboard = () => {
     setForgotPasswordEmail(e.target.value);
   };
 
+  const handleImageNavigate = () =>{
+    navigate('/');
+  }
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -78,10 +84,12 @@ const LoginDashboard = () => {
     try {
       const { email, password, userType } = form;
       const content = await LoginUserApi(userType, {'email': email, 'password': password});
-  
       if (content?.type === "ok" && content?.token) {
         loginUser(content.token);
-      } else {
+      } else if (content?.details) {
+        setError(content?.details)
+      }
+      else{
         setError("Invalid credentials or server error.");
       }
     } catch (err) {
@@ -157,6 +165,7 @@ const LoginDashboard = () => {
         <img
           src="/sac_circular.webp"
           alt="SAC Logo"
+          onClick={handleImageNavigate}
           style={{ width: 80, marginBottom: 12 }}
         />
 

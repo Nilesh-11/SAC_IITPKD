@@ -8,10 +8,11 @@ from src.config.config import FRONTEND_URL
 from src.utils.mail import send_password_reset_mail
 from src.schemas.request import ResetPasswordRequest,ForgotPasswordRequest
 from src.database.connection import get_users_db,get_auth_db
-from fastapi import FastAPI, Depends
+from fastapi import FastAPI, Depends, Request
 from sqlalchemy.orm import Session
 from fastapi.responses import JSONResponse
 import datetime
+from fastapi.exceptions import RequestValidationError
 
 app = FastAPI(title="Auth Service")
 
@@ -22,8 +23,21 @@ app.include_router(admin.router, prefix="/admin")
 app.include_router(club.router, prefix="/club")
 app.include_router(council.router, prefix="/council")
 app.include_router(guest.router, prefix="/guest")
+
 app.add_middleware(LoggingMiddleware)
 
+@app.exception_handler(RequestValidationError)
+async def validation_exception_handler(request: Request, exc: RequestValidationError):
+    errors = exc.errors()
+    first_error = errors[0]
+    msg = first_error["msg"]
+    return JSONResponse(
+        status_code=422,
+        content={
+            "type": "error",
+            "details": f"{msg}"
+        }
+    )
 
 @app.get("/")
 def health_check():
@@ -69,7 +83,7 @@ def forget_password(data: ForgotPasswordRequest, db: Session = Depends(get_users
         return JSONResponse(content={"type": "ok", 'details': "forgot password request successfull, check email, :)"})
     except Exception as e:
         print("Error in Forget password:", e)
-        return JSONResponse(content={"type": "error", "detail": "Forgot Password request failed"},
+        return JSONResponse(content={"type": "error", "details": "Forgot Password request failed"},
                             status_code=500)
 
 @app.post("/reset-password")
@@ -104,5 +118,5 @@ def reset_password(data: ResetPasswordRequest, db: Session = Depends(get_users_d
         return JSONResponse(content={"type": "ok", "details": "Password reset successful"})
     except Exception as e:
         print("Error in reset password:", e)
-        return JSONResponse(content={"type": "error", "detail": "Password reset failed"},
+        return JSONResponse(content={"type": "error", "details": "Password reset failed"},
                             status_code=500)

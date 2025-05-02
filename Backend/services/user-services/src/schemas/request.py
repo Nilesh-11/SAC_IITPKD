@@ -1,8 +1,10 @@
 from src.utils.verify import validate_mail, validate_password
+from src.models.public import AnnouncementPriority
 from pydantic import BaseModel, field_validator, EmailStr, Field
 from typing import Optional, List
-from datetime import date, time, timedelta, datetime
-from src.models.public import AnnouncementPriority
+from datetime import datetime
+from fastapi.exceptions import RequestValidationError
+
 
 class CoreteamRequest(BaseModel):
     club_email: EmailStr
@@ -57,7 +59,6 @@ class MemberInfoRequest(BaseModel):
     @classmethod
     def validate_mail(cls, value: str) -> str:
         return validate_mail(value)
-
 
 class RolesListRequest(BaseModel):
     request_by: EmailStr
@@ -155,6 +156,11 @@ class AddCouncilRequest(BaseModel):
     def validate_mail(cls, value: str) -> str:
         return validate_mail(value)
     
+    @field_validator("email")
+    @classmethod
+    def validate_mail(cls, value: str) -> str:
+        return validate_mail(value)
+    
     @field_validator("password")
     @classmethod
     def validate_password(cls, value: str) -> str:
@@ -173,6 +179,11 @@ class UpdateCouncilRequest(BaseModel):
     request_by: str
     
     @field_validator("request_by")
+    @classmethod
+    def validate_mail(cls, value: str) -> str:
+        return validate_mail(value)
+    
+    @field_validator("email")
     @classmethod
     def validate_mail(cls, value: str) -> str:
         return validate_mail(value)
@@ -259,6 +270,11 @@ class AddClubRequest(BaseModel):
     request_by: EmailStr
     
     @field_validator("request_by")
+    @classmethod
+    def validate_mail(cls, value: str) -> str:
+        return validate_mail(value)
+    
+    @field_validator("email")
     @classmethod
     def validate_mail(cls, value: str) -> str:
         return validate_mail(value)

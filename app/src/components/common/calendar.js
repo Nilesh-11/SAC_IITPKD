@@ -2,11 +2,11 @@ import React, { useState } from "react";
 import dayjs from "dayjs";
 import isSameOrBefore from "dayjs/plugin/isSameOrBefore";
 import isSameOrAfter from "dayjs/plugin/isSameOrAfter";
-import Box from '@mui/material/Box';
-import Typography from '@mui/material/Typography';
-import Tooltip from '@mui/material/Tooltip';
-import Paper from '@mui/material/Paper';
-import Button from '@mui/material/Button';
+import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
+import Tooltip from "@mui/material/Tooltip";
+import Paper from "@mui/material/Paper";
+import Button from "@mui/material/Button";
 import { FaChevronRight, FaChevronLeft } from "react-icons/fa";
 
 dayjs.extend(isSameOrBefore);
@@ -30,42 +30,43 @@ const CalendarComponent = ({ events }) => {
     const startOfMonth = currentMonth.startOf("month");
     const endOfMonth = currentMonth.endOf("month");
     const daysInMonth = currentMonth.daysInMonth();
-    
+
     const startDay = startOfMonth.day();
     const daysFromPrevMonth = startDay === 0 ? 6 : startDay - 1;
-    
+
     const endDay = endOfMonth.day();
     const daysFromNextMonth = endDay === 0 ? 0 : 7 - endDay;
-    
+
     const days = [];
-    
+
     for (let i = daysFromPrevMonth; i > 0; i--) {
       days.push({
         date: startOfMonth.subtract(i, "day"),
         currentMonth: false,
-        events: []
+        events: [],
       });
     }
-    
+
     // Current month days
     for (let i = 1; i <= daysInMonth; i++) {
       const date = currentMonth.date(i);
       days.push({
         date,
         currentMonth: true,
-        events: events?.filter(e => dayjs(e.start_time).isSame(date, "day")) || []
+        events:
+          events?.filter((e) => dayjs(e.start_time).isSame(date, "day")) || [],
       });
     }
-    
+
     // Next month days
     for (let i = 1; i <= daysFromNextMonth; i++) {
       days.push({
         date: endOfMonth.add(i, "day"),
         currentMonth: false,
-        events: []
+        events: [],
       });
     }
-    
+
     return days;
   };
 
@@ -75,19 +76,22 @@ const CalendarComponent = ({ events }) => {
 
   const renderDay = (day) => {
     const hasEvents = day.events.length > 0;
-    const councils = [...new Set(day.events.map(e => e.council))];
-    const primaryColor = councils.length === 1 
-      ? COUNCIL_COLORS[councils[0]] || COUNCIL_COLORS.default 
-      : COUNCIL_COLORS.default;
+    const councils = [...new Set(day.events.map((e) => e.council))];
+    const primaryColor =
+      councils.length === 1
+        ? COUNCIL_COLORS[councils[0]] || COUNCIL_COLORS.default
+        : COUNCIL_COLORS.default;
 
     const tooltipContent = day.events
-      .map(e => `${dayjs(e.start_time).format("HH:mm")} - ${e.title}`)
+      .map((e) => `${dayjs(e.start_time).format("HH:mm")} - ${e.title}`)
       .join("\n");
 
     return (
-      <Tooltip 
-        key={day.date.toString()} 
-        title={hasEvents ? <pre style={{ margin: 0 }}>{tooltipContent}</pre> : ""} 
+      <Tooltip
+        key={day.date.toString()}
+        title={
+          hasEvents ? <pre style={{ margin: 0 }}>{tooltipContent}</pre> : ""
+        }
         arrow
       >
         <Box
@@ -99,7 +103,11 @@ const CalendarComponent = ({ events }) => {
             justifyContent: "center",
             borderRadius: "50%",
             backgroundColor: hasEvents ? primaryColor : "transparent",
-            color: hasEvents ? "white" : day.currentMonth ? "text.primary" : "text.disabled",
+            color: hasEvents
+              ? "white"
+              : day.currentMonth
+              ? "text.primary"
+              : "text.disabled",
             cursor: hasEvents ? "pointer" : "default",
             "&:hover": {
               backgroundColor: hasEvents ? "#333" : "action.hover",
@@ -121,7 +129,6 @@ const CalendarComponent = ({ events }) => {
         padding: 2,
       }}
     >
-      {/* Header */}
       <Box
         sx={{
           display: "flex",
@@ -155,16 +162,24 @@ const CalendarComponent = ({ events }) => {
         />
       </Box>
 
-      {/* Calendar Controls */}
       <Box sx={{ display: "flex", justifyContent: "space-between", mb: 2 }}>
-        <Button onClick={() => handleMonthChange(-1)} sx={{color:"orange"}}><FaChevronLeft fontSize="20px" /></Button>
+        <Button
+          onClick={() => handleMonthChange(-1)}
+          sx={{ color: "rgb(243, 130, 33)" }}
+        >
+          <FaChevronLeft fontSize="20px" />
+        </Button>
         <Typography variant="h6" sx={{ textAlign: "center" }}>
           {currentMonth.format("MMMM YYYY")}
         </Typography>
-        <Button onClick={() => handleMonthChange(1)} sx={{color:"orange"}}><FaChevronRight fontSize="20px" /></Button>
+        <Button
+          onClick={() => handleMonthChange(1)}
+          sx={{ color: "rgb(243, 130, 33)" }}
+        >
+          <FaChevronRight fontSize="20px" />
+        </Button>
       </Box>
 
-      {/* Calendar Grid */}
       <Paper
         sx={{
           backgroundColor: "rgb(250, 199, 170)",
@@ -179,24 +194,28 @@ const CalendarComponent = ({ events }) => {
           },
         }}
       >
-        {/* Weekday Headers */}
-        <Box sx={{ 
-          display: "grid", 
-          gridTemplateColumns: "repeat(7, 1fr)",
-          textAlign: "center",
-          mb: 1
-        }}>
-          {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map(day => (
-            <Typography key={day} variant="caption">{day}</Typography>
+        <Box
+          sx={{
+            display: "grid",
+            gridTemplateColumns: "repeat(7, 1fr)",
+            textAlign: "center",
+            mb: 1,
+          }}
+        >
+          {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((day) => (
+            <Typography key={day} variant="caption">
+              {day}
+            </Typography>
           ))}
         </Box>
 
-        {/* Days Grid */}
-        <Box sx={{ 
-          display: "grid", 
-          gridTemplateColumns: "repeat(7, 1fr)",
-          gap: 1
-        }}>
+        <Box
+          sx={{
+            display: "grid",
+            gridTemplateColumns: "repeat(7, 1fr)",
+            gap: 1,
+          }}
+        >
           {generateMonthDays().map(renderDay)}
         </Box>
       </Paper>

@@ -8327,3 +8327,431 @@ ConnectionResetError: [WinError 10054] An existing connection was forcibly close
 2025-04-30 16:03:27,612 - INFO - Request: POST /api/user/username - 1.26s
 2025-04-30 16:03:27,613 - INFO - HTTP Request: POST http://localhost:8005/events/list "HTTP/1.1 200 OK"
 2025-04-30 16:03:27,614 - INFO - Request: POST /api/public/events/list - 1.26s
+2025-05-01 21:09:05,574 - INFO - Request: OPTIONS /api/public/announcements/list - 0.00s
+2025-05-01 21:09:05,575 - INFO - Request: OPTIONS /api/public/events/list - 0.00s
+2025-05-01 21:09:08,974 - INFO - Request: POST /api/public/announcements/list - 3.40s
+2025-05-01 21:09:08,975 - INFO - Request: POST /api/public/events/list - 3.40s
+2025-05-01 21:10:01,571 - INFO - HTTP Request: POST http://localhost:8005/announcements/list "HTTP/1.1 200 OK"
+2025-05-01 21:10:01,573 - INFO - Request: POST /api/public/announcements/list - 1.39s
+2025-05-01 21:10:01,812 - INFO - HTTP Request: POST http://localhost:8005/events/list "HTTP/1.1 200 OK"
+2025-05-01 21:10:01,814 - INFO - Request: POST /api/public/events/list - 1.63s
+2025-05-01 21:11:01,814 - INFO - Request: OPTIONS /api/public/academic - 0.00s
+2025-05-01 21:11:02,599 - INFO - HTTP Request: POST http://localhost:8005/academic "HTTP/1.1 200 OK"
+2025-05-01 21:11:02,600 - INFO - Request: POST /api/public/academic - 0.78s
+2025-05-01 21:11:09,787 - INFO - HTTP Request: POST http://localhost:8005/announcements/list "HTTP/1.1 200 OK"
+2025-05-01 21:11:09,788 - INFO - Request: POST /api/public/announcements/list - 1.30s
+2025-05-01 21:11:09,789 - INFO - HTTP Request: POST http://localhost:8005/events/list "HTTP/1.1 200 OK"
+2025-05-01 21:11:09,790 - INFO - Request: POST /api/public/events/list - 1.30s
+2025-05-01 21:21:18,874 - INFO - Request: OPTIONS /api/public/announcements/list - 0.00s
+2025-05-01 21:21:18,875 - INFO - Request: OPTIONS /api/public/events/list - 0.00s
+2025-05-01 21:21:20,140 - INFO - HTTP Request: POST http://localhost:8005/announcements/list "HTTP/1.1 200 OK"
+2025-05-01 21:21:20,141 - INFO - Request: POST /api/public/announcements/list - 1.26s
+2025-05-01 21:21:20,142 - INFO - HTTP Request: POST http://localhost:8005/events/list "HTTP/1.1 200 OK"
+2025-05-01 21:21:20,143 - INFO - Request: POST /api/public/events/list - 1.26s
+2025-05-01 21:21:49,950 - INFO - HTTP Request: POST http://localhost:8005/announcements/list "HTTP/1.1 200 OK"
+2025-05-01 21:21:49,951 - INFO - Request: POST /api/public/announcements/list - 1.28s
+2025-05-01 21:21:49,952 - INFO - HTTP Request: POST http://localhost:8005/events/list "HTTP/1.1 200 OK"
+2025-05-01 21:21:49,953 - INFO - Request: POST /api/public/events/list - 1.28s
+2025-05-01 21:22:51,577 - INFO - HTTP Request: POST http://localhost:8005/announcements/list "HTTP/1.1 200 OK"
+2025-05-01 21:22:51,578 - INFO - Request: POST /api/public/announcements/list - 1.31s
+2025-05-01 21:22:51,580 - INFO - HTTP Request: POST http://localhost:8005/events/list "HTTP/1.1 200 OK"
+2025-05-01 21:22:51,580 - INFO - Request: POST /api/public/events/list - 1.31s
+2025-05-01 21:26:13,956 - INFO - HTTP Request: POST http://localhost:8005/announcements/list "HTTP/1.1 200 OK"
+2025-05-01 21:26:13,957 - INFO - Request: POST /api/public/announcements/list - 1.30s
+2025-05-01 21:26:13,958 - INFO - HTTP Request: POST http://localhost:8005/events/list "HTTP/1.1 200 OK"
+2025-05-01 21:26:13,959 - INFO - Request: POST /api/public/events/list - 1.30s
+2025-05-01 21:26:22,689 - INFO - HTTP Request: POST http://localhost:8005/announcements/list "HTTP/1.1 200 OK"
+2025-05-01 21:26:22,690 - INFO - Request: POST /api/public/announcements/list - 0.99s
+2025-05-01 21:26:22,960 - INFO - HTTP Request: POST http://localhost:8005/events/list "HTTP/1.1 200 OK"
+2025-05-01 21:26:22,961 - INFO - Request: POST /api/public/events/list - 0.77s
+2025-05-01 21:26:31,177 - INFO - HTTP Request: POST http://localhost:8005/announcements/list "HTTP/1.1 200 OK"
+2025-05-01 21:26:31,179 - INFO - Request: POST /api/public/announcements/list - 1.29s
+2025-05-01 21:26:31,180 - INFO - HTTP Request: POST http://localhost:8005/events/list "HTTP/1.1 200 OK"
+2025-05-01 21:26:31,181 - INFO - Request: POST /api/public/events/list - 1.29s
+2025-05-01 21:27:01,687 - INFO - HTTP Request: POST http://localhost:8005/announcements/list "HTTP/1.1 200 OK"
+2025-05-01 21:27:01,688 - INFO - Request: POST /api/public/announcements/list - 1.01s
+2025-05-01 21:27:01,946 - INFO - HTTP Request: POST http://localhost:8005/events/list "HTTP/1.1 200 OK"
+2025-05-01 21:27:01,947 - INFO - Request: POST /api/public/events/list - 0.77s
+2025-05-01 21:27:09,235 - INFO - HTTP Request: POST http://localhost:8005/announcements/list "HTTP/1.1 200 OK"
+2025-05-01 21:27:09,236 - INFO - Request: POST /api/public/announcements/list - 1.25s
+2025-05-01 21:27:09,237 - INFO - HTTP Request: POST http://localhost:8005/events/list "HTTP/1.1 200 OK"
+2025-05-01 21:27:09,238 - INFO - Request: POST /api/public/events/list - 1.25s
+2025-05-01 21:27:14,074 - INFO - HTTP Request: POST http://localhost:8005/announcements/list "HTTP/1.1 200 OK"
+2025-05-01 21:27:14,075 - INFO - Request: POST /api/public/announcements/list - 1.28s
+2025-05-01 21:27:14,076 - INFO - HTTP Request: POST http://localhost:8005/events/list "HTTP/1.1 200 OK"
+2025-05-01 21:27:14,078 - INFO - Request: POST /api/public/events/list - 1.28s
+2025-05-01 21:28:58,389 - INFO - Request: OPTIONS /api/public/sports - 0.00s
+2025-05-01 21:28:59,181 - INFO - HTTP Request: POST http://localhost:8005/sports "HTTP/1.1 200 OK"
+2025-05-01 21:28:59,181 - INFO - Request: POST /api/public/sports - 0.79s
+2025-05-01 21:32:24,337 - INFO - Request: OPTIONS /api/public/announcements/list - 0.00s
+2025-05-01 21:32:24,338 - INFO - Request: OPTIONS /api/public/events/list - 0.00s
+2025-05-01 21:32:25,625 - INFO - HTTP Request: POST http://localhost:8005/announcements/list "HTTP/1.1 200 OK"
+2025-05-01 21:32:25,625 - INFO - Request: POST /api/public/announcements/list - 1.28s
+2025-05-01 21:32:25,627 - INFO - HTTP Request: POST http://localhost:8005/events/list "HTTP/1.1 200 OK"
+2025-05-01 21:32:25,628 - INFO - Request: POST /api/public/events/list - 1.29s
+2025-05-01 21:32:27,398 - INFO - HTTP Request: POST http://localhost:8005/sports "HTTP/1.1 200 OK"
+2025-05-01 21:32:27,399 - INFO - Request: POST /api/public/sports - 0.81s
+2025-05-01 21:32:33,734 - INFO - Request: OPTIONS /api/public/hostel - 0.00s
+2025-05-01 21:32:34,516 - INFO - HTTP Request: POST http://localhost:8005/hostel "HTTP/1.1 200 OK"
+2025-05-01 21:32:34,518 - INFO - Request: POST /api/public/hostel - 0.78s
+2025-05-01 21:32:45,863 - INFO - Request: OPTIONS /api/public/postgraduate - 0.00s
+2025-05-01 21:32:46,662 - INFO - HTTP Request: POST http://localhost:8005/postgraduate "HTTP/1.1 200 OK"
+2025-05-01 21:32:46,663 - INFO - Request: POST /api/public/postgraduate - 0.80s
+2025-05-01 21:32:53,066 - INFO - Request: OPTIONS /api/public/technical - 0.00s
+2025-05-01 21:32:53,845 - INFO - HTTP Request: POST http://localhost:8005/technical "HTTP/1.1 200 OK"
+2025-05-01 21:32:53,846 - INFO - Request: POST /api/public/technical - 0.78s
+2025-05-01 21:33:21,544 - INFO - HTTP Request: POST http://localhost:8005/announcements/list "HTTP/1.1 200 OK"
+2025-05-01 21:33:21,545 - INFO - Request: POST /api/public/announcements/list - 1.04s
+2025-05-01 21:33:21,804 - INFO - HTTP Request: POST http://localhost:8005/events/list "HTTP/1.1 200 OK"
+2025-05-01 21:33:21,805 - INFO - Request: POST /api/public/events/list - 0.78s
+2025-05-01 21:38:12,055 - INFO - HTTP Request: POST http://localhost:8005/announcements/list "HTTP/1.1 200 OK"
+2025-05-01 21:38:12,056 - INFO - Request: POST /api/public/announcements/list - 1.25s
+2025-05-01 21:38:12,057 - INFO - HTTP Request: POST http://localhost:8005/events/list "HTTP/1.1 200 OK"
+2025-05-01 21:38:12,058 - INFO - Request: POST /api/public/events/list - 1.25s
+2025-05-01 21:38:58,674 - INFO - HTTP Request: POST http://localhost:8005/announcements/list "HTTP/1.1 200 OK"
+2025-05-01 21:38:58,675 - INFO - Request: POST /api/public/announcements/list - 0.99s
+2025-05-01 21:38:58,941 - INFO - HTTP Request: POST http://localhost:8005/events/list "HTTP/1.1 200 OK"
+2025-05-01 21:38:58,942 - INFO - Request: POST /api/public/events/list - 0.76s
+2025-05-01 21:39:28,280 - INFO - HTTP Request: POST http://localhost:8005/announcements/list "HTTP/1.1 200 OK"
+2025-05-01 21:39:28,281 - INFO - Request: POST /api/public/announcements/list - 1.28s
+2025-05-01 21:39:28,282 - INFO - HTTP Request: POST http://localhost:8005/events/list "HTTP/1.1 200 OK"
+2025-05-01 21:39:28,283 - INFO - Request: POST /api/public/events/list - 1.28s
+2025-05-01 21:39:58,711 - INFO - HTTP Request: POST http://localhost:8005/announcements/list "HTTP/1.1 200 OK"
+2025-05-01 21:39:58,712 - INFO - Request: POST /api/public/announcements/list - 1.04s
+2025-05-01 21:39:58,927 - INFO - HTTP Request: POST http://localhost:8005/events/list "HTTP/1.1 200 OK"
+2025-05-01 21:39:58,928 - INFO - Request: POST /api/public/events/list - 0.76s
+2025-05-01 21:40:16,257 - INFO - HTTP Request: POST http://localhost:8005/announcements/list "HTTP/1.1 200 OK"
+2025-05-01 21:40:16,258 - INFO - Request: POST /api/public/announcements/list - 1.26s
+2025-05-01 21:40:16,465 - INFO - HTTP Request: POST http://localhost:8005/events/list "HTTP/1.1 200 OK"
+2025-05-01 21:40:16,466 - INFO - Request: POST /api/public/events/list - 1.47s
+2025-05-01 21:40:42,024 - INFO - HTTP Request: POST http://localhost:8005/announcements/list "HTTP/1.1 200 OK"
+2025-05-01 21:40:42,025 - INFO - Request: POST /api/public/announcements/list - 1.00s
+2025-05-01 21:40:42,262 - INFO - HTTP Request: POST http://localhost:8005/events/list "HTTP/1.1 200 OK"
+2025-05-01 21:40:42,263 - INFO - Request: POST /api/public/events/list - 0.74s
+2025-05-01 21:40:56,228 - INFO - HTTP Request: POST http://localhost:8005/announcements/list "HTTP/1.1 200 OK"
+2025-05-01 21:40:56,229 - INFO - Request: POST /api/public/announcements/list - 1.25s
+2025-05-01 21:40:56,230 - INFO - HTTP Request: POST http://localhost:8005/events/list "HTTP/1.1 200 OK"
+2025-05-01 21:40:56,232 - INFO - Request: POST /api/public/events/list - 1.25s
+2025-05-01 21:41:19,681 - INFO - HTTP Request: POST http://localhost:8005/announcements/list "HTTP/1.1 200 OK"
+2025-05-01 21:41:19,682 - INFO - Request: POST /api/public/announcements/list - 0.99s
+2025-05-01 21:41:19,941 - INFO - HTTP Request: POST http://localhost:8005/events/list "HTTP/1.1 200 OK"
+2025-05-01 21:41:19,942 - INFO - Request: POST /api/public/events/list - 0.76s
+2025-05-01 21:41:35,223 - INFO - HTTP Request: POST http://localhost:8005/announcements/list "HTTP/1.1 200 OK"
+2025-05-01 21:41:35,223 - INFO - Request: POST /api/public/announcements/list - 1.24s
+2025-05-01 21:41:35,224 - INFO - HTTP Request: POST http://localhost:8005/events/list "HTTP/1.1 200 OK"
+2025-05-01 21:41:35,226 - INFO - Request: POST /api/public/events/list - 1.24s
+2025-05-01 21:41:58,670 - INFO - HTTP Request: POST http://localhost:8005/announcements/list "HTTP/1.1 200 OK"
+2025-05-01 21:41:58,671 - INFO - Request: POST /api/public/announcements/list - 0.99s
+2025-05-01 21:41:58,935 - INFO - HTTP Request: POST http://localhost:8005/events/list "HTTP/1.1 200 OK"
+2025-05-01 21:41:58,936 - INFO - Request: POST /api/public/events/list - 0.76s
+2025-05-01 21:42:33,980 - INFO - Request: OPTIONS /api/public/announcements/list - 0.00s
+2025-05-01 21:42:33,981 - INFO - Request: OPTIONS /api/public/events/list - 0.00s
+2025-05-01 21:42:35,259 - INFO - HTTP Request: POST http://localhost:8005/announcements/list "HTTP/1.1 200 OK"
+2025-05-01 21:42:35,260 - INFO - Request: POST /api/public/announcements/list - 1.28s
+2025-05-01 21:42:35,261 - INFO - HTTP Request: POST http://localhost:8005/events/list "HTTP/1.1 200 OK"
+2025-05-01 21:42:35,263 - INFO - Request: POST /api/public/events/list - 1.28s
+2025-05-01 21:43:01,796 - INFO - HTTP Request: POST http://localhost:8005/announcements/list "HTTP/1.1 200 OK"
+2025-05-01 21:43:01,797 - INFO - HTTP Request: POST http://localhost:8005/events/list "HTTP/1.1 200 OK"
+2025-05-01 21:43:01,800 - INFO - Request: POST /api/public/announcements/list - 2.11s
+2025-05-01 21:43:01,801 - INFO - Request: POST /api/public/events/list - 2.11s
+2025-05-01 21:43:01,806 - INFO - HTTP Request: POST http://localhost:8005/announcements/list "HTTP/1.1 200 OK"
+2025-05-01 21:43:01,807 - INFO - Request: POST /api/public/announcements/list - 1.05s
+2025-05-01 21:43:02,069 - INFO - HTTP Request: POST http://localhost:8005/events/list "HTTP/1.1 200 OK"
+2025-05-01 21:43:02,070 - INFO - Request: POST /api/public/events/list - 0.80s
+2025-05-01 21:43:03,999 - INFO - HTTP Request: POST http://localhost:8005/announcements/list "HTTP/1.1 200 OK"
+2025-05-01 21:43:04,000 - INFO - Request: POST /api/public/announcements/list - 1.31s
+2025-05-01 21:43:04,000 - INFO - HTTP Request: POST http://localhost:8005/events/list "HTTP/1.1 200 OK"
+2025-05-01 21:43:04,001 - INFO - Request: POST /api/public/events/list - 1.32s
+2025-05-01 21:43:06,535 - INFO - HTTP Request: POST http://localhost:8005/announcements/list "HTTP/1.1 200 OK"
+2025-05-01 21:43:06,536 - INFO - Request: POST /api/public/announcements/list - 1.55s
+2025-05-01 21:43:06,537 - INFO - HTTP Request: POST http://localhost:8005/events/list "HTTP/1.1 200 OK"
+2025-05-01 21:43:06,538 - INFO - Request: POST /api/public/events/list - 1.55s
+2025-05-01 21:43:07,213 - INFO - HTTP Request: POST http://localhost:8005/announcements/list "HTTP/1.1 200 OK"
+2025-05-01 21:43:07,213 - INFO - Request: POST /api/public/announcements/list - 1.18s
+2025-05-01 21:43:07,461 - INFO - HTTP Request: POST http://localhost:8005/announcements/list "HTTP/1.1 200 OK"
+2025-05-01 21:43:07,462 - INFO - Request: POST /api/public/announcements/list - 0.79s
+2025-05-01 21:43:08,755 - INFO - HTTP Request: POST http://localhost:8005/announcements/list "HTTP/1.1 200 OK"
+2025-05-01 21:43:08,756 - INFO - Request: POST /api/public/announcements/list - 1.08s
+2025-05-01 21:43:10,056 - INFO - HTTP Request: POST http://localhost:8005/events/list "HTTP/1.1 200 OK"
+2025-05-01 21:43:10,061 - INFO - Request: POST /api/public/events/list - 1.84s
+2025-05-01 21:43:10,066 - INFO - HTTP Request: POST http://localhost:8005/announcements/list "HTTP/1.1 200 OK"
+2025-05-01 21:43:10,068 - INFO - Request: POST /api/public/announcements/list - 1.08s
+2025-05-01 21:43:10,319 - INFO - HTTP Request: POST http://localhost:8005/events/list "HTTP/1.1 200 OK"
+2025-05-01 21:43:10,320 - INFO - Request: POST /api/public/events/list - 0.82s
+2025-05-01 21:43:11,467 - INFO - HTTP Request: POST http://localhost:8005/announcements/list "HTTP/1.1 200 OK"
+2025-05-01 21:43:11,468 - INFO - Request: POST /api/public/announcements/list - 0.79s
+2025-05-01 21:43:12,450 - INFO - HTTP Request: POST http://localhost:8005/announcements/list "HTTP/1.1 200 OK"
+2025-05-01 21:43:12,452 - INFO - Request: POST /api/public/announcements/list - 0.78s
+2025-05-01 21:43:13,728 - INFO - HTTP Request: POST http://localhost:8005/announcements/list "HTTP/1.1 200 OK"
+2025-05-01 21:43:13,730 - INFO - Request: POST /api/public/announcements/list - 1.05s
+2025-05-01 21:43:13,967 - INFO - HTTP Request: POST http://localhost:8005/events/list "HTTP/1.1 200 OK"
+2025-05-01 21:43:13,968 - INFO - Request: POST /api/public/events/list - 0.80s
+2025-05-01 21:43:17,227 - INFO - HTTP Request: POST http://localhost:8005/announcements/list "HTTP/1.1 200 OK"
+2025-05-01 21:43:17,228 - INFO - Request: POST /api/public/announcements/list - 1.55s
+2025-05-01 21:43:17,229 - INFO - HTTP Request: POST http://localhost:8005/events/list "HTTP/1.1 200 OK"
+2025-05-01 21:43:17,230 - INFO - Request: POST /api/public/events/list - 1.55s
+2025-05-01 21:43:20,967 - INFO - HTTP Request: POST http://localhost:8005/announcements/list "HTTP/1.1 200 OK"
+2025-05-01 21:43:20,968 - INFO - Request: POST /api/public/announcements/list - 1.29s
+2025-05-01 21:43:20,969 - INFO - HTTP Request: POST http://localhost:8005/events/list "HTTP/1.1 200 OK"
+2025-05-01 21:43:20,970 - INFO - Request: POST /api/public/events/list - 1.29s
+2025-05-01 21:43:23,966 - INFO - HTTP Request: POST http://localhost:8005/announcements/list "HTTP/1.1 200 OK"
+2025-05-01 21:43:23,967 - INFO - Request: POST /api/public/announcements/list - 1.28s
+2025-05-01 21:43:23,968 - INFO - HTTP Request: POST http://localhost:8005/events/list "HTTP/1.1 200 OK"
+2025-05-01 21:43:23,970 - INFO - Request: POST /api/public/events/list - 1.28s
+2025-05-01 21:43:27,092 - INFO - HTTP Request: POST http://localhost:8005/announcements/list "HTTP/1.1 200 OK"
+2025-05-01 21:43:27,093 - INFO - Request: POST /api/public/announcements/list - 2.40s
+2025-05-01 21:43:27,094 - INFO - HTTP Request: POST http://localhost:8005/events/list "HTTP/1.1 200 OK"
+2025-05-01 21:43:27,095 - INFO - Request: POST /api/public/events/list - 2.40s
+2025-05-01 21:43:27,335 - INFO - HTTP Request: POST http://localhost:8005/announcements/list "HTTP/1.1 200 OK"
+2025-05-01 21:43:27,336 - INFO - Request: POST /api/public/announcements/list - 1.34s
+2025-05-01 21:43:27,337 - INFO - HTTP Request: POST http://localhost:8005/events/list "HTTP/1.1 200 OK"
+2025-05-01 21:43:27,338 - INFO - Request: POST /api/public/events/list - 1.34s
+2025-05-01 21:43:28,687 - INFO - HTTP Request: POST http://localhost:8005/announcements/list "HTTP/1.1 200 OK"
+2025-05-01 21:43:28,688 - INFO - Request: POST /api/public/announcements/list - 1.01s
+2025-05-01 21:43:28,952 - INFO - HTTP Request: POST http://localhost:8005/events/list "HTTP/1.1 200 OK"
+2025-05-01 21:43:28,953 - INFO - Request: POST /api/public/events/list - 0.77s
+2025-05-01 21:44:31,276 - INFO - HTTP Request: POST http://localhost:8005/announcements/list "HTTP/1.1 200 OK"
+2025-05-01 21:44:31,277 - INFO - Request: POST /api/public/announcements/list - 1.28s
+2025-05-01 21:44:31,278 - INFO - HTTP Request: POST http://localhost:8005/events/list "HTTP/1.1 200 OK"
+2025-05-01 21:44:31,279 - INFO - Request: POST /api/public/events/list - 1.28s
+2025-05-01 21:44:43,399 - INFO - HTTP Request: POST http://localhost:8005/announcements/list "HTTP/1.1 200 OK"
+2025-05-01 21:44:43,400 - INFO - Request: POST /api/public/announcements/list - 1.00s
+2025-05-01 21:44:43,666 - INFO - HTTP Request: POST http://localhost:8005/events/list "HTTP/1.1 200 OK"
+2025-05-01 21:44:43,667 - INFO - Request: POST /api/public/events/list - 0.76s
+2025-05-01 21:45:41,257 - INFO - HTTP Request: POST http://localhost:8005/announcements/list "HTTP/1.1 200 OK"
+2025-05-01 21:45:41,258 - INFO - Request: POST /api/public/announcements/list - 1.26s
+2025-05-01 21:45:41,259 - INFO - HTTP Request: POST http://localhost:8005/events/list "HTTP/1.1 200 OK"
+2025-05-01 21:45:41,260 - INFO - Request: POST /api/public/events/list - 1.26s
+2025-05-01 21:46:34,123 - INFO - HTTP Request: POST http://localhost:8005/announcements/list "HTTP/1.1 200 OK"
+2025-05-01 21:46:34,124 - INFO - Request: POST /api/public/announcements/list - 0.99s
+2025-05-01 21:46:34,394 - INFO - HTTP Request: POST http://localhost:8005/events/list "HTTP/1.1 200 OK"
+2025-05-01 21:46:34,395 - INFO - Request: POST /api/public/events/list - 0.77s
+2025-05-01 21:46:55,230 - INFO - HTTP Request: POST http://localhost:8005/announcements/list "HTTP/1.1 200 OK"
+2025-05-01 21:46:55,231 - INFO - Request: POST /api/public/announcements/list - 1.25s
+2025-05-01 21:46:55,232 - INFO - HTTP Request: POST http://localhost:8005/events/list "HTTP/1.1 200 OK"
+2025-05-01 21:46:55,233 - INFO - Request: POST /api/public/events/list - 1.25s
+2025-05-01 21:50:26,982 - INFO - HTTP Request: POST http://localhost:8005/announcements/list "HTTP/1.1 200 OK"
+2025-05-01 21:50:26,983 - INFO - Request: POST /api/public/announcements/list - 1.30s
+2025-05-01 21:50:26,984 - INFO - HTTP Request: POST http://localhost:8005/events/list "HTTP/1.1 200 OK"
+2025-05-01 21:50:26,986 - INFO - Request: POST /api/public/events/list - 1.31s
+2025-05-01 21:50:47,255 - INFO - HTTP Request: POST http://localhost:8005/announcements/list "HTTP/1.1 200 OK"
+2025-05-01 21:50:47,256 - INFO - Request: POST /api/public/announcements/list - 1.26s
+2025-05-01 21:50:47,257 - INFO - HTTP Request: POST http://localhost:8005/events/list "HTTP/1.1 200 OK"
+2025-05-01 21:50:47,258 - INFO - Request: POST /api/public/events/list - 1.27s
+2025-05-01 21:51:30,680 - INFO - HTTP Request: POST http://localhost:8005/announcements/list "HTTP/1.1 200 OK"
+2025-05-01 21:51:30,681 - INFO - Request: POST /api/public/announcements/list - 1.00s
+2025-05-01 21:51:30,947 - INFO - HTTP Request: POST http://localhost:8005/events/list "HTTP/1.1 200 OK"
+2025-05-01 21:51:30,948 - INFO - Request: POST /api/public/events/list - 0.77s
+2025-05-01 21:51:58,257 - INFO - HTTP Request: POST http://localhost:8005/announcements/list "HTTP/1.1 200 OK"
+2025-05-01 21:51:58,258 - INFO - Request: POST /api/public/announcements/list - 1.26s
+2025-05-01 21:51:58,259 - INFO - HTTP Request: POST http://localhost:8005/events/list "HTTP/1.1 200 OK"
+2025-05-01 21:51:58,260 - INFO - Request: POST /api/public/events/list - 1.27s
+2025-05-01 21:52:32,665 - INFO - HTTP Request: POST http://localhost:8005/announcements/list "HTTP/1.1 200 OK"
+2025-05-01 21:52:32,666 - INFO - Request: POST /api/public/announcements/list - 0.99s
+2025-05-01 21:52:32,933 - INFO - HTTP Request: POST http://localhost:8005/events/list "HTTP/1.1 200 OK"
+2025-05-01 21:52:32,934 - INFO - Request: POST /api/public/events/list - 0.77s
+2025-05-01 21:53:23,988 - INFO - Request: OPTIONS /api/public/announcements/list - 0.00s
+2025-05-01 21:53:23,988 - INFO - Request: OPTIONS /api/public/events/list - 0.00s
+2025-05-01 21:53:25,234 - INFO - HTTP Request: POST http://localhost:8005/announcements/list "HTTP/1.1 200 OK"
+2025-05-01 21:53:25,234 - INFO - Request: POST /api/public/announcements/list - 1.24s
+2025-05-01 21:53:25,235 - INFO - HTTP Request: POST http://localhost:8005/events/list "HTTP/1.1 200 OK"
+2025-05-01 21:53:25,236 - INFO - Request: POST /api/public/events/list - 1.24s
+2025-05-01 21:53:46,937 - INFO - HTTP Request: POST http://localhost:8005/announcements/list "HTTP/1.1 200 OK"
+2025-05-01 21:53:46,938 - INFO - Request: POST /api/public/announcements/list - 1.26s
+2025-05-01 21:53:46,939 - INFO - HTTP Request: POST http://localhost:8005/events/list "HTTP/1.1 200 OK"
+2025-05-01 21:53:46,940 - INFO - Request: POST /api/public/events/list - 1.26s
+2025-05-02 01:50:52,079 - INFO - Request: OPTIONS /api/public/announcements/list - 0.00s
+2025-05-02 01:50:52,082 - INFO - Request: OPTIONS /api/public/events/list - 0.00s
+2025-05-02 01:50:53,554 - INFO - HTTP Request: POST http://localhost:8005/announcements/list "HTTP/1.1 200 OK"
+2025-05-02 01:50:53,557 - INFO - Request: POST /api/public/announcements/list - 1.47s
+2025-05-02 01:50:53,609 - INFO - HTTP Request: POST http://localhost:8005/events/list "HTTP/1.1 200 OK"
+2025-05-02 01:50:53,610 - INFO - Request: POST /api/public/events/list - 1.52s
+2025-05-02 01:51:07,238 - INFO - Request: OPTIONS /api/auth/student/login - 0.00s
+2025-05-02 01:51:08,177 - INFO - HTTP Request: POST http://localhost:8001/student/login "HTTP/1.1 422 Unprocessable Entity"
+2025-05-02 01:51:08,178 - INFO - Request: POST /api/auth/student/login - 0.94s
+2025-05-02 01:52:59,217 - INFO - HTTP Request: POST http://localhost:8001/student/login "HTTP/1.1 422 Unprocessable Entity"
+2025-05-02 01:52:59,218 - INFO - Request: POST /api/auth/student/login - 0.77s
+2025-05-02 01:53:37,686 - INFO - HTTP Request: POST http://localhost:8001/student/login "HTTP/1.1 422 Unprocessable Entity"
+2025-05-02 01:53:37,687 - INFO - Request: POST /api/auth/student/login - 0.85s
+2025-05-02 01:56:25,732 - INFO - HTTP Request: POST http://localhost:8001/student/login "HTTP/1.1 422 Unprocessable Entity"
+2025-05-02 01:56:25,733 - INFO - Request: POST /api/auth/student/login - 0.81s
+2025-05-02 01:57:07,399 - INFO - HTTP Request: POST http://localhost:8001/student/login "HTTP/1.1 422 Unprocessable Entity"
+2025-05-02 01:57:07,400 - INFO - Request: POST /api/auth/student/login - 0.77s
+2025-05-02 01:58:45,976 - INFO - HTTP Request: POST http://localhost:8001/student/login "HTTP/1.1 422 Unprocessable Entity"
+2025-05-02 01:58:45,977 - INFO - Request: POST /api/auth/student/login - 0.78s
+2025-05-02 01:59:24,899 - INFO - HTTP Request: POST http://localhost:8001/student/login "HTTP/1.1 422 Unprocessable Entity"
+2025-05-02 01:59:24,900 - INFO - Request: POST /api/auth/student/login - 0.78s
+2025-05-02 02:00:35,026 - INFO - HTTP Request: POST http://localhost:8001/student/login "HTTP/1.1 422 Unprocessable Entity"
+2025-05-02 02:00:35,027 - INFO - Request: POST /api/auth/student/login - 0.75s
+2025-05-02 02:01:25,074 - INFO - Request: OPTIONS /api/auth/student/login - 0.00s
+2025-05-02 02:01:25,848 - INFO - HTTP Request: POST http://localhost:8001/student/login "HTTP/1.1 422 Unprocessable Entity"
+2025-05-02 02:01:25,849 - INFO - Request: POST /api/auth/student/login - 0.77s
+2025-05-02 02:02:44,478 - INFO - HTTP Request: POST http://localhost:8001/student/login "HTTP/1.1 422 Unprocessable Entity"
+2025-05-02 02:02:44,479 - INFO - Request: POST /api/auth/student/login - 0.76s
+2025-05-02 02:04:07,019 - INFO - HTTP Request: POST http://localhost:8001/student/login "HTTP/1.1 404 Not Found"
+2025-05-02 02:04:07,020 - INFO - Request: POST /api/auth/student/login - 0.84s
+2025-05-02 02:05:40,082 - INFO - HTTP Request: POST http://localhost:8001/student/login "HTTP/1.1 422 Unprocessable Entity"
+2025-05-02 02:05:40,083 - INFO - Request: POST /api/auth/student/login - 0.76s
+2025-05-02 02:05:49,073 - INFO - HTTP Request: POST http://localhost:8001/student/login "HTTP/1.1 422 Unprocessable Entity"
+2025-05-02 02:05:49,074 - INFO - Request: POST /api/auth/student/login - 0.76s
+2025-05-02 02:08:31,656 - INFO - HTTP Request: POST http://localhost:8001/student/login "HTTP/1.1 422 Unprocessable Entity"
+2025-05-02 02:08:31,657 - INFO - Request: POST /api/auth/student/login - 0.76s
+2025-05-02 02:11:13,909 - INFO - HTTP Request: POST http://localhost:8001/student/login "HTTP/1.1 422 Unprocessable Entity"
+2025-05-02 02:11:13,910 - INFO - Request: POST /api/auth/student/login - 0.84s
+2025-05-02 02:11:28,001 - INFO - Request: OPTIONS /api/auth/student/login - 0.00s
+2025-05-02 02:11:28,807 - INFO - HTTP Request: POST http://localhost:8001/student/login "HTTP/1.1 422 Unprocessable Entity"
+2025-05-02 02:11:28,808 - INFO - Request: POST /api/auth/student/login - 0.80s
+2025-05-02 02:11:34,458 - INFO - HTTP Request: POST http://localhost:8001/student/login "HTTP/1.1 422 Unprocessable Entity"
+2025-05-02 02:11:34,459 - INFO - Request: POST /api/auth/student/login - 0.78s
+2025-05-02 02:11:40,496 - INFO - HTTP Request: POST http://localhost:8001/student/login "HTTP/1.1 422 Unprocessable Entity"
+2025-05-02 02:11:40,496 - INFO - Request: POST /api/auth/student/login - 0.77s
+2025-05-02 02:12:01,486 - INFO - Request: OPTIONS /api/auth/guest/login - 0.00s
+2025-05-02 02:12:02,478 - INFO - HTTP Request: POST http://localhost:8001/guest/login "HTTP/1.1 200 OK"
+2025-05-02 02:12:02,479 - INFO - Request: POST /api/auth/guest/login - 0.99s
+2025-05-02 02:12:03,162 - INFO - Request: OPTIONS /api/public/announcements/list - 0.00s
+2025-05-02 02:12:03,164 - INFO - Request: OPTIONS /api/public/status - 0.00s
+2025-05-02 02:12:03,165 - INFO - Request: OPTIONS /api/public/clubs/list - 0.00s
+2025-05-02 02:12:04,678 - INFO - HTTP Request: POST http://localhost:8005/announcements/list "HTTP/1.1 200 OK"
+2025-05-02 02:12:04,679 - INFO - Request: POST /api/public/announcements/list - 1.51s
+2025-05-02 02:12:05,004 - INFO - HTTP Request: POST http://localhost:8005/clubs/list "HTTP/1.1 200 OK"
+2025-05-02 02:12:05,006 - INFO - Request: POST /api/public/clubs/list - 1.84s
+2025-05-02 02:12:05,170 - INFO - HTTP Request: POST http://localhost:8005/status "HTTP/1.1 200 OK"
+2025-05-02 02:12:05,171 - INFO - Request: POST /api/public/status - 2.00s
+2025-05-02 02:17:38,616 - INFO - Request: OPTIONS /api/public/events/list - 0.00s
+2025-05-02 02:17:39,659 - INFO - HTTP Request: POST http://localhost:8005/announcements/list "HTTP/1.1 200 OK"
+2025-05-02 02:17:39,660 - INFO - Request: POST /api/public/announcements/list - 1.05s
+2025-05-02 02:17:39,912 - INFO - HTTP Request: POST http://localhost:8005/events/list "HTTP/1.1 200 OK"
+2025-05-02 02:17:39,913 - INFO - Request: POST /api/public/events/list - 0.78s
+2025-05-02 02:27:17,193 - INFO - Request: OPTIONS /api/verify-token - 0.00s
+2025-05-02 02:27:17,220 - INFO - Request: POST /api/verify-token - 0.02s
+2025-05-02 02:27:17,283 - INFO - Request: OPTIONS /api/public/announcements/list - 0.00s
+2025-05-02 02:27:18,400 - INFO - HTTP Request: POST http://localhost:8005/events/list "HTTP/1.1 200 OK"
+2025-05-02 02:27:18,401 - INFO - Request: POST /api/public/events/list - 1.12s
+2025-05-02 02:27:18,656 - INFO - HTTP Request: POST http://localhost:8005/announcements/list "HTTP/1.1 200 OK"
+2025-05-02 02:27:18,656 - INFO - Request: POST /api/public/announcements/list - 0.83s
+2025-05-02 02:27:27,868 - INFO - Request: POST /api/verify-token - 0.00s
+2025-05-02 02:27:30,084 - INFO - HTTP Request: POST http://localhost:8005/announcements/list "HTTP/1.1 200 OK"
+2025-05-02 02:27:30,086 - INFO - Request: POST /api/public/announcements/list - 1.37s
+2025-05-02 02:27:30,145 - INFO - HTTP Request: POST http://localhost:8005/events/list "HTTP/1.1 200 OK"
+2025-05-02 02:27:30,146 - INFO - Request: POST /api/public/events/list - 1.43s
+2025-05-02 02:29:52,844 - INFO - Request: OPTIONS /api/auth/student/login - 0.00s
+2025-05-02 02:29:53,847 - INFO - HTTP Request: POST http://localhost:8001/student/login "HTTP/1.1 200 OK"
+2025-05-02 02:29:53,848 - INFO - Request: POST /api/auth/student/login - 1.00s
+2025-05-02 02:29:53,899 - INFO - Request: OPTIONS /api/user/username - 0.00s
+2025-05-02 02:29:54,816 - INFO - HTTP Request: POST http://localhost:8004/username "HTTP/1.1 200 OK"
+2025-05-02 02:29:54,818 - INFO - Request: POST /api/user/username - 0.92s
+2025-05-02 02:29:55,348 - INFO - Request: OPTIONS /api/public/status - 0.51s
+2025-05-02 02:29:55,350 - INFO - Request: OPTIONS /api/public/clubs/list - 0.00s
+2025-05-02 02:29:56,409 - INFO - HTTP Request: POST http://localhost:8005/announcements/list "HTTP/1.1 200 OK"
+2025-05-02 02:29:56,410 - INFO - Request: POST /api/public/announcements/list - 1.58s
+2025-05-02 02:29:56,679 - INFO - HTTP Request: POST http://localhost:8005/clubs/list "HTTP/1.1 200 OK"
+2025-05-02 02:29:56,680 - INFO - Request: POST /api/public/clubs/list - 1.33s
+2025-05-02 02:29:56,692 - INFO - HTTP Request: POST http://localhost:8005/status "HTTP/1.1 200 OK"
+2025-05-02 02:29:56,693 - INFO - Request: POST /api/public/status - 1.34s
+2025-05-02 02:30:48,171 - INFO - Request: POST /api/verify-token - 0.00s
+2025-05-02 02:30:49,263 - INFO - HTTP Request: POST http://localhost:8004/username "HTTP/1.1 200 OK"
+2025-05-02 02:30:49,264 - INFO - Request: POST /api/user/username - 0.77s
+2025-05-02 02:30:50,826 - INFO - HTTP Request: POST http://localhost:8005/announcements/list "HTTP/1.1 200 OK"
+2025-05-02 02:30:50,827 - INFO - Request: POST /api/public/announcements/list - 1.54s
+2025-05-02 02:30:50,832 - INFO - HTTP Request: POST http://localhost:8005/status "HTTP/1.1 200 OK"
+2025-05-02 02:30:50,833 - INFO - Request: POST /api/public/status - 1.54s
+2025-05-02 02:30:51,098 - INFO - HTTP Request: POST http://localhost:8005/clubs/list "HTTP/1.1 200 OK"
+2025-05-02 02:30:51,099 - INFO - Request: POST /api/public/clubs/list - 1.31s
+2025-05-02 02:31:09,275 - INFO - Request: POST /api/verify-token - 0.00s
+2025-05-02 02:31:10,363 - INFO - HTTP Request: POST http://localhost:8004/username "HTTP/1.1 200 OK"
+2025-05-02 02:31:10,367 - INFO - Request: POST /api/user/username - 0.78s
+2025-05-02 02:31:11,908 - INFO - HTTP Request: POST http://localhost:8005/announcements/list "HTTP/1.1 200 OK"
+2025-05-02 02:31:11,910 - INFO - Request: POST /api/public/announcements/list - 1.52s
+2025-05-02 02:31:11,915 - INFO - HTTP Request: POST http://localhost:8005/status "HTTP/1.1 200 OK"
+2025-05-02 02:31:11,916 - INFO - Request: POST /api/public/status - 1.53s
+2025-05-02 02:31:12,180 - INFO - HTTP Request: POST http://localhost:8005/clubs/list "HTTP/1.1 200 OK"
+2025-05-02 02:31:12,181 - INFO - Request: POST /api/public/clubs/list - 1.29s
+2025-05-02 02:31:17,439 - INFO - Request: OPTIONS /api/public/events/list - 0.00s
+2025-05-02 02:31:17,965 - INFO - HTTP Request: POST http://localhost:8005/announcements/list "HTTP/1.1 200 OK"
+2025-05-02 02:31:17,966 - INFO - Request: POST /api/public/announcements/list - 1.04s
+2025-05-02 02:31:18,229 - INFO - HTTP Request: POST http://localhost:8005/events/list "HTTP/1.1 200 OK"
+2025-05-02 02:31:18,230 - INFO - Request: POST /api/public/events/list - 0.79s
+2025-05-02 02:31:24,672 - INFO - HTTP Request: POST http://localhost:8001/student/login "HTTP/1.1 200 OK"
+2025-05-02 02:31:24,673 - INFO - Request: POST /api/auth/student/login - 1.01s
+2025-05-02 02:31:25,472 - INFO - HTTP Request: POST http://localhost:8004/username "HTTP/1.1 200 OK"
+2025-05-02 02:31:25,473 - INFO - Request: POST /api/user/username - 0.78s
+2025-05-02 02:31:27,003 - INFO - HTTP Request: POST http://localhost:8005/announcements/list "HTTP/1.1 200 OK"
+2025-05-02 02:31:27,004 - INFO - Request: POST /api/public/announcements/list - 1.52s
+2025-05-02 02:31:27,272 - INFO - HTTP Request: POST http://localhost:8005/clubs/list "HTTP/1.1 200 OK"
+2025-05-02 02:31:27,273 - INFO - Request: POST /api/public/clubs/list - 1.29s
+2025-05-02 02:31:27,276 - INFO - HTTP Request: POST http://localhost:8005/status "HTTP/1.1 200 OK"
+2025-05-02 02:31:27,276 - INFO - Request: POST /api/public/status - 1.29s
+2025-05-02 02:35:57,308 - INFO - Request: OPTIONS /api/public/academic - 0.00s
+2025-05-02 02:35:57,872 - INFO - HTTP Request: POST http://localhost:8005/announcements/list "HTTP/1.1 200 OK"
+2025-05-02 02:35:57,873 - INFO - Request: POST /api/public/announcements/list - 1.68s
+2025-05-02 02:35:57,875 - INFO - HTTP Request: POST http://localhost:8005/events/list "HTTP/1.1 200 OK"
+2025-05-02 02:35:57,877 - INFO - Request: POST /api/public/events/list - 1.68s
+2025-05-02 02:35:58,136 - INFO - HTTP Request: POST http://localhost:8005/academic "HTTP/1.1 200 OK"
+2025-05-02 02:35:58,137 - INFO - Request: POST /api/public/academic - 0.83s
+2025-05-02 02:35:58,797 - INFO - Request: OPTIONS /api/public/postgraduate - 0.00s
+2025-05-02 02:35:59,617 - INFO - HTTP Request: POST http://localhost:8005/postgraduate "HTTP/1.1 200 OK"
+2025-05-02 02:35:59,618 - INFO - Request: POST /api/public/postgraduate - 0.82s
+2025-05-02 02:36:04,326 - INFO - Request: OPTIONS /api/public/technical - 0.00s
+2025-05-02 02:36:05,126 - INFO - HTTP Request: POST http://localhost:8005/technical "HTTP/1.1 200 OK"
+2025-05-02 02:36:05,127 - INFO - Request: POST /api/public/technical - 0.80s
+2025-05-02 02:36:09,522 - INFO - Request: OPTIONS /api/public/cultural - 0.00s
+2025-05-02 02:36:10,320 - INFO - HTTP Request: POST http://localhost:8005/cultural "HTTP/1.1 200 OK"
+2025-05-02 02:36:10,322 - INFO - Request: POST /api/public/cultural - 0.80s
+2025-05-02 02:36:12,827 - INFO - Request: OPTIONS /api/public/hostel - 0.00s
+2025-05-02 02:36:13,661 - INFO - HTTP Request: POST http://localhost:8005/hostel "HTTP/1.1 200 OK"
+2025-05-02 02:36:13,662 - INFO - Request: POST /api/public/hostel - 0.83s
+2025-05-02 02:36:16,378 - INFO - Request: OPTIONS /api/public/sports - 0.00s
+2025-05-02 02:36:17,170 - INFO - HTTP Request: POST http://localhost:8005/sports "HTTP/1.1 200 OK"
+2025-05-02 02:36:17,172 - INFO - Request: POST /api/public/sports - 0.79s
+2025-05-02 02:36:22,058 - INFO - HTTP Request: POST http://localhost:8005/hostel "HTTP/1.1 200 OK"
+2025-05-02 02:36:22,060 - INFO - Request: POST /api/public/hostel - 0.82s
+2025-05-02 02:36:25,650 - INFO - HTTP Request: POST http://localhost:8005/academic "HTTP/1.1 200 OK"
+2025-05-02 02:36:25,651 - INFO - Request: POST /api/public/academic - 0.87s
+2025-05-02 02:36:30,177 - INFO - HTTP Request: POST http://localhost:8005/announcements/list "HTTP/1.1 200 OK"
+2025-05-02 02:36:30,178 - INFO - Request: POST /api/public/announcements/list - 1.07s
+2025-05-02 02:36:30,444 - INFO - HTTP Request: POST http://localhost:8005/events/list "HTTP/1.1 200 OK"
+2025-05-02 02:36:30,446 - INFO - Request: POST /api/public/events/list - 0.81s
+2025-05-02 02:43:00,715 - INFO - Request: OPTIONS /api/verify-token - 0.00s
+2025-05-02 02:43:00,717 - INFO - Request: OPTIONS /api/verify-token - 0.00s
+2025-05-02 02:43:00,743 - INFO - Request: POST /api/verify-token - 0.02s
+2025-05-02 02:43:00,746 - INFO - Request: POST /api/verify-token - 0.02s
+2025-05-02 02:43:01,022 - INFO - Request: OPTIONS /api/verify-token - 0.00s
+2025-05-02 02:43:01,031 - INFO - Request: POST /api/verify-token - 0.00s
+2025-05-02 02:43:07,071 - INFO - Request: OPTIONS /api/auth/student/login - 0.00s
+2025-05-02 02:43:08,135 - INFO - HTTP Request: POST http://localhost:8001/student/login "HTTP/1.1 200 OK"
+2025-05-02 02:43:08,136 - INFO - Request: POST /api/auth/student/login - 1.06s
+2025-05-02 02:43:08,231 - INFO - Request: OPTIONS /api/user/username - 0.00s
+2025-05-02 02:43:08,999 - INFO - HTTP Request: POST http://localhost:8004/username "HTTP/1.1 200 OK"
+2025-05-02 02:43:09,000 - INFO - Request: POST /api/user/username - 0.77s
+2025-05-02 02:43:09,019 - INFO - Request: OPTIONS /api/public/announcements/list - 0.00s
+2025-05-02 02:43:09,026 - INFO - Request: OPTIONS /api/public/status - 0.00s
+2025-05-02 02:43:09,027 - INFO - Request: OPTIONS /api/public/clubs/list - 0.00s
+2025-05-02 02:43:10,559 - INFO - HTTP Request: POST http://localhost:8005/announcements/list "HTTP/1.1 200 OK"
+2025-05-02 02:43:10,560 - INFO - Request: POST /api/public/announcements/list - 1.53s
+2025-05-02 02:43:10,823 - INFO - HTTP Request: POST http://localhost:8005/clubs/list "HTTP/1.1 200 OK"
+2025-05-02 02:43:10,825 - INFO - Request: POST /api/public/clubs/list - 1.29s
+2025-05-02 02:43:11,031 - INFO - HTTP Request: POST http://localhost:8005/status "HTTP/1.1 200 OK"
+2025-05-02 02:43:11,032 - INFO - Request: POST /api/public/status - 1.49s
+2025-05-02 02:43:17,112 - INFO - HTTP Request: POST http://localhost:8005/clubs/list "HTTP/1.1 200 OK"
+2025-05-02 02:43:17,113 - INFO - Request: POST /api/public/clubs/list - 0.78s
+2025-05-02 02:43:17,968 - INFO - Request: OPTIONS /api/user/student/club/info - 0.00s
+2025-05-02 02:43:18,895 - INFO - HTTP Request: POST http://localhost:8004/student/club/info "HTTP/1.1 200 OK"
+2025-05-02 02:43:18,896 - INFO - Request: POST /api/user/student/club/info - 0.93s
+2025-05-02 02:43:20,907 - INFO - Request: POST /api/verify-token - 0.00s
+2025-05-02 02:43:21,273 - INFO - Request: OPTIONS /api/user/student/club/coreteam - 0.00s
+2025-05-02 02:43:22,105 - INFO - HTTP Request: POST http://localhost:8004/student/club/coreteam "HTTP/1.1 200 OK"
+2025-05-02 02:43:22,106 - INFO - Request: POST /api/user/student/club/coreteam - 0.83s
+2025-05-02 02:46:55,644 - INFO - Request: POST /api/verify-token - 0.00s
+2025-05-02 02:46:56,786 - INFO - HTTP Request: POST http://localhost:8004/student/club/info "HTTP/1.1 200 OK"
+2025-05-02 02:46:56,788 - INFO - Request: POST /api/user/student/club/info - 0.82s
+2025-05-02 02:47:47,769 - INFO - Request: POST /api/verify-token - 0.01s
+2025-05-02 02:47:48,918 - INFO - HTTP Request: POST http://localhost:8004/student/club/coreteam "HTTP/1.1 200 OK"
+2025-05-02 02:47:48,919 - INFO - Request: POST /api/user/student/club/coreteam - 0.80s
+2025-05-02 03:02:28,103 - INFO - Request: OPTIONS /api/auth/student/login - 0.00s
+2025-05-02 03:02:28,860 - INFO - HTTP Request: POST http://localhost:8001/student/login "HTTP/1.1 404 Not Found"
+2025-05-02 03:02:28,860 - INFO - Request: POST /api/auth/student/login - 0.76s
+2025-05-02 03:02:31,404 - INFO - Request: OPTIONS /api/auth/council/login - 0.00s
+2025-05-02 03:02:32,191 - INFO - HTTP Request: POST http://localhost:8001/council/login "HTTP/1.1 404 Not Found"
+2025-05-02 03:02:32,192 - INFO - Request: POST /api/auth/council/login - 0.79s
+2025-05-02 03:02:42,563 - INFO - HTTP Request: POST http://localhost:8001/council/login "HTTP/1.1 404 Not Found"
+2025-05-02 03:02:42,564 - INFO - Request: POST /api/auth/council/login - 0.77s

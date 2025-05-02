@@ -1,7 +1,8 @@
 from src.models.users import Club, Student, Admin, Council
+from src.config.config import logger
 from sqlalchemy.orm import Session
 from sqlalchemy.sql import exists
-from src.config.config import logger
+from fastapi.responses import JSONResponse
 
 def validate_password(value: str) -> str:
     if not any(char.isdigit() for char in value):
@@ -16,7 +17,7 @@ def validate_password(value: str) -> str:
 
 def validate_mail(email: str) -> bool:
     if not email.lower().endswith("iitpkd.ac.in"):
-        raise ValueError("Invalid mail.")
+        return JSONResponse(content={'type': 'error', 'details': "Invalid mail."})
     return email
 
 def verify_user(email: str, db: Session) -> bool:

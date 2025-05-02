@@ -10,6 +10,9 @@ from fastapi import FastAPI, Depends
 from fastapi.responses import JSONResponse
 from sqlalchemy.orm import Session
 import datetime
+from fastapi import Request
+from fastapi.exceptions import RequestValidationError
+from fastapi.responses import JSONResponse
 
 app = FastAPI(title="Projects Service")
 
@@ -21,6 +24,19 @@ app.include_router(council.router, prefix="/council")
 app.include_router(admin.router, prefix="/admin")
 
 app.add_middleware(LoggingMiddleware)
+
+@app.exception_handler(RequestValidationError)
+async def validation_exception_handler(request: Request, exc: RequestValidationError):
+    errors = exc.errors()
+    first_error = errors[0]
+    msg = first_error["msg"]
+    return JSONResponse(
+        status_code=422,
+        content={
+            "type": "error",
+            "details": f"{msg}"
+        }
+    )
 
 @app.get("/")
 def health_check():
@@ -190,3 +206,17 @@ def add_announcment(request: DeleteAnnouncementRequest, db: Session = Depends(ge
     except Exception as e:
         print("ERROR in add announcement:", e)
         return JSONResponse(content={'type': "error", 'details':"An error occurred"})
+
+@app.exception_handler(RequestValidationError)
+async def validation_exception_handler(request: Request, exc: RequestValidationError):
+    # Extract messages from the error list
+    errors = exc.errors()
+    messages = []
+    for err in errors:
+        loc = ".".join(str(x) for x in err["loc"] if x != "body")  # e.g., "request_by"
+        messages.append(f"{loc}: {err['msg']}")
+    
+    return JSONResponse(
+        status_code=422,
+        content={"type": "error", "details": "; ".join(messages)}
+    )

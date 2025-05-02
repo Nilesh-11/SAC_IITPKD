@@ -88,7 +88,6 @@ const Cultural = () => {
         }}
       >
         <Grid container spacing={3}>
-          {/* Leadership Section with Loading/Error States */}
           <Grid item xs={12}>
             {loading ? (
               <Box display="flex" justifyContent="center">

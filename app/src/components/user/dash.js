@@ -10,10 +10,10 @@ import useMediaQuery from "@mui/material/useMediaQuery";
 import { useTheme } from "@mui/material/styles";
 import CircularProgress from '@mui/material/CircularProgress';
 import { FaUniversity } from "react-icons/fa";
-import SquareGallery from "./squareGallery";
 import timeAgo from "../../utils/parser";
 import { ClubsListApi, StatusApi } from "../../api/public";
 import { getAnnouncementsList } from "../../api/announcement";
+import ClubsGallery from "./clubsGallery";
 
 const Dashboard = ({
   role = "student",
@@ -252,7 +252,7 @@ const Dashboard = ({
           </Button>
         </Box>
 
-        <SquareGallery images={myClubs} galleryId="dashMyClubs" />
+        <ClubsGallery images={myClubs} galleryId="dashMyClubs" />
       </Box>
     </Box>
   );

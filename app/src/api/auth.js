@@ -158,7 +158,7 @@ export const LoginUserApi = async (userType, data) => {
         return responseData;
       }
       else{
-        if (responseData?.type){
+        if (responseData?.type === "error"){
           return responseData;
         }
         else{
@@ -166,7 +166,49 @@ export const LoginUserApi = async (userType, data) => {
         }
       }
     } else {
-      throw new Error(`HTTP error! Status: ${response.status}`);
+      if (responseData?.type && responseData?.details){
+        return responseData;
+      }
+      else{
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+    }
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const SigunupUserApi = async (data) => {
+  const url = `${BACKEND_URL}/api/auth/student/signup`;
+  try {
+    const response = await fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    });
+    const responseData = await response.json();
+    console.log(responseData);
+    if (response.ok) {
+      if (responseData?.type === "ok"){
+        return responseData;
+      }
+      else{
+        if (responseData?.type === "error"){
+          return responseData;
+        }
+        else{
+          return {'type': "error", 'details': "An error occurred"};
+        }
+      }
+    } else {
+      if (responseData?.type && responseData?.details){
+        return responseData;
+      }
+      else{
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
     }
   } catch (error) {
     throw error;

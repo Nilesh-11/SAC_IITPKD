@@ -13,6 +13,11 @@ class ResetPasswordRequest(BaseModel):
 
 class AddClubRequest(BaseModel):
     email: EmailStr
+    
+    @field_validator("email")
+    @classmethod
+    def validate_mail(cls, value: str) -> str:
+        return validate_mail(value)
 
 class ResendOtpRequest(BaseModel):
     email:EmailStr
@@ -27,6 +32,11 @@ class ResendOtpRequest(BaseModel):
 class VerifyotpRequest(BaseModel):
     otp_code: str = Field(..., min_length=6, max_length=6, pattern="^[0-9]+$")
     email: EmailStr
+    
+    @field_validator("email")
+    @classmethod
+    def validate_mail(cls, value: str) -> str:
+        return validate_mail(value)
 
 class StudentSignupRequest(BaseModel):
     name: str = Field(..., min_length=3, max_length=30, pattern="^[a-zA-Z]+$")

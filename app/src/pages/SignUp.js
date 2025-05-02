@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Api } from "../api/auth";
+import { SigunupUserApi, Api } from "../api/auth";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import TextField from "@mui/material/TextField";
@@ -37,7 +37,7 @@ const Signup = () => {
       if (content.type === "ok") {
         setResendStatus("OTP resent successfully. Check your email.");
       } else {
-        setResendStatus(content.detail || "Unable to resend OTP.");
+        setResendStatus(content.details || "Unable to resend OTP.");
       }
     } catch (err) {
       console.error(err);
@@ -72,6 +72,10 @@ const Signup = () => {
   const handleOtpChange = (e) =>
     setOtpForm({ ...OtpForm, [e.target.name]: e.target.value });
 
+  const handleImageNavigation = () => {
+    navigate("/");
+  }
+
   const handleSignupSubmit = async (e) => {
     e.preventDefault();
     setError("");
@@ -88,8 +92,7 @@ const Signup = () => {
         password: SignupForm.password,
         email: SignupForm.email,
       };
-      const res = await Api("/api/auth/student/signup", { data });
-      const content = res;
+      const content = await SigunupUserApi(data);
 
       if (content.type === "ok") {
         setIsOtp(true);
@@ -98,7 +101,7 @@ const Signup = () => {
         alert("OTP already sent");
         setIsOtp(true);
       } else {
-        setError(content.detail || "Signup failed.");
+        setError(content.details || "Signup failed.");
       }
     } catch (err) {
       console.error(err);
@@ -123,7 +126,7 @@ const Signup = () => {
         alert("User registered successfully");
         navigate("/login");
       } else {
-        setError(content.detail || "OTP verification failed.");
+        setError(content.details || "OTP verification failed.");
       }
     } catch (err) {
       console.error(err);
@@ -194,6 +197,7 @@ const Signup = () => {
           <img
             src="/sac_circular.webp"
             alt="SAC Logo"
+            onClick={handleImageNavigation}
             style={{ height: "64px", objectFit: "contain" }}
           />
         </Box>
