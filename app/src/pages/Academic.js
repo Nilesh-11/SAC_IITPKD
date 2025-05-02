@@ -42,6 +42,7 @@ const Academic = () => {
     "/council/academic/photo1.webp",
     "/council/academic/photo2.webp",
     "/council/academic/photo3.webp",
+    "/council/academic/photo4.webp",
   ];
 
   return (
@@ -68,7 +69,6 @@ const Academic = () => {
         }}
       >
         <Grid container spacing={3}>
-          {/* Leadership Section with Loading/Error States */}
           <Grid item xs={12}>
             {loading ? (
               <Box display="flex" justifyContent="center">
@@ -88,7 +88,6 @@ const Academic = () => {
             )}
           </Grid>
 
-          {/* About the Council Section - Always Visible */}
           <Grid item xs={12}>
             <motion.div
               initial={{ opacity: 0 }}

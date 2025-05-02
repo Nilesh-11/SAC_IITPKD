@@ -41,7 +41,7 @@ const Dashboard = ({
           StatusApi(),
           ClubsListApi()
         ]);
-        setMyClubs(clubData.clubs.map(item => `/clubs/${item.name}/opaque_logo_square.webp`));
+        setMyClubs(clubData.clubs.map(item => `/clubs/${item.name}/opaque_logo_square_512.webp`));
         setAnnouncements(annData);
         setStatus(statData);
       } catch (err) {

@@ -54,8 +54,7 @@ const Technical = () => {
   const galleryImages = useMemo(
     () => ["/council/technical/photo4.webp",
           "/council/technical/photo5.webp", 
-          "/council/technical/photo3.webp",
-        "/council/technical/photo1.webp"],
+          "/council/technical/photo6.webp"],
     []
   );
 

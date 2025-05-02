@@ -8755,3 +8755,29 @@ ConnectionResetError: [WinError 10054] An existing connection was forcibly close
 2025-05-02 03:02:32,192 - INFO - Request: POST /api/auth/council/login - 0.79s
 2025-05-02 03:02:42,563 - INFO - HTTP Request: POST http://localhost:8001/council/login "HTTP/1.1 404 Not Found"
 2025-05-02 03:02:42,564 - INFO - Request: POST /api/auth/council/login - 0.77s
+2025-05-02 14:22:40,884 - INFO - Request: OPTIONS /api/public/announcements/list - 0.00s
+2025-05-02 14:22:40,887 - INFO - Request: OPTIONS /api/public/events/list - 0.00s
+2025-05-02 14:22:42,610 - INFO - HTTP Request: POST http://localhost:8005/announcements/list "HTTP/1.1 200 OK"
+2025-05-02 14:22:42,611 - INFO - Request: POST /api/public/announcements/list - 1.72s
+2025-05-02 14:22:42,708 - INFO - HTTP Request: POST http://localhost:8005/events/list "HTTP/1.1 200 OK"
+2025-05-02 14:22:42,709 - INFO - Request: POST /api/public/events/list - 1.82s
+2025-05-02 14:23:22,881 - INFO - Request: OPTIONS /api/public/academic - 0.00s
+2025-05-02 14:23:23,681 - INFO - HTTP Request: POST http://localhost:8005/academic "HTTP/1.1 200 OK"
+2025-05-02 14:23:23,682 - INFO - Request: POST /api/public/academic - 0.80s
+2025-05-02 14:23:50,492 - INFO - Request: OPTIONS /api/public/hostel - 0.00s
+2025-05-02 14:23:51,283 - INFO - HTTP Request: POST http://localhost:8005/hostel "HTTP/1.1 200 OK"
+2025-05-02 14:23:51,285 - INFO - Request: POST /api/public/hostel - 0.79s
+2025-05-02 14:25:17,389 - INFO - HTTP Request: POST http://localhost:8005/announcements/list "HTTP/1.1 200 OK"
+2025-05-02 14:25:17,390 - INFO - Request: POST /api/public/announcements/list - 1.28s
+2025-05-02 14:25:17,423 - INFO - HTTP Request: POST http://localhost:8005/events/list "HTTP/1.1 200 OK"
+2025-05-02 14:25:17,424 - INFO - Request: POST /api/public/events/list - 1.32s
+2025-05-02 15:14:31,487 - INFO - Request: OPTIONS /api/public/announcements/list - 0.00s
+2025-05-02 15:14:31,490 - INFO - Request: OPTIONS /api/public/events/list - 0.00s
+2025-05-02 15:14:33,018 - INFO - HTTP Request: POST http://localhost:8005/announcements/list "HTTP/1.1 200 OK"
+2025-05-02 15:14:33,020 - INFO - Request: POST /api/public/announcements/list - 1.53s
+2025-05-02 15:14:33,084 - INFO - HTTP Request: POST http://localhost:8005/events/list "HTTP/1.1 200 OK"
+2025-05-02 15:14:33,085 - INFO - Request: POST /api/public/events/list - 1.59s
+2025-05-02 15:17:19,953 - INFO - HTTP Request: POST http://localhost:8005/announcements/list "HTTP/1.1 200 OK"
+2025-05-02 15:17:19,954 - INFO - Request: POST /api/public/announcements/list - 1.33s
+2025-05-02 15:17:19,955 - INFO - HTTP Request: POST http://localhost:8005/events/list "HTTP/1.1 200 OK"
+2025-05-02 15:17:19,956 - INFO - Request: POST /api/public/events/list - 1.33s

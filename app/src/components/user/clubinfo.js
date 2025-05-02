@@ -132,7 +132,7 @@ const ClubInfo = () => {
           >
             <Box
               component="img"
-              src={`/clubs/${clubData.name}/opaque_logo_square.webp`}
+              src={`/clubs/${clubData.name}/opaque_logo_square_512.webp`}
               alt={`${clubData.name} logo`}
               sx={{
                 width: "100%",

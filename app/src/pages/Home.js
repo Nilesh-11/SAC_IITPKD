@@ -46,7 +46,7 @@ const Home = () => {
   const about_images = [
     "/council/photo9.webp",
     "/council/photo7.webp",
-    "/council/photo11.webp",
+    "/council/photo19.webp",
     "/council/photo16.webp",
     "/council/photo10.webp",
     "/council/photo14.webp",

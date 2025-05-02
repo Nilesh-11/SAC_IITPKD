@@ -56,6 +56,7 @@ const Sports = () => {
       "/council/sports/photo2.webp",
       "/council/sports/photo3.webp",
       "/council/sports/photo4.webp",
+      "/council/sports/photo5.webp",
     ],
     []
   );

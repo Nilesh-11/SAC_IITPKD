@@ -56,6 +56,7 @@ const Cultural = () => {
       "/council/cultural/photo2.webp",
       "/council/cultural/photo3.webp",
       "/council/cultural/photo4.webp",
+      "/council/cultural/photo5.webp",
     ],
     []
   );
