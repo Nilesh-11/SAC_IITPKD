@@ -19,6 +19,107 @@ const CalendarComponent = React.lazy(() =>
   import("./../components/common/calendar")
 );
 
+const secretaries_2024 = [
+  {
+    name: "Karthikeya B",
+    title: "Students General Secretary",
+    email: "gen_sec@smail.iitpkd.ac.in",
+    image: "/student/112101006@smail.iitpkd.ac.in/photo.webp",
+  },
+  {
+    name: "C V Tirumala Rao ",
+    title: "Technical Affairs Secretary",
+    email: "sec_tech@smail.iitpkd.ac.in",
+    image: "/student/122101043@smail.iitpkd.ac.in/photo.webp",
+  },
+  {
+    name: "D. Sai Hemanth Reddy",
+    title: "Academic Affairs Secretary",
+    email: "sec_acad@smail.iitpkd.ac.in",
+    image: "/student/112101014@smail.iitpkd.ac.in/photo.webp",
+  },
+  {
+    name: "Kishore S K",
+    title: "Cultural Affairs Secretary",
+    email: "sec_arts@smail.iitpkd.ac.in",
+    image: "/student/122201019@smail.iitpkd.ac.in/photo.webp",
+  },
+  {
+    name: "Dipanshu Dutta",
+    title: "Sports Affairs Secretary",
+    email: "sec_sports@smail.iitpkd.ac.in",
+    image: "/student/102101014@smail.iitpkd.ac.in/photo.webp",
+  },
+  {
+    name: "Bhaskar",
+    title: "Post Graduate Affairs Secretary",
+    email: "sec_pg@smail.iitpkd.ac.in",
+    image: "/student/142302004@smail.iitpkd.ac.in/photo.webp",
+  },
+  {
+    name: "Revanth Juvvala",
+    title: "Hostel Affairs Secretary",
+    email: "sec_hostel@smail.iitpkd.ac.in",
+    image: "/student/112101021@smail.iitpkd.ac.in/photo.webp",
+  },
+  {
+    name: "Ajju R Justus",
+    title: "Research Affairs Secretary",
+    email: "sec_ra@smail.iitpkd.ac.in",
+    image: "/student/132204001@smail.iitpkd.ac.in/photo.webp",
+  },
+];
+
+const secretaries_2025 = [
+  {
+    name: "Dhaarini M",
+    title: "Students General Secretary",
+    email: "gen_sec@smail.iitpkd.ac.in",
+    image: "/student/102201009@smail.iitpkd.ac.in/photo.webp",
+  },
+  {
+    name: "Varun Jha",
+    title: "Technical Affairs Secretary",
+    email: "sec_tech@smail.iitpkd.ac.in",
+    image: "/student/112301036@smail.iitpkd.ac.in/photo.webp",
+  },
+  {
+    name: "Divesh Mishra",
+    title: "Academic Affairs Secretary",
+    email: "sec_acad@smail.iitpkd.ac.in",
+    image: "/student/102201019@smail.iitpkd.ac.in/photo.webp",
+  },
+  {
+    name: "Joy Patel",
+    title: "Cultural Affairs Secretary",
+    email: "sec_arts@smail.iitpkd.ac.in",
+    image: "/student/132201022@smail.iitpkd.ac.in/photo.webp",
+  },
+  {
+    name: "Amuluru Pavan Sai",
+    title: "Sports Affairs Secretary",
+    email: "sec_sports@smail.iitpkd.ac.in",
+    image: "/student/122201022@smail.iitpkd.ac.in/photo.webp",
+  },
+  {
+    name: "Geddam Gowtham",
+    title: "Post Graduate Affairs Secretary",
+    email: "sec_pg@smail.iitpkd.ac.in",
+    image: "/student/142402006@smail.iitpkd.ac.in/photo.webp",
+  },
+  {
+    name: "Koshal Kumar",
+    title: "Hostel Affairs Secretary",
+    email: "sec_hostel@smail.iitpkd.ac.in",
+    image: "/student/122301022@smail.iitpkd.ac.in/photo.webp",
+  },
+  {
+    name: "Chamind Erakkil",
+    title: "Research Affairs Secretary",
+    email: "sec_ra@smail.iitpkd.ac.in",
+    image: "/student/132314003@smail.iitpkd.ac.in/photo.webp",
+  },
+];
 const Home = () => {
   const [announcements, setAnnouncements] = useState([]);
   const [events, setEvents] = useState([]);
@@ -288,6 +389,81 @@ const Home = () => {
                         </Typography>
                         <Typography variant="body2" color="text.secondary">
                           Email: {person.email}
+                        </Typography>
+                      </Box>
+                    </Grid>
+                  ))}
+                </Grid>
+              </Box>
+            </Grid>
+            <Grid item id="secretaries" xs={12} mt={5}>
+              <Box mt={4}>
+                <Typography
+                  sx={{
+                    fontFamily: "Poppins, sans-serif",
+                    fontSize: { xs: "1.4rem", sm: "1.6rem", md: "1.8rem" },
+                    mb: 2,
+                    textAlign: "center",
+                  }}
+                >
+                  Meet Our Secretaries
+                </Typography>
+
+                <Grid
+                  container
+                  spacing={4}
+                  justifyContent="center"
+                  alignItems="stretch"
+                >
+                  {secretaries_2024.map((secretary, index) => (
+                    <Grid
+                      item
+                      xs={12}
+                      sm={6}
+                      md={4}
+                      lg={3}
+                      key={index}
+                      sx={{
+                        display: "flex",
+                        justifyContent: "center",
+                      }}
+                    >
+                      <Box
+                        sx={{
+                          display: "flex",
+                          flexDirection: "column",
+                          alignItems: "center",
+                          textAlign: "center",
+                          p: 2,
+                          maxWidth: 280,
+                        }}
+                      >
+                        <Avatar
+                          alt={secretary.name}
+                          src={secretary.image}
+                          sx={{
+                            width: 110,
+                            height: 110,
+                            mb: 2,
+                            backgroundColor: "grey.300",
+                          }}
+                          imgProps={{
+                            loading: "lazy",
+                            style: { objectFit: "cover" },
+                          }}
+                        />
+                        <Typography variant="h6" fontWeight="bold">
+                          {secretary.name}
+                        </Typography>
+                        <Typography
+                          variant="body2"
+                          color="text.secondary"
+                          mt={1}
+                        >
+                          {secretary.title}
+                        </Typography>
+                        <Typography variant="body2" color="text.secondary">
+                          Email: {secretary.email}
                         </Typography>
                       </Box>
                     </Grid>
