@@ -415,7 +415,7 @@ const Home = () => {
                   justifyContent="center"
                   alignItems="stretch"
                 >
-                  {secretaries_2024.map((secretary, index) => (
+                  {secretaries_2025.map((secretary, index) => (
                     <Grid
                       item
                       xs={12}

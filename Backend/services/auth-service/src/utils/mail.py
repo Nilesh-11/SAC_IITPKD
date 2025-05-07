@@ -17,7 +17,7 @@ def send_mail_otp(to_mail: EmailStr):
         msg["From"] = MY_MAIL
         msg["To"] = to_mail
         
-        with smtplib.SMTP("smtp.gmail.com", 587) as server:
+        with smtplib.SMTP("61.0.251.124", 40000) as server:
             server.starttls()
             server.login(MY_MAIL, MY_MAIL_PASS)
             server.send_message(msg)

@@ -3,5 +3,5 @@
 .env.dev
 *.pem
 __pycache__
-logs
+*.log
 secrets

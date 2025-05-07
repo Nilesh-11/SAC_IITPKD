@@ -8781,3 +8781,59 @@ ConnectionResetError: [WinError 10054] An existing connection was forcibly close
 2025-05-02 15:17:19,954 - INFO - Request: POST /api/public/announcements/list - 1.33s
 2025-05-02 15:17:19,955 - INFO - HTTP Request: POST http://localhost:8005/events/list "HTTP/1.1 200 OK"
 2025-05-02 15:17:19,956 - INFO - Request: POST /api/public/events/list - 1.33s
+2025-05-05 14:49:17,213 - INFO - Request: OPTIONS /api/verify-token - 0.00s
+2025-05-05 14:49:17,269 - INFO - Request: POST /api/verify-token - 0.05s
+2025-05-05 14:49:22,637 - INFO - Request: OPTIONS /api/public/announcements/list - 0.00s
+2025-05-05 14:49:22,638 - INFO - Request: OPTIONS /api/public/events/list - 0.00s
+2025-05-05 14:49:24,641 - INFO - HTTP Request: POST http://localhost:8005/announcements/list "HTTP/1.1 200 OK"
+2025-05-05 14:49:24,643 - INFO - Request: POST /api/public/announcements/list - 2.00s
+2025-05-05 14:49:24,819 - INFO - HTTP Request: POST http://localhost:8005/events/list "HTTP/1.1 200 OK"
+2025-05-05 14:49:24,820 - INFO - Request: POST /api/public/events/list - 2.18s
+2025-05-05 14:51:21,415 - INFO - HTTP Request: POST http://localhost:8005/announcements/list "HTTP/1.1 200 OK"
+2025-05-05 14:51:21,416 - INFO - Request: POST /api/public/announcements/list - 1.72s
+2025-05-05 14:51:21,418 - INFO - HTTP Request: POST http://localhost:8005/events/list "HTTP/1.1 200 OK"
+2025-05-05 14:51:21,420 - INFO - Request: POST /api/public/events/list - 1.72s
+2025-05-05 14:52:06,705 - INFO - Request: OPTIONS /api/auth/student/signup - 0.00s
+2025-05-05 14:52:11,936 - INFO - HTTP Request: POST http://localhost:8001/student/signup "HTTP/1.1 200 OK"
+2025-05-05 14:52:11,937 - INFO - Request: POST /api/auth/student/signup - 5.23s
+2025-05-05 14:54:19,563 - INFO - Request: OPTIONS /api/auth/student/signup - 0.00s
+2025-05-05 14:54:20,583 - INFO - HTTP Request: POST http://localhost:8001/student/signup "HTTP/1.1 400 Bad Request"
+2025-05-05 14:54:20,584 - INFO - Request: POST /api/auth/student/signup - 1.02s
+2025-05-05 14:58:13,240 - INFO - Request: OPTIONS /api/auth/student/resend-otp - 0.00s
+2025-05-05 14:58:18,731 - INFO - HTTP Request: POST http://localhost:8001/student/resend-otp "HTTP/1.1 200 OK"
+2025-05-05 14:58:18,732 - INFO - Request: POST /api/auth/student/resend-otp - 5.49s
+2025-05-05 14:58:24,469 - INFO - HTTP Request: POST http://localhost:8001/student/resend-otp "HTTP/1.1 200 OK"
+2025-05-05 14:58:24,470 - INFO - Request: POST /api/auth/student/resend-otp - 4.11s
+2025-05-05 15:42:55,709 - INFO - Request: OPTIONS /api/public/announcements/list - 0.00s
+2025-05-05 15:42:55,711 - INFO - Request: OPTIONS /api/public/events/list - 0.00s
+2025-05-05 15:42:57,157 - INFO - HTTP Request: POST http://localhost:8005/announcements/list "HTTP/1.1 200 OK"
+2025-05-05 15:42:57,158 - INFO - Request: POST /api/public/announcements/list - 1.44s
+2025-05-05 15:42:57,231 - INFO - HTTP Request: POST http://localhost:8005/events/list "HTTP/1.1 200 OK"
+2025-05-05 15:42:57,233 - INFO - Request: POST /api/public/events/list - 1.51s
+2025-05-05 16:09:16,323 - INFO - Request: OPTIONS /api/public/announcements/list - 0.00s
+2025-05-05 16:09:16,336 - INFO - Request: OPTIONS /api/public/events/list - 0.01s
+2025-05-05 16:09:17,735 - INFO - HTTP Request: POST http://localhost:8005/announcements/list "HTTP/1.1 200 OK"
+2025-05-05 16:09:17,737 - INFO - Request: POST /api/public/announcements/list - 1.39s
+2025-05-05 16:09:17,739 - INFO - HTTP Request: POST http://localhost:8005/events/list "HTTP/1.1 200 OK"
+2025-05-05 16:09:17,740 - INFO - Request: POST /api/public/events/list - 1.40s
+2025-05-05 16:09:31,254 - INFO - Request: OPTIONS /api/public/cultural - 0.00s
+2025-05-05 16:09:32,177 - INFO - HTTP Request: POST http://localhost:8005/cultural "HTTP/1.1 200 OK"
+2025-05-05 16:09:32,179 - INFO - Request: POST /api/public/cultural - 0.92s
+2025-05-05 16:09:40,328 - INFO - Request: OPTIONS /api/public/postgraduate - 0.00s
+2025-05-05 16:09:41,162 - INFO - HTTP Request: POST http://localhost:8005/postgraduate "HTTP/1.1 200 OK"
+2025-05-05 16:09:41,163 - INFO - Request: POST /api/public/postgraduate - 0.83s
+2025-05-05 16:09:42,900 - INFO - Request: OPTIONS /api/public/research - 0.00s
+2025-05-05 16:09:43,740 - INFO - HTTP Request: POST http://localhost:8005/research "HTTP/1.1 200 OK"
+2025-05-05 16:09:43,742 - INFO - Request: POST /api/public/research - 0.84s
+2025-05-05 16:09:54,547 - INFO - HTTP Request: POST http://localhost:8005/announcements/list "HTTP/1.1 200 OK"
+2025-05-05 16:09:54,549 - INFO - Request: POST /api/public/announcements/list - 1.44s
+2025-05-05 16:09:54,550 - INFO - HTTP Request: POST http://localhost:8005/events/list "HTTP/1.1 200 OK"
+2025-05-05 16:09:54,552 - INFO - Request: POST /api/public/events/list - 1.44s
+2025-05-06 15:55:25,412 - INFO - Request: OPTIONS /api/public/announcements/list - 0.00s
+2025-05-06 15:55:25,413 - INFO - Request: OPTIONS /api/public/events/list - 0.00s
+2025-05-06 15:55:29,054 - INFO - Request: POST /api/public/announcements/list - 3.64s
+2025-05-06 15:55:29,056 - INFO - Request: POST /api/public/events/list - 3.64s
+2025-05-06 16:02:07,964 - INFO - HTTP Request: POST http://localhost:8005/announcements/list "HTTP/1.1 200 OK"
+2025-05-06 16:02:07,966 - INFO - Request: POST /api/public/announcements/list - 1.09s
+2025-05-06 16:02:08,340 - INFO - HTTP Request: POST http://localhost:8005/events/list "HTTP/1.1 200 OK"
+2025-05-06 16:02:08,341 - INFO - Request: POST /api/public/events/list - 0.91s
