@@ -90,21 +90,20 @@ create_databases() {
 
     for db in "${DATABASES[@]}"; do
         echo -e "${YELLOW}Creating database: $db${NC}"
-        sudo -u postgres /usr/pgsql-15/bin/psql -c "DO \$\$ 
-        BEGIN 
-            IF NOT EXISTS (SELECT FROM pg_database WHERE datname = '$db') THEN 
-                CREATE DATABASE $db OWNER $pg_user;
-            ELSE 
-                RAISE NOTICE 'Database \"$db\" already exists'; 
-            END IF; 
-        END 
-        \$\$;"
+        
+        DB_EXISTS=$(sudo -u postgres /usr/pgsql-15/bin/psql -tAc "SELECT 1 FROM pg_database WHERE datname = '$db'")
+        if [[ "$DB_EXISTS" != "1" ]]; then
+            sudo -u postgres /usr/pgsql-15/bin/createdb -O "$pg_user" "$db"
+        else
+            echo -e "${YELLOW}Database \"$db\" already exists${NC}"
+        fi
     done
 
     update_env_file "$pg_user" "$pg_password"
 
     echo -e "${GREEN}Databases created successfully!${NC}"
 }
+
 
 update_env_file() {
     local pg_user=$1
