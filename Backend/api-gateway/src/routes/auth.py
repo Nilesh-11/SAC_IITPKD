@@ -6,8 +6,8 @@ from src.config import limiter
 router = APIRouter()
 
 @router.post("/{path:path}")
-@limiter.limit("50/minute")
-async def signup(path: str, request: Request, data: AuthRequest):
+@limiter.limit("50/120minute")
+async def auth_request(path: str, request: Request, data: AuthRequest):
     ip_address = request.client.host
     user_agent = request.headers.get("user-agent", "Unknown")
     forwarded_for = request.headers.get("x-forwarded-for")

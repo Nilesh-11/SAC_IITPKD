@@ -8,8 +8,8 @@ from src.config import limiter
 router = APIRouter()
 
 @router.post("/{path:path}")
-@limiter.limit("50/minute")
-async def events(path: str, request: Request, data: EventsRequest, token: str = Depends(get_token_from_header)):
+@limiter.limit("50/120minute")
+async def events_request(path: str, request: Request, data: EventsRequest, token: str = Depends(get_token_from_header)):
     payload = authenticate_jwt(token)['content']
     if payload['type'] != "ok":
         return {'type': "navigate", 'details': 'login'}

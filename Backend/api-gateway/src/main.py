@@ -33,7 +33,7 @@ app.add_middleware(ValidateRequestMiddleware)
 app.add_middleware(LoggingMiddleware)
 
 @app.get("/")
-@limiter.limit("5/minute")
+@limiter.limit("5/5minute")
 def health_check(request: Request):
     return JSONResponse(
                 content= {
@@ -42,6 +42,6 @@ def health_check(request: Request):
             )
 
 @app.post("/api/verify-token")
-@limiter.limit("40/minute")
+@limiter.limit("40/120minute")
 def verify_jwt(request: Request, token: str = Depends(get_token_from_header)):
     return JSONResponse(content=authenticate_jwt(token))
