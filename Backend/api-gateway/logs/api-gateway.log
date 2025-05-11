@@ -8837,3 +8837,43 @@ ConnectionResetError: [WinError 10054] An existing connection was forcibly close
 2025-05-06 16:02:07,966 - INFO - Request: POST /api/public/announcements/list - 1.09s
 2025-05-06 16:02:08,340 - INFO - HTTP Request: POST http://localhost:8005/events/list "HTTP/1.1 200 OK"
 2025-05-06 16:02:08,341 - INFO - Request: POST /api/public/events/list - 0.91s
+2025-05-09 16:28:44,237 - INFO - Request: GET /api/ - 0.00s
+2025-05-09 16:28:44,447 - INFO - Request: GET /favicon.ico - 0.00s
+2025-05-09 16:28:58,041 - INFO - Request: GET / - 0.01s
+2025-05-09 16:29:01,774 - INFO - Request: GET / - 0.00s
+2025-05-09 16:29:03,460 - INFO - Request: GET / - 0.00s
+2025-05-09 16:29:05,258 - INFO - Request: GET / - 0.00s
+2025-05-09 16:29:08,585 - INFO - Request: GET / - 0.01s
+2025-05-09 16:29:09,777 - WARNING - ratelimit 5 per 1 minute (127.0.0.1) exceeded at endpoint: /
+2025-05-09 16:29:09,778 - INFO - Request: GET / - 0.00s
+2025-05-09 16:29:17,772 - INFO - Request: GET /.well-known/appspecific/com.chrome.devtools.json - 0.00s
+2025-05-09 16:29:24,914 - WARNING - ratelimit 5 per 1 minute (127.0.0.1) exceeded at endpoint: /
+2025-05-09 16:29:24,915 - INFO - Request: GET / - 0.00s
+2025-05-09 16:29:24,970 - INFO - Request: GET /.well-known/appspecific/com.chrome.devtools.json - 0.00s
+2025-05-09 16:30:13,513 - INFO - Request: GET / - 0.00s
+2025-05-09 16:30:13,594 - INFO - Request: GET /.well-known/appspecific/com.chrome.devtools.json - 0.00s
+2025-05-09 16:30:20,104 - INFO - Request: GET / - 0.00s
+2025-05-09 16:30:22,065 - INFO - Request: GET / - 0.00s
+2025-05-09 16:30:22,561 - INFO - Request: GET / - 0.00s
+2025-05-09 16:30:23,034 - INFO - Request: GET / - 0.00s
+2025-05-09 16:30:23,527 - WARNING - ratelimit 5 per 1 minute (127.0.0.1) exceeded at endpoint: /
+2025-05-09 16:30:23,528 - INFO - Request: GET / - 0.00s
+2025-05-09 16:46:08,275 - INFO - Request: GET / - 0.00s
+2025-05-09 16:46:10,016 - INFO - Request: GET / - 0.00s
+2025-05-09 16:46:10,951 - INFO - Request: GET / - 0.00s
+2025-05-09 16:46:11,529 - INFO - Request: GET / - 0.00s
+2025-05-09 16:46:12,048 - INFO - Request: GET / - 0.00s
+2025-05-09 16:46:12,600 - WARNING - ratelimit 5 per 5 minute (127.0.0.1) exceeded at endpoint: /
+2025-05-09 16:46:12,601 - INFO - Request: GET / - 0.00s
+2025-05-09 16:46:13,186 - WARNING - ratelimit 5 per 5 minute (127.0.0.1) exceeded at endpoint: /
+2025-05-09 16:46:13,187 - INFO - Request: GET / - 0.00s
+2025-05-09 16:46:13,709 - WARNING - ratelimit 5 per 5 minute (127.0.0.1) exceeded at endpoint: /
+2025-05-09 16:46:13,710 - INFO - Request: GET / - 0.00s
+2025-05-09 16:46:17,808 - INFO - Request: GET /.well-known/appspecific/com.chrome.devtools.json - 0.00s
+2025-05-09 16:46:20,979 - WARNING - ratelimit 5 per 5 minute (127.0.0.1) exceeded at endpoint: /
+2025-05-09 16:46:20,980 - INFO - Request: GET / - 0.00s
+2025-05-09 16:46:21,043 - INFO - Request: GET /.well-known/appspecific/com.chrome.devtools.json - 0.00s
+2025-05-09 16:46:23,759 - WARNING - ratelimit 5 per 5 minute (127.0.0.1) exceeded at endpoint: /
+2025-05-09 16:46:23,761 - INFO - Request: GET / - 0.00s
+2025-05-09 16:47:35,032 - WARNING - ratelimit 5 per 5 minute (127.0.0.1) exceeded at endpoint: /
+2025-05-09 16:47:35,033 - INFO - Request: GET / - 0.00s

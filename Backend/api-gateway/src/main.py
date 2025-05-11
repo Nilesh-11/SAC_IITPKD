@@ -22,11 +22,18 @@ app.include_router(projects.router, prefix="/api/projects")
 app.include_router(user.router, prefix="/api/user")
 app.include_router(public.router, prefix="/api/public")
 
+origins = [
+    "http://localhost",
+    "http://localhost:3000",
+    "http://139.59.69.67",
+]
+
 app.add_middleware(SlowAPIMiddleware)
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=origins,
     allow_methods=["GET", "POST"],
+    allow_credentials=True,
     allow_headers=["*"],
 )
 app.add_middleware(ValidateRequestMiddleware)
